@@ -1,0 +1,103 @@
+{% extends "pro/navbar.html.twig" %}
+
+{% block content %}
+	<div class="container text-center" style="margin-top: 2vh;">
+		<div class="row align-items-center" style="margin-bottom: 20px">
+			<div class="col-3" style="max-width: 296.75px">
+				<img src="/{{ user.profilePic }}" alt="Image de profil" style="width: 100%; max-width: 200px; height: auto">
+			</div>
+			<div class="col">
+				<h1>Bonjour
+					{{ user.firstName}}</h1>
+				<p style="font-size: large">Bienvenue dans votre espace privé Capsule ! Comment allez-vous aujourd'hui ?</p>
+			</div>
+		</div>
+		<div class="row row-cols-4">
+			<div
+				class="col">
+
+				{# Pavé profil #}
+				<div class="pave" style="margin-top: 45px; background-color: #e2e2e2; height: 150px">
+					<div style="text-align: right; width: 100%; padding-right: 0.5vw; padding-top: 0.5vw">
+						<a href="/pro/profil" class="btn"><img src="/images/add_green.png" alt="+" height="25vw"></a>
+					</div>
+					<img src="/images/pro_geometric_id.png" class="" alt="Image déco" style="border-radius: 50%; border: 5px solid white; height: 100px; width:100px; margin: -120px auto 0 auto">
+					<div class="card-body">
+						<h4 class="card-title" style="padding: 25px 0; font-weight: bold">{{user.firstName}}
+							{{user.name}}</h5>
+					</div>
+				</div>
+
+				{# Pavé facturation #}
+				<div class="pave" style="background-color: #03989e; color: white; height: 300px">
+					<div style="position: absolute; bottom: 0; padding-left: 1vw; padding-bottom: 0.75vw; color:white; font-size: x-large; text-align: left">
+						Espace facturation<br>
+						<a href="/pro/repays"><img src="/images/left_arrow.png" alt="flèche droite" style="max-width: 40px; height: auto"></a>
+					</div>
+				</div>
+			</div>
+			<div
+				class="col">
+
+				{# Pavé patients #}
+				<div class="pave" style="background-color: #99d9d9; margin-top: 45px; height: 200px;">
+					<div style="text-align: right; width: 100%; padding-right: 0.5vw; padding-top: 0.5vw">
+						<a href="/pro/patients" class="btn"><img src="/images/add_white.png" alt="+" height="25vw"></a>
+					</div>
+					<div style="position: absolute; bottom: 0; padding-left: 1vw; padding-bottom: 0.75vw; color:white; font-size: x-large">Patients</div>
+				</div>
+
+				{# Pavé nloc note #}
+				<div class="pave" style="background-color: #e2e2e2; height: 250px">
+					<div style="text-align: right; width: 100%; padding-right: 0.5vw; padding-top: 0.5vw">
+						<a href="" class="btn"><img src="/images/add_red.png" alt="+" height="25vw"></a>
+					</div>
+					<div style="position: absolute; bottom: 0; padding-left: 1vw; padding-bottom: 0.75vw; font-size: x-large">Bloc note</div>
+				</div>
+			</div>
+			<div
+				class="col">
+
+				{# Pavé calendrier #}
+				<div class="pave" style="background-color: #e2e2e2; margin-top: 45px; height: 200px">
+					<div style="text-align: right; width: 100%; padding-right: 0.5vw; padding-top: 0.5vw">
+						<a href="" class="btn"><img src="/images/add_green.png" alt="+" height="25vw"></a>
+					</div>
+					<div style="position: absolute; bottom: 0; padding-left: 1vw; padding-bottom: 0.75vw; font-size: x-large">Calendrier</div>
+				</div>
+
+				{# Pavé CapsuleTV #}
+				<div class="pave" style="background-color: #aa02ff; height: 250px">
+					<div style="text-align: right; width: 100%; padding-right: 0.5vw; padding-top: 0.5vw">
+						<a href="" class="btn"><img src="/images/add_white.png" alt="+" height="25vw"></a>
+					</div>
+					<div style="position: absolute; bottom: 0; padding-left: 1vw; padding-bottom: 0.75vw; color:white; font-size: x-large">Capsule TV</div>
+				</div>
+			</div>
+			<div class="col">
+				<div class="pave" style="background-color: #fa0644; margin-top: 45px; height: 150px; color: white">
+					<div style="text-align: right; width: 100%; padding-right: 0.5vw; padding-top: 0.5vw">
+						<a href="" class="btn"><img src="/images/add_white.png" alt="+" height="25vw"></a>
+					</div>
+					<div style="position: absolute; bottom: 0; padding-left: 1vw; padding-bottom: 0.75vw; color:white; font-size: x-large">Mes rendez-vous</div>
+				</div>
+				<div class="pave" style=" height: 300px; background-image: url('/images/pro_pave_communaute.jpg'); background-size: cover">
+					<div style="text-align: right; width: 100%; padding-right: 0.5vw; padding-top: 0.5vw">
+						<a href="" class="btn"><img src="/images/add_red.png" alt="+" height="25vw"></a>
+					</div>
+					<div style="position: absolute; bottom: 0; padding-left: 1vw; padding-bottom: 0.75vw; font-size: x-large; text-align: left; color: white; ">Communauté des praticiens Capsule</div>
+				</div>
+			</div>
+		</div>
+		<div style="background-image: url('/images/pro_home_event.jpg'); background-size: 100%; background-repeat: no-repeat; width: 100%; margin-bottom: 2vh; padding-left: 55%; padding-right: 4%">
+			<h1 style="padding-top: 25%; padding-bottom: 10%; font-variant-caps: small-caps">Evénements Capsule</h1>
+			<p style="padding-bottom: 10%">Parce que Capsule c’est aussi un espace d’échange, découvrez les prochaines dates de nos événements digitaux & conférences, et réservez votre place en tant que participant ou en tant que speaker</p>
+			<div>
+				<a href="" type="button" class="btn" style="margin-bottom: 3vh; background-color: rgba(48, 180, 167, 1); color: white; font-size: x-large">En savoir +</a>
+			</div>
+		</div>
+		{# {{ dump(user)}} #}
+	</div>
+
+
+{% endblock %}

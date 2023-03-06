@@ -1,0 +1,125 @@
+{% extends "pro/navbar.html.twig" %}
+
+{% block body %}
+	<h1>Dossier de candidature</h1>
+	<div class="container text-center">
+		<form method="POST" enctype="multipart/form-data">
+			<input type="hidden" name="role" value="Pro">
+			<fieldset>
+				<legend>Identité</legend>
+				<div class="row row-col-1 row-cols-sm-3">
+					<div class="col">
+						<input type="hidden" name="MAX_FILE_SIZE" value="1100000"/>
+						<input type="file" name="pic" accept="image/png, image/jpg, image/jpeg, image/gif, image/svg">
+					</div>
+					<div class="col">
+						<p>
+							<label for="title">Titre de civilité :</label>
+							<select id="title" name="title">
+								<option value="Mme">Madame</option>
+								<option value="Mr">Monsieur</option>
+								<option value="Dr">Docteur</option>
+								<option value="Pr">Professeur</option>
+							</select>
+						</p>
+						<p><input type="text" name="name" placeholder="Nom *" required></p>
+						<p><input type="text" name="first_name" placeholder="Prénom" required></p>
+						<p><input type="tel" name="phone_office" placeholder="Téléphone professionnel *" required></p>
+						<p><input type="tel" name="phone_mobile" placeholder="Téléphone mobile"></p>
+					</div>
+					<div class="col">
+						<p><input type="text" name="street1" placeholder="N° et rue"></p>
+						<p><input type="text" name="street2" placeholder="Complément"></p>
+						<p><input type="text" name="postcode" placeholder="Code postal"></p>
+						<p><input type="text" name="city" placeholder="Ville"></p>
+						<p><input type="email" name="email" placeholder="Email *" required></p>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset>
+				<legend>Formation</legend>
+				<input type="hidden" name="educations" value="3" id="educations">
+				<p><input type="date" name="date1" style="margin-right: 25px" required>
+					<input type="text" name="degree1" placeholder="Diplôme ou titre obtenu *" size="54" style="margin-right: 25px" required>
+					<input type="text" name="school1" placeholder="Ecole ou organisme certificateur *" size="54" required></p>
+				<p><input type="date" name="date2" style="margin-right: 25px">
+					<input type="text" name="degree2" placeholder="Diplôme ou titre obtenu" size="54" style="margin-right: 25px">
+					<input type="text" name="school2" placeholder="Ecole ou organisme certificateur" size="54"></p>
+				<p><input type="date" name="date3" style="margin-right: 25px">
+					<input type="text" name="degree3" placeholder="Diplôme ou titre obtenu" size="54" style="margin-right: 25px">
+					<input type="text" name="school3" placeholder="Ecole ou organisme certificateur" size="54"></p>
+			</fieldset>
+			<fieldset>
+				<input type="hidden" name="experiences" value="3" id="experiences">
+				<legend>Expérience</legend>
+				<p><input type="date" name="dateStart1" style="margin-right: 25px" required>
+					<input type="date" name="dateEnd1" style="margin-right: 25px">
+					<input type="text" name="position1" placeholder="Poste* " size="45" style="margin-right: 25px" required>
+					<input type="text" name="employer1" placeholder="Employeur *" size="45" required></p>
+				<p><input type="date" name="dateStart2" style="margin-right: 25px">
+					<input type="date" name="dateEnd2" style="margin-right: 25px">
+					<input type="text" name="position2" placeholder="Poste" size="45" style="margin-right: 25px">
+					<input type="text" name="employer2" placeholder="Employeur" size="45"></p>
+				<p><input type="date" name="dateStart3" style="margin-right: 25px">
+					<input type="date" name="dateEnd3" style="margin-right: 25px">
+					<input type="text" name="position3" placeholder="Poste" size="45" style="margin-right: 25px">
+					<input type="text" name="employer3" placeholder="Employeur" size="45"></p>
+			</fieldset>
+
+			<fieldset>
+				<input type="hidden" name="experiences" value="3" id="experiences">
+				<legend>Profession et spécialités</legend>
+				<div class="row row-col-1 row-cols-sm-2" style="padding-bottom: 10px">
+					<div class="col">
+						Profession :<br>
+						<input list="profession">
+						<datalist id="profession" name="profession">
+							<option value="Psychiatre">Psychiatre</option>
+							<option value="Psychologue">Psychologue</option>
+							<option value="Coach">Coach</option>
+							<option value="Sage-femme">Sage-femme</option>
+							<option value="Gynécologue">Gynécologue</option>
+						</datalist>
+					</div>
+					<div class="col">
+						Sélection spécialités :<br>
+						<div style="max-height: 100px; overflow: auto">
+							<input type="checkbox" name="specialty1" value="1">
+							<label for="specialty1">
+								Confiance en soi</label><br>
+							<input type="checkbox" name="specialty2" value="2">
+							<label for="specialty2">
+								Addiction</label><br>
+							<input type="checkbox" name="specialty3" value="3">
+							<label for="specialty3">
+								Gestion du stress</label><br>
+							<input type="checkbox" name="specialty4" value="4">
+							<label for="specialty4">
+								Optimiser les apprentissages</label><br>
+							<input type="checkbox" name="specialty5" value="5">
+							<label for="specialty5">
+								Gérer les relations aux autres</label><br>
+							<input type="checkbox" name="specialty6" value="6">
+							<label for="specialty6">
+								Nutrition</label>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset>
+				<legend>Présentation<br>
+					<textarea name="bio" cols="110vw" rows="5" style="font-size: 0.75em"></textarea>
+				</legend>
+			</fieldset>
+
+			<p><input type="submit" value="Soumettre">
+			</p>
+		</form>
+	</div>
+</div>{% endblock %}{% block javascript %}
+<script>
+	function changeValues(field) {
+var element = document.getElementById(field)
+element.value = element.value + 1
+}
+</script>{% endblock %}

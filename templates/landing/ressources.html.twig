@@ -1,0 +1,32 @@
+{% extends "landing/navbar.html.twig" %}
+{% block title %}
+	Capsule
+{% endblock %}
+{% block body %}
+	<div class="navbar sticky-top" style="padding: 0">
+		<div class="container-fluid" style="background: rgba(255,255,255,0.5); padding: 0 12.5% 0 12.5%">
+			<form action="" method="post">
+				<input type="hidden" name="type" value="videos">
+				<input type="submit" value="Vidéos">
+			</form>
+			<form action="" method="post">
+				<input type="hidden" name="type" value="poscasts">
+				<input type="submit" value="Poscasts">
+			</form>
+			<form action="" method="post">
+				<input type="hidden" name="type" value="audiobooks">
+				<input type="submit" value="Audiobooks">
+			</form>
+			<form action="" method="post">
+				<input type="hidden" name="type" value="illustrations">
+				<input type="submit" value="Illustrations">
+			</form>
+		</div>
+	</div>
+	<h1>Design à imaginer</h1>
+	{{ role }}
+
+	<div class="col" style="margin: 100px">
+		<a href="/" role="button" class="btn btn-dark">Retour à l'accueil</a>
+	</div>
+{% endblock %}

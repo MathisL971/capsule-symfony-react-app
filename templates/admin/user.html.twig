@@ -1,0 +1,77 @@
+{% extends "admin/navbar.html.twig" %}
+
+
+{% block body %}
+	<div class="navbar sticky-top" style="padding-top: 0;">
+		<div class="container-fluid" style="background: black;">
+			<a href="/admin/user/new" class="btn btn-success">Créer un compte</a>
+			<a href="/admin/user/update/{{profile.id}}/" class="btn btn-primary">Mettre à jour</a>
+			{% if profile.status == 'pending' %}
+				<a href="/admin/user/activate/{{profile.id}}/" class="btn btn-primary">Activer</a>
+			{% endif %}
+			{% if profile.status == 'suspended' %}
+				<a href="/admin/user/reactivate/{{profile.id}}/" class="btn btn-primary">Réactiver</a>
+			{% endif %}
+			{% if user.role == 'SuperAdmin' %}
+				<a href="/admin/user/upgrade/{{ profile.id }}" class="btn btn-warning">Nommer Admin</a>
+				<a href="/admin/user/upgrade2/{{ profile.id }}" class="btn btn-warning">Nommer SuperAdmin</a>
+			{% endif %}
+			{% if profile.user != 'SuperAdmin' %}
+				<a href="/admin/user/suspend/{{profile.id}}" class="btn btn-danger">Bloquer le compte</a>
+			{% endif %}
+		</div>
+	</div>
+	<h1>{{profile.firstName}}
+		{{profile.name}}</h1>
+	<h2>{{profile.role}}</h2>
+	<span style="color: red">{{profile.status == 'suspended' ? 'Compte suspendu'}}</span>
+	<span style="color: yellow">{{profile.status == 'pending' ? 'Compte à approuver'}}</span>
+
+	<div class="container">
+		<div class="row">
+			<div class="col col-3">
+				<img src="/{{ profile.profilePic }}" alt="Image de profil" width="100vw" max-width="200px" height="auto">
+			</div>
+			<div class="col col-3">
+				{{ profile.firstName }}
+				{{ profile.name }}
+				<br>
+				{{ profile.street1 }}
+				{{ profile.street2 == NULL ? :  profile.street2 }}
+				<br>
+				{{ profile.postcode }}
+				{{ profile.city }}
+				<br>
+				{{ profile.phoneOffice == NULL ? : profile.phoneOffice}}
+				{{ profile.phoneMobile == NULL ? : profile.phoneMobile}}
+			</div>
+			<div class="col col-6">
+				{% for experience in experiences %}
+					<p>{{ experience.dateStart | date('d. m.Y')}}
+						à
+						{{ experience.dateEnd == NULL ? "aujourd'hui" : experience.dateEnd|date('d. m.Y') }}
+						:
+						{{ experience.position}}
+						/
+						{{ experience.employer}}
+					</p>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+
+
+	<p>
+		<i>**Infos user<br>
+			- Infos de profil<br>
+			- Dernière connexion<br>
+			- Infos abonnement<br>
+			- ... podolff ?</i>
+	</p>
+	<div
+		class="supera">
+		{# {{ dump(user) }} #}
+		{{ (user.role == 'SuperAdmin') ? dump(user) }}
+
+	</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "admin/navbar.html.twig" %}
+{% block title %}
+	Capsule - Console admin
+{% endblock %}
+{% block body %}
+
+	<div class="row row-cols-1 row-cols-md-2 g-4" style="max-width: 90%; margin:auto">
+		<div class="col">
+			<div class="card text-bg-dark mb-3 h-100">
+				<div class="card-header">
+					<h5 class="card-title">Comptes</h5>
+				</div>
+				<div class="card-body">
+					<p class="card-text">Nombre de comptes jeune<br>
+						Nombre de comptes parent<br>
+						Nombre de comptes pro</p>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card text-bg-dark mb-3 h-100">
+				<div class="card-header">
+					<h5 class="card-title">Consultations</h5>
+				</div>
+				<div class="card-body">
+					<p class="card-text">Depuis le début de Capsule<br>
+						Réalisées ce mois<br>
+						A venir</p>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card text-bg-dark mb-3 h-100">
+				<div class="card-header">
+					<h5 class="card-title">Messages</h5>
+				</div>
+				<div class="card-body">
+					<p class="card-text">Messages échangés<br>
+						Messages déposés par les jeunes<br>
+						Messages déposés par les parents</p>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card text-bg-dark mb-3 h-100">
+				<div class="card-header">
+					<h5 class="card-title">Ressources</h5>
+				</div>
+				<div class="card-body">
+					<p class="card-text">Vidéos<br>
+						Articles<br>
+						Audio</p>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card text-bg-dark mb-3 h-100">
+				<div class="card-header">
+					<h5 class="card-title">Chiffre d'affaires</h5>
+				</div>
+				<div class="card-body">
+					<p class="card-text">Du mois<br>
+						De l'exercice</p>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card text-bg-dark mb-3 h-100">
+				<div class="card-header">
+					<h5 class="card-title">Ticket support</h5>
+				</div>
+				<div class="card-body">
+					<p class="card-text">Ticket en attente #1<br>
+						Ticket en attente #2<br>
+						Ticket en attente #3<br>
+						...</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+{% endblock %}

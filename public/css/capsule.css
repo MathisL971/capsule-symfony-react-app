@@ -1,0 +1,60 @@
+:root {
+    --caps-green-50: rgba(48, 180, 167, 0.5);
+}
+
+h1.landing {
+    font-size: 4vw;
+    color: white;
+    font-weight: bold;
+    font-style: italic;
+    -webkit-text-stroke: 1px grey;
+}
+
+h2.landing {
+    font-size: 4vw;
+    margin-bottom: 100px;
+}
+
+h4.landing {
+    margin-top: 25px;
+}
+
+a {
+    text-decoration: none;
+}
+
+a.admin {
+    color: white;
+}
+
+.test {
+    border: 1px white solid;
+}
+
+div.faded {
+    border: 1px solid white;
+    background-color: black;
+    color: grey;
+}
+
+div.profilAdmin {
+    border: 1px solid white;
+    border-radius: 10px;
+}
+
+div.pave {
+    border-radius: 2vh;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+div.supera {
+    background-color: grey;
+    border: 1px dotted red;
+    margin: 5%;
+    padding: 5%;
+}
+
+div.navbar-nav a.nav-link {
+    margin: auto
+}

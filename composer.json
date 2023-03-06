@@ -7,14 +7,25 @@
         "php": ">=7.2.5",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "doctrine/common": "^3.4",
+        "doctrine/doctrine-bundle": "^2.7",
+        "doctrine/doctrine-migrations-bundle": "^3.2",
+        "doctrine/orm": "^2.14",
+        "sensio/framework-extra-bundle": "^6.2",
+        "symfony/apache-pack": "^1.0",
         "symfony/console": "5.4.*",
+        "symfony/debug": "^4.4",
         "symfony/dotenv": "5.4.*",
+        "symfony/error-handler": "^5.4",
         "symfony/flex": "^1.17|^2",
         "symfony/framework-bundle": "5.4.*",
         "symfony/runtime": "5.4.*",
-        "symfony/yaml": "5.4.*"
-    },
-    "require-dev": {
+        "symfony/security-bundle": "^5.4",
+        "symfony/webpack-encore-bundle": "^1.16",
+        "symfony/yaml": "5.4.*",
+        "twig/intl-extra": "^3.5",
+        "twig/twig": "3.0",
+        "twilio/sdk": "^6.44"
     },
     "config": {
         "allow-plugins": {
@@ -63,5 +74,8 @@
             "allow-contrib": false,
             "require": "5.4.*"
         }
+    },
+    "require-dev": {
+        "symfony/maker-bundle": "^1.43"
     }
 }

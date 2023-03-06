@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>
+			{% block title %}Capsule
+			{% endblock %}
+		</title>
+		{% block stylesheet %}
+			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+			<link rel="stylesheet" href="/css/capsule.css">
+		{% endblock %}
+		{% block favicon %}
+			<link rel="shortcut icon" href="/images/logo.png" sizes="16x16" type="image/x-icon">
+		{% endblock %}
+	</head>
+	<body style="width: 100%;"> {% block navbar %}{% endblock %}
+
+		{% if flash %}
+			<div class="alert alert-warning text-center">
+				{{flash}}</div>
+		{% endif %}
+
+
+		{# barre latérale amovible #}
+		<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel" style="text-align: center;">
+			<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+			{% if user %}
+				{# Affichage des informations sur le profil connecté #}
+				<p style="margin-top: 15px">{{user.firstName}}
+					{{user.name}}</p>
+
+				<p>
+					<a class="btn btn-warning" href="/{{role|lower}}/profil">
+						Profil
+					</a>
+				</p>
+
+				<p>
+					<a class="btn btn-primary" href="/deconnect">
+						Déconnexion
+					</a>
+				</p>
+
+				{# Boutons d'accès aux autres espaces #}
+
+				<div style="margin: 10px; padding-top: 15px; text-align: center; border: 1px solid lightgrey">
+					<p style="color: grey">Espaces</p>
+
+					{# Affichage du lien vers l'espace public #}
+					<p>
+						<a class="btn btn-light" href="/" style="background-color: white; border: 1px solid black">
+							Accéder à l'espace public
+						</a>
+					</p>
+
+
+					{% if role == "SuperAdmin" or role == "Admin" or role == "Pro" %}
+
+						<p>
+							<a class="btn btn-success" href="/ado/home" style="background-color: rgb(48,180,167); border: none">
+								Accéder à l'espace ado
+							</a>
+						</p>
+
+						<p>
+							<a class="btn btn-info" href="/parent/home" style="background-color: rgba(190,19,232,0.5); border: none">
+								Accéder à l'espace parent
+							</a>
+						</p>
+
+						<p>
+							<a class="btn btn-warning" href="/pro/home" style="background-color: rgb(255,222,16); border: none">
+								Accéder à l'espace pro
+							</a>
+						</p>
+
+
+						{# Affichage du lien vers l'espace admin si profil admin ou super admin #}
+						{% if role == "SuperAdmin" or role == "Admin" %}
+							<p>
+								<a class="btn btn-dark" href="/admin/home">
+									Accéder à l'espace administrateur
+								</a>
+							</p>
+						{% endif %}
+
+					{% endif %}
+				</div>
+
+
+			{% else %}
+				<div class="offcanvas-header"></div>
+				<div class="offcanvas-body">
+					<div>
+						<form method="POST" action="/">
+							<input type=" text" name="email" placeholder="Email *" required>
+							<p><input type="password" name="password" placeholder="Mot de passe *" required>
+							</p>
+							<p><input type="submit" value="Se connecter" class="btn btn-primary">
+							</p>
+						</form>
+						<p>
+							<a class="btn btn-primary" href="/new">
+								Créer un compte</a>
+						</p>
+					</div>
+				</div>
+
+			{% endif %}
+		</div>
+
+		<div class="col text-center"> {% block body %}{% endblock %}
+			</div>
+
+			{% block footer %}
+				<footer style="margin-top: 00px; margin-bottom: 10px">
+					<div class="col text-center">
+						<a href="https://www.facebook.com/Capsule.ado"><img src="/images/logo_fb.png" alt="Facebook"></a>
+
+						<a href="https://www.instagram.com/capsule.ado/"><img src="/images/logo_insta.png" alt="Instagram"></a>
+
+						<a href="https://www.tiktok.com/@gaellepelloille"><img src="/images/logo_tiktok.png" alt="TikTok"></a>
+
+						<a href="https://twitter.com/CapsuleAdo"><img src="/images/logo_tw.png" alt="Twitter"></a>
+
+						<a href="https://www.linkedin.com/showcase/capsule-ado/"><img src="/images/logo_li.png" alt="LinkedIn"></a>
+					</div>
+					<div class="col text-center" style="margin-top: 15px">
+						<a href="/mentions">Mentions légales</a>
+						-
+						<a href="/rgpd">RGPD</a>
+						-
+						<a href="/cgs">Conditions générales de service</a>
+						-
+						<a href="/faq">FAQ</a>
+						- &copy;Capsule 2023
+					</div>
+				</footer>
+			{% endblock %}
+
+			<script src="/scripts/bootstrap.js"></script>
+			{% block javascript %}{% endblock %}
+		</body>
+	</html>

@@ -1,0 +1,58 @@
+{% extends "/landing/navbar.html.twig" %}
+{% block title %}
+	Capsule -
+	{{profile.firstName}}
+	{{profile.name}}
+{% endblock %}
+{% block body %}
+
+	<div class="container text-align">
+		<div class="row row-cols-1 row-cols-md-2 g-4">
+			<div class="col">
+				<div class="row">
+					<div class="col" style="max-width: 174px">
+						{% if profile.profilePic %}
+							<img src={{profile.profilePic}} class="" alt="Portrait 1" style="border-radius: 50%; height: 150px; width:150px;">
+						{% else %}
+							<div style="background: white; padding-top: 50px; border-radius: 50%; border: 15px solid white; height: 200px; width:200px;">
+								<h1>{{profile.firstName|slice(0, 1)}}{{profile.name|slice(0, 1)}}</h1>
+							</div>
+						{% endif %}
+					</div>
+					<div class="col align-self-center" style="text-align: left">
+						<h3>{{profile.firstName}}
+							{{profile.name}}</h3>
+						Spécialité
+					</div>
+				</div>
+				<div class="row row-cols-1 g-2" style="margin-top: 5px">
+					<div class="col" style="padding-left: 10px; text-align: left; background-color: lightgrey; border-radius: 20px">
+						<p>
+							<h5>Ville</h5>
+							{{profile.city}}
+							({{profile.postcode}})
+							<a href="https:///www.google.com/maps/place/{{profile.postcode}}+{{profile.city|replace({" ":" +"})}}" target="_blank" rel="noopener noreferrer"><img src="/images/maps.png" alt="Maps" style="vertical-align: top"></a>
+						</p>
+					</div>
+					<div class="col" style="padding-left: 10px; text-align: left; border: 1px solid lightgrey; border-radius: 20px">
+						<p>
+							<h5>Spécialités</h5>
+							Liste des domaines de compétences</p>
+
+					</div>
+					<div class="col" style="padding-left: 10px; text-align: left; background-color: rgba(48,180,167,0.5); border-radius: 20px ">
+						<p>
+							<h5>Tarifs</h5>
+							Conventionné ou non
+							<br>Prix pratiqués</p>
+					</div>
+				</div>
+			</div>
+			<div class="col" style="border-radius: 20px; border : 1px solid rgba(48,180,167,0.5) ">Col 2</div>
+		</div>
+	</div>
+
+	{% if user.role == 'SuperAdmin' %}
+		{{dump(profile)}}
+	{% endif %}
+{% endblock %}

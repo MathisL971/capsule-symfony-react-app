@@ -1,0 +1,44 @@
+{% extends "landing/navbar.html.twig" %}
+{% block title %}
+	Capsule - Parent
+{% endblock %}
+{% block body %}
+	{# Image accueil #}
+	<div class="container-fluid text-center" style="padding: 0">
+		<div class="row" style="margin-top: -70px">
+			<img src="images/landing_parent.jpg" alt="image d'accueil" style="width: 100%">
+		</div>
+	</div>
+
+	{# Problématique #}
+	<div class="row" style="padding: 75px">
+		<h1>Aujourd'hui, vous avez envie de dire
+			<br>
+			Attends... pause ! Explique-moi ! !</h1>
+		<p>Texte sur les problématiques rencontrées</p>
+	</div>
+
+	{# Solutions #}
+	<div class="row" style="padding: 75px">
+		<h1>
+			Capsule répond présent</h1>
+		<p>Texte sur les atouts de capsule et ses fonctionnalités</p>
+	</div>
+
+	{# Fonctionnalités #}
+	<div class="row" style="padding: 75px">
+		<h1>Capsule c'est</h1>
+		<div class="col col-4">Un accès aux consultations</div>
+		<div class="col col-4">Ton profil utilisateur interactif</div>
+		<div class="col col-4">Du contenu sur mesure</div>
+	</div>
+
+	{# Inscription #}
+	<div class="row" style="padding: 75px; width:100%">
+		<p>
+			<a href="new" class="btn btn-info">Bouton inscription</a>
+		</p>
+	</div>
+
+
+{% endblock %}

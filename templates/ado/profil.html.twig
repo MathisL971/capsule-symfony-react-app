@@ -1,0 +1,89 @@
+{% extends "ado/navbar.html.twig" %}
+
+{% block title %}
+	Capsule - Profil
+{% endblock %}
+
+{% block body %}
+	<h1>Ton profil</h1>
+	<button class="btn btn-sm" id="update">Mettre à jour</button>
+	<button class="btn btn-sm" id="back" style="display: none">Revenir au profil</button>
+
+	<div class="container" id="profile">
+		<div class="row row-cols-sm-3">
+			<div class="col" style="border: 1px solid black"><img src="" alt="Profile picture"></div>
+			<div class="col" style="border: 1px solid black">
+				<p>{{user.firstname}}
+					{{user.name}}
+					<br>{{user.email}}
+					<br>{{user.phonemobile}}</p>
+				<p>né.e le
+					{{user.birthDate|date('d / m / Y')}}</p>
+			</div>
+			<div class="col" style="border: 1px solid black">{{user.street1}}
+				{% if user.street2 %}<br>{{user.street2}}
+				{% endif %}
+				<br>{{user.postcode}}
+				{{user.city}}
+				<br>{{user.country}}
+			</div>
+		</div>
+	</div>
+
+
+	<div class="container" id="form" style="display: none">
+		<form method="post" enctype="multipart/form-data">
+			<div class="row row-cols-sm-3">
+				<div class="col" style="border: 1px solid black">
+					<input type="hidden" name="MAX_FILE_SIZE" value="1100000"/>
+					<input type="file" name="pic" accept="image/png, image/jpg, image/jpeg, image/gif, image/svg">
+				</div>
+				<div class="col" style="border: 1px solid black">
+					<p><input type="text" name="firstName" value="{{user.firstname}}">
+						<input type="text" name="name" value="{{user.name}}" placeholder="Nom de famille">
+						<br><input type="text" name="email" value="{{user.email}}" placeholder="Email">
+						<br><input type="text" name="mobile" value="{{user.phonemobile}}" placeholder="Téléphone mobile"></p>
+					<p>
+						Date de naissance
+						<input type="date" name="birthDate" value="{{user.birthDate|date('Y-m-d')}}"></p>
+				</div>
+				<div class="col" style="border: 1px solid black"><input type="text" name="street1" value="{{user.street1}}" placeholder="Adresse">
+					<br><input type="text" name="street2" value="{{user.street2}}" placeholder="Complément d'adresse">
+					<br><input type="text" name="postcode" value="{{user.postcode}}" placeholder="Code postal" size="5">
+					<input type="text" name="city" value="{{user.city}}" placeholder="Ville">
+					<br><input type="text" name="country" value="{{user.country}}" placeholder="Pays">
+				</div>
+			</div>
+			<input type="submit" value="Sauver">
+		</form>
+	</div>
+
+	<div style="margin-top: 50px">{{dump(user)}}</div>
+
+	<div class="col" style="margin: 100px">
+		<a href="/ado/home" role="button" class="btn btn-dark">Retour à l'accueil</a>
+	</div>
+{% endblock %}
+
+{% block javascript %}
+	<script>
+		let btn = document.getElementById("update");
+let back = document.getElementById("back");
+let divProfile = document.getElementById("profile");
+let divForm = document.getElementById("form");
+
+btn.addEventListener("click", () => {
+divProfile.style.display = "none";
+divForm.style.display = "block";
+btn.style.display = "none";
+back.style.display = "inline-block";
+})
+
+back.addEventListener("click", () => {
+divProfile.style.display = "block";
+divForm.style.display = "none";
+btn.style.display = "inline-block";
+back.style.display = "none";
+})
+	</script>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends "ado/navbar.html.twig" %}
+
+{% block body %}
+	<div class="container text-center">
+		<div class="row" style="padding: 50px">
+			<div class="col col-3">Image</div>
+			<div class="col col-9" style="text-align: left">
+				<h1>Salut
+					{{ user.firstName }}</h1>
+				<p>Bienvenue dans ton profil privé Capsule !
+					<br>Comment vas-tu ? C'est quoi le plan aujourd'hui ?
+					<br>** Idée : plusieurs textes accueil aléatoires **</p>
+			</div>
+		</div>
+		<div class="row row-cols-1 row-cols-md-4 g-4">
+			<div class="col">
+				<a href="/ado/agenda"><img src="/images/ado_agenda.png" alt="Ton agenda" height="250px" width="auto" title="Mon agenda"></a>
+			</div>
+			<div class="col">
+				<img src="/images/ado_journal.png" alt="Ton journal" height="250px" width="auto" style="opacity: 25%" title="Coming soon">
+			</div>
+			<div class="col">
+				<a href="/ado/videos"><img src="/images/ado_videos.png" alt="Tes videos" height="250px" width="auto"></a>
+			</div>
+			<div class="col">
+				<a href="/ado/podcasts"><img src="/images/ado_podcasts.png" alt="Tes podcasts" height="250px" width="auto"></a>
+			</div>
+			<div class="col">
+				<a href="/ado/audiobooks"><img src="/images/ado_audiobooks.png" alt="Tes audiobooks" height="250px" width="auto"></a>
+			</div>
+			<div class="col">
+				<a href="/ado/messages"><img src="/images/ado_messages.png" alt="Tes messages" height="250px" width="auto"></a>
+			</div>
+			<div class="col">
+				<img src="/images/ado_family.png" alt="Espace famille" height="250px" width="auto" style="opacity: 25%" title="Coming soon">
+			</div>
+			<div class="col">
+				<img src="/images/ado_news.png" alt="Tes news" height="250px" width="auto" style="opacity: 25%" title="Coming soon">
+			</div>
+			<div class="col">
+				<img src="/images/ado_notes.png" alt="Tes notes" height="250px" width="auto" style="opacity: 25%" title="Coming soon">
+			</div>
+			<div class="col">
+				<img src="/images/ado_community.png" alt="Ta communauté" height="250px" width="auto" style="opacity: 25%" title="Coming soon">
+			</div>
+			<div class="col">
+				<img src="/images/ado_timing.png" alt="Tes timing" height="250px" width="auto" style="opacity: 25%" title="Coming soon">
+			</div>
+			<div class="col">
+				<a href="/ado/visio"><img src="/images/ado_visio.png" alt="Ta visio" height="250px" width="auto"></a>
+			</div>
+		</div>
+
+		{# Ressources #}
+		<div class="row" style="padding: 75px">
+			<div>
+				<img src="/images/landing_ressources.png" alt="landing_ressources.png" style="margin-bottom: 25px; max-width:400px; width:100vw"><br>
+			</div>
+
+			<h5>VIDEOS</h5>
+			<div class="row row-cols-1 row-cols-md-3 mb-3">
+				<div class="col">
+					<iframe style="width:75vw; max-width:300px; height:75vw; max-height:300px" border-radius="20%" src="https://www.youtube.com/embed/k17Ul2eTzus" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+				</div>
+				<div class="col">
+					<iframe style="width:75vw; max-width:300px; height:75vw; max-height:300px" src="https://www.youtube.com/embed/eqCyYR_bGDE?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+				</div>
+				<div class="col">
+					<iframe style="width:75vw; max-width:300px; height:75vw; max-height:300px" src="https://www.youtube.com/embed/GPPK-qqtmCU?controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+				</div>
+			</div>
+
+			<h5>PODCASTS</h5>
+			<div class="row row-cols-1 row-cols-md-3 mb-3">
+				<div class="col">
+					<img src="/images/landing_podcast.png" style="border-radius: 50%; max-height:250px; max-width:250px" alt="landing_podcast.png">
+					<br>Podcast 1
+				</div>
+				<div class="col">
+					<img src="/images/landing_podcast.png" style="border-radius: 50%; max-height:250px; max-width:250px" alt="landing_podcast.png">
+					<br>Podcast 2
+				</div>
+				<div class="col">
+					<img src="/images/landing_podcast.png" style="border-radius: 50%; max-height:250px; max-width:250px" alt="landing_podcast.png">
+					<br>Podcast 3
+				</div>
+			</div>
+
+			<h5>AUDIOBOOKS</h5>
+			<div class="row row-cols-1 row-cols-md-3 mb-3">
+				<div class="col">
+					<img src="/images/landing_audiobooks.png" style="border-radius: 50%; max-height:250px; max-width:250px" alt="landing_podcast.png">
+					<br>Livre audio 1
+				</div>
+				<div class="col">
+					<img src="/images/landing_audiobooks.png" style="border-radius: 50%; max-height:250px; max-width:250px" alt="landing_podcast.png">
+					<br>Livre audio 2
+				</div>
+				<div class="col">
+					<img src="/images/landing_audiobooks.png" style="border-radius: 50%; max-height:250px; max-width:250px" alt="landing_podcast.png">
+					<br>Livre audio 3
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+
+{% endblock %}

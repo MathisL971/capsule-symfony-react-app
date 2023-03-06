@@ -1,0 +1,24 @@
+{% extends "admin/base.html.twig" %}
+{% block title %}
+	Capsule - Backoffice
+{% endblock %}
+
+{% block navbar %}
+
+	{# barre de navigation #}
+	<div class="navbar sticky-top" style="padding-top: 0;">
+		<div class="container-fluid" style="background: black;">
+			<a class="navbar-brand" href="/admin/home"><img src="/images/Logo.png" alt="Logo Capsule" width="40" height="48.2"></a>
+			<a href="/admin/home" style="color: white; text-decoration:none">Tableau de bord</a>
+			<a class="admin" href="/admin/agenda">Agenda</a>
+			<a href="/admin/users" style="color: white; text-decoration:none">Utilisateurs</a>
+			<a href="/admin/ressources" style="color: white; text-decoration:none">Ressources</a>
+			<a href="/admin/textes" style="color: white; text-decoration:none" title="Textes de la landing">Textes</a>
+			<a href="/admin/revue" style="color: white; text-decoration:none">Revue de presse</a>
+			<a href="/admin/support" style="color: white; text-decoration:none">Support</a>
+			<a data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample"><img src="/images/user40white.png" alt="Profil utilisateur"></a>
+		</div>
+	</div>
+{% endblock %}
+
+{% block body %}{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "landing/navbar.html.twig" %}
+{% block title %}
+	Capsule - Jeune
+{% endblock %}
+{% block body %}
+	{# Image accueil #}
+	<div class="container-fluid text-center" style="padding: 0">
+		<div class="row" style="margin-top: -70px">
+			<img src="images/landing_jeune.jpg" alt="image d'accueil" style="width: 100%">
+		</div>
+	</div>
+
+	{# Problématique #}
+	<div class="row" style="padding: 75px">
+		<h1>Aujourd'hui, tu as<br>envie de dire STOP !</h1>
+		<p>Texte sur les problématiques rencontrées</p>
+	</div>
+
+	{# Solutions #}
+	<div class="row" style="padding: 75px">
+		<h1>
+			Capsule répond présent</h1>
+		<p>TExte sur les atouts de capsule et ses fonctionnalités</p>
+	</div>
+
+	{# Fonctionnalités #}
+	<div class="row" style="padding: 75px">
+		<h1>Capsule c'est</h1>
+		<div class="col col-4"><img src="images/landing_ado_contenu.jpg" alt="Illustration" style="margin-bottom: 1vw; width: auto; height: 15vw; border-top-right-radius: 3vw">
+			<p style="font-weight: bold">DU CONTENU SUR MESURE</p>
+			<p>Podcasts, revues, articles,…, accès aux conférences, zone d’échanges entre professionnels
+			</p>
+		</div>
+		<div class="col col-4"><img src="images/landing_ado_profil.jpg" alt="Illustration" style="margin-bottom: 1vw; width: auto; height: 15vw; border-top-right-radius: 3vw">
+			<p style="font-weight: bold">UN PROFIL UTILISATEUR COMPLET ET INTERACTIF</p>
+			<p>Retrouvez tous les outils dont vous avez besoin en un clic : dossiers, suivi patient, boîte de réception,etc.</p>
+		</div>
+		<div class="col col-4">
+			<img src="images/landing_ado_acces.jpg" alt="Illustration" style="margin-bottom: 1vw; width: auto; height: 15vw; border-top-right-radius: 3vw">
+			<p style="font-weight: bold">UN ACCES AUX CONSULTATIONS</p>
+			<p>Toutes vos consultations réunies sur une seule et même plateforme
+			</p>
+		</div>
+	</div>
+
+	{# Inscription #}
+	<div class="row" style="padding: 75px; width:100%">
+		<p>
+			<a href="new" class="btn btn-info btn-lg" style="background: rgba(48,180,167,0.5); border: 0px ">Je m'inscris</a>
+		</p>
+	</div>
+
+	{# Liste des praticiens #}
+	<div class="row" style="background: rgba(48,180,167,0.5); padding: 75px 75px 0px 75px; margin-bottom: 25px">
+		<h1>Nos praticiens</h1>
+
+		<div class="row row-cols-1 row-cols-md-3 mb-3" style="padding: 5px; margin-top: 150px">
+			{% for pro in pros %}
+				<div class="col">
+					<div class="card" style="padding: 10px; margin-bottom: 150px">
+						{% if pro.profilePic %}
+							<img src={{pro.profilePic}} class="" alt="Portrait 1" style="border-radius: 50%; border: 15px solid white; height: 200px; width:200px; margin: -100px auto 10px auto">
+						{% else %}
+							<div style="background: white; padding-top: 50px; border-radius: 50%; border: 15px solid white; height: 200px; width:200px; margin: -100px auto 10px auto">
+								<h1>{{pro.firstName|slice(0, 1)}}{{pro.name|slice(0, 1)}}</h1>
+							</div>
+						{% endif %}
+
+
+						<div class="card-body">
+							<h5 class="card-title">{{pro.firstName}}
+								{{pro.name}}</h5>
+							<p class="card-text">{{pro.specialty}}</p>
+							<a href="fiche_pro/{{pro.id}}" class="btn btn-primary">En savoir plus</a>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+
+
+{% endblock %}

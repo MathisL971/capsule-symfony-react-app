@@ -1,0 +1,30 @@
+{% extends "landing/navbar.html.twig" %}
+{% block title %}
+	Capsule
+{% endblock %}
+{% block body %}
+	<h1>Création d'un compte Capsule</h1>
+	<form method="POST">
+		<p><input type="email" name="email" placeholder="Email" required></p>
+		<p><input type="password" name="password" placeholder="Mot de passe" required></p>
+		<p><input type="password" name="password2" placeholder="Confirmer le mot de passe" required></p>
+		<p><input type="text" name="firstName" placeholder="Prénom ou pseudonyme" required></p>
+		<p>
+			<select id="roles" name="role">
+				<option value="Ado">Ado</option>
+				<option value="Parent">Parent</option>
+			</select>
+		</p>
+		<p><input type="submit" value="Créer le compte"></p>
+	</form>
+
+	<div class="col" style="margin: 100px">
+		<a href="/pro/new" role="button" class="btn btn-warning">Créer un compte professionnel</a>
+	</div>
+
+	<div class="col" style="margin: 100px">
+		<a href="/" role="button" class="btn btn-dark">Retour à l'accueil</a>
+	</div>
+
+
+{% endblock %}
