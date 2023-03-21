@@ -1,0 +1,16 @@
+{% extends extend %}
+
+{% block title %}
+	Capsule - Abonnement
+{% endblock %}
+
+{% block body %}
+	<h1>Abonnement Capsule</h1>
+	<div style="min-height: 75vh">
+		<form method="post">
+			<input type="hidden" name="abo" value="1">
+			<input type="submit" class="btn btn-warning" value="Je souhaite souscrire à un abonnement d'un an au prix de 6€ TTC">
+		</form>
+	</div>
+
+{% endblock %}

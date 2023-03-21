@@ -119,6 +119,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
+     * Civilité : Mr Mme Dr Pr... podolff ?
      */
     private $title;
 
@@ -131,6 +132,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="text", nullable=true)
      */
     private $bio;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $socid;
 
     public function __construct()
     {
@@ -530,6 +536,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setBio(?string $bio): self
     {
         $this->bio = $bio;
+
+        return $this;
+    }
+
+    public function getSocid(): ?int
+    {
+        return $this->socid;
+    }
+
+    public function setSocid(?int $socid): self
+    {
+        $this->socid = $socid;
 
         return $this;
     }
