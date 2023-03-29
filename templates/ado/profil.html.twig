@@ -58,8 +58,6 @@
 		</form>
 	</div>
 
-	<div style="margin-top: 50px">{{dump(user)}}</div>
-
 	<div class="col" style="margin: 100px">
 		<a href="/ado/home" role="button" class="btn btn-dark">Retour à l'accueil</a>
 	</div>
@@ -86,4 +84,8 @@ btn.style.display = "inline-block";
 back.style.display = "none";
 })
 	</script>
+{% endblock %}
+
+{% block admin %}
+	<div style="margin-top: 50px">{{dump(user)}}</div>
 {% endblock %}

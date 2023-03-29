@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use DateTime;
 use DateInterval;
-use Chris\Apidoli;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -23,20 +22,23 @@ class SubscriptionController extends BaseController
 
         if (!empty($_POST)) {
             $user = $this->session->get('user');
-            //$apikey = $this->em->getRepository(Param::class)->finBy(['name' => 'doli_apikey']);
+            //$apikey = $this->em->getRepository(Param::class)->findBy(['name' => 'doli_apikey']);
             $apikey = "If1Xo2WXDYp5Qr5vy98GVjNz75ee1D3v";
-            //$url = $this->em->getRepository(Param::class)->finBy(['name' => 'doli_base_url']);
+            //$url = $this->em->getRepository(Param::class)->findBy(['name' => 'doli_base_url']);
             $url = "http://dolilocal/htdocs/api/index.php/";
-            //$prix = $this->em->getRepository(Param::class)->finBy(['name' => 'prix_abo']);
+            //$prix = $this->em->getRepository(Param::class)->findBy(['name' => 'prix_abo']);
             $prix = 5;
+
+            $client_id = $user->getSocid();
 
             if (empty($user->getSocid())) {
                 //Création du nouveau client s'il n'est pas déjà enregistré dans Dolibarr
                 $name = $user->getFirstName() . " " . $user->getName();
-                $name = ($user->getTitle() == "Dr") ? "Dr " . $name : '';
-                $name = ($user->getTitle() == "Pr") ? "Pr " . $name : '';
+                $name = ($user->getTitle() == "Dr") ? "Dr " . $name : $name;
+                $name = ($user->getTitle() == "Pr") ? "Pr " . $name : $name;
 
                 $address = ($user->getStreet2()) ? $user->getStreet1() . "<br>" . $user->getStreet2() : $user->getStreet1();
+                $phone = ($user->getPhoneMobile()) ? $user->getPhoneMobile() : $user->getPhoneOffice();
 
                 $client = json_encode(array(
                     'name' => $name,
@@ -44,16 +46,15 @@ class SubscriptionController extends BaseController
                     'zip' => $user->getPostcode(),
                     'town' => $user->getCity(),
                     'status' => '1',
-                    'phone' => $user->getPhone(),
+                    'phone' => $phone,
                     'email' => $user->getEmail()
                 ));
 
                 //Enregistrement du client & récupération de son id
-                //$client_id = Apidoli::CallAPI("POST", $apikey, $url . "http://dolilocal/htdocs/api/index.php/ThirdParties", $client);
-                $client_id = 2;
+                $client_id = $this->CallAPI("POST", $apikey, $url . "ThirdParties", $client);
 
                 //Mise à jour du User avec le socid
-                $user->setSocid = $client_id;
+                $user->setSocid($client_id);
                 $this->em->persist($user);
             }
 
@@ -96,30 +97,65 @@ class SubscriptionController extends BaseController
                 'note_private' => 'Test formulaire abo. Merci Karine Leprêtre'
             ));
 
-            echo 'Enregistrement de la facture<br>';
-            $facture_id = CallAPI("POST", "If1Xo2WXDYp5Qr5vy98GVjNz75ee1D3v", "http://dolilocal/htdocs/api/index.php/invoices", $facture);
+            $facture_id = $this->CallAPI("POST", $apikey, $url . "invoices", $facture);
 
-            echo 'Validation de la facture <br>';
-            $url = "http://dolilocal/htdocs/api/index.php/invoices/" . $facture_id . "/validate";
-            CallAPI("POST", "If1Xo2WXDYp5Qr5vy98GVjNz75ee1D3v", $url);
+            $this->CallAPI("POST", $apikey, $url . $facture_id . "/validate");
 
-            echo 'Récupération de la facture validée';
-            $facture = json_decode(CallAPI("GET", "If1Xo2WXDYp5Qr5vy98GVjNz75ee1D3v", "http://dolilocal/htdocs/api/index.php/invoices/" . $facture_id));
+            $facture = json_decode($this->CallAPI("GET", $apikey, $url . "invoices/" . $facture_id));
 
-            echo 'Génération du pdf<br>';
             $pdf_a_generer = json_encode(array(
                 'modulepart' => 'invoice',
                 'original_file' => $facture->ref . "/" . $facture->ref . ".pdf",
                 'doctemplate' => 'sponge',
                 'langcode' => 'fr_FR'
             ));
-            CallAPI("PUT", "If1Xo2WXDYp5Qr5vy98GVjNz75ee1D3v", "http://dolilocal/htdocs/api/index.php/documents/builddoc", $pdf_a_generer);
-        } else {
-            echo 'Oh my God! They killed Kenny!';
+            $this->CallAPI("PUT", "If1Xo2WXDYp5Qr5vy98GVjNz75ee1D3v",  $url . "documents/builddoc", $pdf_a_generer);
         }
 
-
-
         return new Response($this->twig->render('subscription/subscription.html.twig', $vars));
+    }
+
+    public function CallAPI($method, $apikey, $url, $data = false)
+    {
+        $curl = curl_init();
+        $httpheader = ['DOLAPIKEY: ' . $apikey];
+
+        switch ($method) {
+            case "POST":
+                curl_setopt($curl, CURLOPT_POST, 1);
+                $httpheader[] = "Content-Type:application/json";
+
+                if ($data)
+                    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+
+                break;
+
+            case "PUT":
+                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
+                $httpheader[] = "Content-Type:application/json";
+
+                if ($data)
+                    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+
+                break;
+
+            default:
+                if ($data)
+                    $url = sprintf("%s?%s", $url, http_build_query($data));
+        }
+
+        // Optional Authentication:
+        //    curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+        //    curl_setopt($curl, CURLOPT_USERPWD, "username:password");
+
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $httpheader);
+
+        $result = curl_exec($curl);
+
+        curl_close($curl);
+
+        return $result;
     }
 }
