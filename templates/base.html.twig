@@ -144,7 +144,7 @@
 			<script src="/scripts/bootstrap.js"></script>
 			{% block javascript %}{% endblock %}
 
-			{% if $role == 'SuperAdmin' %}
+			{% if role == 'SuperAdmin' %}
 				{% block admin %}{% endblock %}
 			{% endif %}
 		</body>

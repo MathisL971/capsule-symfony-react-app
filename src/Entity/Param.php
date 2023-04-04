@@ -32,6 +32,11 @@ class Param
      */
     private $category;
 
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $dateUpdate;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -69,6 +74,18 @@ class Param
     public function setCategory(string $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getDateUpdate(): ?\DateTimeInterface
+    {
+        return $this->dateUpdate;
+    }
+
+    public function setDateUpdate(\DateTimeInterface $dateUpdate): self
+    {
+        $this->dateUpdate = $dateUpdate;
 
         return $this;
     }

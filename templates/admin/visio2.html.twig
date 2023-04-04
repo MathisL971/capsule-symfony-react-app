@@ -1,0 +1,38 @@
+{% extends "admin/navbar.html.twig" %}
+
+{% block title %}Capsule - Visio
+{% endblock %}
+
+{% block script %}
+	<script src='https://8x8.vc/external_api.js' async></script>
+	<style>
+		html,
+		body,
+		#meet {
+			height: 100vh;
+		}
+	</style>
+	<div class="js-data" data-domain="{{domain}}" data-room="{{room}}" data-jwt="{{jwt}}" data-subject="Salon des admin"></div>
+	<script type="text/javascript">
+		let api;
+var data = document.querySelector('.js-data')
+
+const initIframeAPI = () => {
+const domain = data.dataset.domain;
+const options = {
+roomName: data.dataset.room,
+jwt: data.dataset.jwt,
+parentNode: document.querySelector('#meet')
+};
+const subject = data.dataset.subject;
+api = new JitsiMeetExternalAPI(domain, options);
+api.executeCommand('localSubject', subject);
+}
+
+window.onload = () => {
+initIframeAPI();
+}
+	</script>
+{% endblock %}
+{% block body %}<div id="meet"/>
+{% endblock %}

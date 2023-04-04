@@ -15,26 +15,39 @@
 		{% block favicon %}
 			<link rel="shortcut icon" href="/images/logo.png" sizes="16x16" type="image/x-icon">
 		{% endblock %}
-		<script src='https://8x8.vc/vpaas-magic-cookie-e9f22e0cc2264adc9c5beffec3ea2822/external_api.js' async></script>
+		<script src='https://8x8.vc/external_api.js' async></script>
 		<style>
 			html,
 			body,
-			#jaas-container {
+			#meet {
 				height: 100%;
 			}
 		</style>
+		<div class="js-data" data-domain="{{domain}}" data-room="{{room}}" data-jwt="{{jwt}}"></div>
 		<script type="text/javascript">
-			window.onload = () => {
-const api = new JitsiMeetExternalAPI("8x8.vc", {
-roomName: "vpaas-magic-cookie-e9f22e0cc2264adc9c5beffec3ea2822/SampleAppDedicatedDuosPileAhead",
-parentNode: document.querySelector('#jaas-container')
-});
+			let api;
+var data = document.querySelector('.js-data')
+
+const initIframeAPI = () => {
+const domain = data.dataset.domain;
+const options = {
+roomName: data.dataset.room,
+jwt: data.dataset.jwt,
+parentNode: document.querySelector('#meet')
+};
+api = new JitsiMeetExternalAPI(domain, options);
+api.executeCommand('localSubject', 'New Conference Local Subject');
+}
+
+
+window.onload = () => {
+initIframeAPI();
 }
 		</script>
 	</head>
 
 
 	{% block body %}
-		<div id="jaas-container"/>
+		<div id="meet"/>
 	{% endblock %}
 </html>

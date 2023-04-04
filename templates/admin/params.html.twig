@@ -1,0 +1,24 @@
+{% extends "admin/navbar.html.twig" %}
+
+{% block title %}
+	Paramètres
+{% endblock %}
+
+{% block body %}
+	<h1>Page de gestion des paramètres</h1>
+
+	<table style="width: 100%">
+		<tr>
+			<th>Paramètre</th>
+			<th>Valeur</th>
+			<th>Dernière modification</th>
+		</tr>
+		<tr>
+			<td><input type="text" form="addParam" name="name"></td>
+			<td><input type="text" form="addParam" name="value"></td>
+			<td><input type="submit" value="Enregistrer" form="addParam"></td>
+		</tr>
+	</table>
+	<form method="post" id="addParam"></form>
+	<p>{{dump(post)}}</p>
+{% endblock %}
