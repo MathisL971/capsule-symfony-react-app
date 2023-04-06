@@ -9,6 +9,8 @@ use App\Entity\Education;
 use App\Entity\Ressource;
 use App\Entity\Experience;
 use App\Controller\BaseController;
+use App\Entity\Param;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -593,9 +595,9 @@ class AdminController extends BaseController
             $payload = array(
                 "aud" => "jitsi",
                 "iss" => "chat",
-                "iat" => 1680609623,
-                "exp" => 1680616823,
-                "nbf" => 1680609618,
+                "iat" => 1680609623,  //Datetime mais à quoi donc il correspond ??? 
+                "exp" => 1681118823,  //ATTENTION A CHANGER !!!! C'est le datetime d'expiration
+                "nbf" => 1680773583,  //ATTENTION A CHANGER !!!! C'est le datetime not before
                 "sub" => "vpaas-magic-cookie-e9f22e0cc2264adc9c5beffec3ea2822",
                 "context" => array(
                     "features" => array(
@@ -701,13 +703,26 @@ class AdminController extends BaseController
     public function params(Request $rq, SessionInterface $session)
     {
         if (AdminController::authentify($session)) {
+            if (!empty($_POST)) {
+                $param = new Param;
+                $param->setName($rq->request->get('name'))
+                    ->setValue($rq->request->get('value'))
+                    ->setCategory($rq->request->get('category'))
+                    ->setDescription($rq->request->get('description'))
+                    ->setDateUpdate(new DateTime());
 
+                $this->em->persist($param);
+                $this->em->flush();
+            }
 
             $vars = [];
 
             $vars['user'] = $session->get('user');
             $vars['role'] = $session->get('role');
-            $vars['post'] = $_POST;
+
+            $repo = $this->em->getRepository(Param::class);
+            $vars['params'] = $repo->findAll();
+
             return new Response($this->twig->render('admin/params.html.twig', $vars));
         }
 

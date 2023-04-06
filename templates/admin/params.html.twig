@@ -14,11 +14,27 @@
 			<th>Dernière modification</th>
 		</tr>
 		<tr>
-			<td><input type="text" form="addParam" name="name"></td>
-			<td><input type="text" form="addParam" name="value"></td>
+			<td><input type="text" form="addParam" name="name">
+				<input type="text" form="addParam" name="description"></td>
+			<td><input type="text" form="addParam" name="value">
+				<input list="categories" form="addParam" name="category">
+				<datalist id="categories">
+					<option value="Jitsi">Jitsi</option>
+				</td>
+			</td>
 			<td><input type="submit" value="Enregistrer" form="addParam"></td>
 		</tr>
+		{% for param in params %}
+			<tr>
+				<td>{{param.name}}
+					:
+					{{param.description}}</td>
+				<td>{{param.value}}</td>
+				<td>{{param.dateUpdate|date('d.m.Y')}}</td>
+			</tr>
+		{% endfor %}
+
 	</table>
 	<form method="post" id="addParam"></form>
-	<p>{{dump(post)}}</p>
+	<p>{{dump(params)}}</p>
 {% endblock %}

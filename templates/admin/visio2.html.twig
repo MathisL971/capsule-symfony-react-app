@@ -12,7 +12,7 @@
 			height: 100vh;
 		}
 	</style>
-	<div class="js-data" data-domain="{{domain}}" data-room="{{room}}" data-jwt="{{jwt}}" data-subject="Salon des admin"></div>
+	<div class="js-data" data-domain="{{domain}}" data-room="{{room}}" data-jwt="{{jwt}}"></div>
 	<script type="text/javascript">
 		let api;
 var data = document.querySelector('.js-data')
@@ -26,7 +26,6 @@ parentNode: document.querySelector('#meet')
 };
 const subject = data.dataset.subject;
 api = new JitsiMeetExternalAPI(domain, options);
-api.executeCommand('localSubject', subject);
 }
 
 window.onload = () => {
@@ -34,5 +33,7 @@ initIframeAPI();
 }
 	</script>
 {% endblock %}
-{% block body %}<div id="meet"/>
+{% block body %}
+	{{jwt}}
+	<div id="meet"/>
 {% endblock %}

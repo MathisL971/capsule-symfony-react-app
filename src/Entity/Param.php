@@ -37,6 +37,11 @@ class Param
      */
     private $dateUpdate;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,6 +91,18 @@ class Param
     public function setDateUpdate(\DateTimeInterface $dateUpdate): self
     {
         $this->dateUpdate = $dateUpdate;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }
