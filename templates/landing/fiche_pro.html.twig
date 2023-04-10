@@ -37,22 +37,50 @@
 					<div class="col" style="padding-left: 10px; text-align: left; border: 1px solid lightgrey; border-radius: 20px">
 						<p>
 							<h5>Spécialités</h5>
-							Liste des domaines de compétences</p>
+							<ul>
+								{% for spec in speciality %}
+									<li>{{spec}}</li>
+								{% endfor %}
+							</ul>
+						</p>
+					</ul>
+				</p>
 
-					</div>
-					<div class="col" style="padding-left: 10px; text-align: left; background-color: rgba(48,180,167,0.5); border-radius: 20px ">
-						<p>
-							<h5>Tarifs</h5>
-							Conventionné ou non
-							<br>Prix pratiqués</p>
-					</div>
-				</div>
 			</div>
-			<div class="col" style="border-radius: 20px; border : 1px solid rgba(48,180,167,0.5) ">Col 2</div>
+			<div class="col" style="padding-left: 10px; text-align: left; background-color: rgba(48,180,167,0.5); border-radius: 20px ">
+				<p>
+					<h5>Tarifs</h5>
+					Conventionné ou non
+					<br>Prix pratiqués</p>
+			</div>
+			<div class="col" style="border-radius: 20px; border : 1px solid rgba(48,180,167,0.5); padding: 10px ">{{profile.bio|nl2br}}</div>
 		</div>
 	</div>
-
-	{% if user.role == 'SuperAdmin' %}
-		{{dump(profile)}}
+	<div class="col" style="border-radius: 20px; border : 1px solid rgba(48,180,167,0.5) ">
+		<p>
+			<h5>Prendre rendez-vous</h5>
+			<div class="row row-cols-6">
+				{% for date in dates %}
+					<div class="col">
+						<div class="row">
+							<p class="text-center">{{date|date("d.m.Y")}}</p>
+						</div>
+						{% for j in 9..20 %}
+							<div class="row">
+								<p class="text-center">
+									<button class="btn btn-outline-primary" disabled>{{j}}:00
+									</button>
+								</p>
+							</div>
+						{% endfor %}
+					</div>
+				{% endfor %}
+			</div>
+		</p>
+	</div>
+</div>
+{% if user.role == 'SuperAdmin' %}
+	{{dump(dates)}}
+	<p>{{dump(profile)}}
 	{% endif %}
 {% endblock %}

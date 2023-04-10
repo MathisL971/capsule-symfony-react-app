@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use DateInterval;
+use DateTime;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -193,6 +195,19 @@ class LandingController extends BaseController
 
         $repo = $this->em->getRepository(USer::class);
         $vars['profile'] = $repo->find($id);
+        $vars['speciality'] = array(
+            '0' => 'Confance en soi',
+            '1' => 'Gestion du stress',
+            '2' => 'Concentration'
+        );
+        $date = new DateTime('now');
+        $vars['dates'][0] = $date;
+
+        for ($i = 1; $i < 6; $i++) {
+            $date = new DateTime('now');
+            $date->add(new DateInterval('P' . $i . 'D'));
+            $vars['dates'][$i] = $date;
+        }
 
         return new Response($this->twig->render('landing/fiche_pro.html.twig', $vars));
     }

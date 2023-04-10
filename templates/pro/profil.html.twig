@@ -2,6 +2,26 @@
 
 {% block body %}
 	<h1>Profil</h1>
+	<h2>Gestion des créneaux</h2>
+	<form method="post">
+		<p>Du
+			<input type="date" name="start_date"><br></p>
+		<p>Au
+			<input type="date" name="end_date"><br></p>
+		<p>Matin : de
+			<input type="time" name="am_start_time">
+			A
+			<input type="time" name="am_end_time"><br></p>
+		<p>Après midi : de
+			<input type="time" name="pm_start_time">
+			A
+			<input type="time" name="pm_end_time"><br></p>
+		<p>Durée d'une consultation :
+			<input type="time" name="duration">
+		</p>
+		<p><input type="submit" value="Ouvrir les créneaux">
+		</p>
+	</form>
 
-
+	<p>{{dump(slots)}}</p>
 {% endblock %}

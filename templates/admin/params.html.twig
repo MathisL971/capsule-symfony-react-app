@@ -29,7 +29,7 @@
 				<td>{{param.name}}
 					:
 					{{param.description}}</td>
-				<td>{{param.value}}</td>
+				<td>{{param.value[:100]}}</td>
 				<td>{{param.dateUpdate|date('d.m.Y')}}</td>
 			</tr>
 		{% endfor %}

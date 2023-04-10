@@ -52,6 +52,11 @@ class Meeting
      */
     private $content;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Slot::class, mappedBy="meeting", cascade={"persist", "remove"})
+     */
+    private $slot;
+
     public function __construct()
     {
         $this->guest = new ArrayCollection();
@@ -142,6 +147,28 @@ class Meeting
     public function setContent(?string $content): self
     {
         $this->content = $content;
+
+        return $this;
+    }
+
+    public function getSlot(): ?Slot
+    {
+        return $this->slot;
+    }
+
+    public function setSlot(?Slot $slot): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($slot === null && $this->slot !== null) {
+            $this->slot->setMeeting(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($slot !== null && $slot->getMeeting() !== $this) {
+            $slot->setMeeting($this);
+        }
+
+        $this->slot = $slot;
 
         return $this;
     }
