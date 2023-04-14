@@ -175,28 +175,28 @@ class ProController extends BaseController
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
 
-            $repo = $this->em->getRepository(Slot::class);
-
-            $vars['slots'] = $repo->findBy([
-                'user' => $this->session->get('user'),
-            ]);
-
             $post = $rq->request;
 
-            if (count($post) > 0) {
-                dump($post);
-                $start_date = new DateTime($post->get('start_date'));
-                $end_date = new DateTime($post->get('end_date'));
-                $date = $start_date;
+            // if (count($post) > 0) {
+            //     dump($post);
+            //     $start_date = new DateTime($post->get('start_date') . $post->get('am_start_time'));
+            //     $end_date = new DateTime($post->get('end_date') . $post->get('pm_end_time'));
+            //     $date = $start_date;
+            //     $duration_interval = new DateInterval('PT' . substr($post->get('duration'), 0, 2) . 'H' . substr($post->get('duration'), -2) . 'M');
+            //     echo date_format($end_date, 'd.m.Y H:i') . '<p>';
 
-                while ($date <= $end_date) {
-                    echo $post->get('am_start_time');
-
-                    echo 'ca tourne !';
-                    $date->add(new DateInterval('P1D'));
-                }
-                dd('Et maintenant ?');
-            }
+            //     while ($date <= $end_date) {
+            //         $day_end = new DateTime(date_format($date, 'Y-m-d') . $post->get('pm_end_time'));
+            //         while ($date < $day_end) {
+            //             echo date_format($date, 'd.m.Y H:i') . '<br>';
+            //             $date->add($duration_interval);
+            //         }
+            //         $date->add(new DateInterval(('P1D')));
+            //         $date = new DateTime(date_format($date, 'Y-m-d') . $post->get('am_start_time'));
+            //         echo 'retour : ' . date_format($date, 'd.m.Y H:i') . '<br>';
+            //     }
+            //     dd('Et maintenant ?');
+            // }
 
             return new Response($this->twig->render('pro/profil.html.twig', $vars));
         }

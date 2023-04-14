@@ -3,25 +3,80 @@
 {% block body %}
 	<h1>Profil</h1>
 	<h2>Gestion des créneaux</h2>
-	<form method="post">
-		<p>Du
-			<input type="date" name="start_date"><br></p>
-		<p>Au
-			<input type="date" name="end_date"><br></p>
-		<p>Matin : de
-			<input type="time" name="am_start_time">
-			A
-			<input type="time" name="am_end_time"><br></p>
-		<p>Après midi : de
-			<input type="time" name="pm_start_time">
-			A
-			<input type="time" name="pm_end_time"><br></p>
-		<p>Durée d'une consultation :
-			<input type="time" name="duration">
-		</p>
-		<p><input type="submit" value="Ouvrir les créneaux">
-		</p>
-	</form>
+	<div class="container">
+		<form method="post">
+			<table style="width: 80%; margin: 20px auto">
+				<tr>
+					<th style="width: 12.5%"></th>
+					<th style="width: 12.5%">Lundi</th>
+					<th style="width: 12.5%">Mardi</th>
+					<th style="width: 12.5%">Mercredi</th>
+					<th style="width: 12.5%">Jeudi</th>
+					<th style="width: 12.5%">Vendredi</th>
+					<th style="width: 12.5%">Samedi</th>
+					<th style="width: 12.5%">Dimanche</th>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input type="checkbox" name="lundi"></td>
+					<td><input type="checkbox" name="mardi"></td>
+					<td><input type="checkbox" name="mercredi"></td>
+					<td><input type="checkbox" name="jeudi"></td>
+					<td><input type="checkbox" name="vendredi"></td>
+					<td><input type="checkbox" name="samedi"></td>
+					<td><input type="checkbox" name="dimanche"></td>
+				</tr>
+				<tr>
+					<td rowspan="2">Matin</td>
+					<td style="padding: 10px 0 0 0"><input type="time" name="start_am_lundi" id=""></td>
+					<td style="padding: 10px 0 0 0"><input type="time" name="start_am_mardi" id=""></td>
+					<td style="padding: 10px 0 0 0"><input type="time" name="start_am_mercredi" id=""></td>
+					<td style="padding: 10px 0 0 0"><input type="time" name="start_am_jeudi" id=""></td>
+					<td style="padding: 10px 0 0 0"><input type="time" name="start_am_vendredi" id=""></td>
+					<td style="padding: 10px 0 0 0"><input type="time" name="start_am_samedi" id=""></td>
+					<td style="padding: 10px 0 0 0"><input type="time" name="start_am_dimanche" id=""></td>
+				</tr>
+				<tr>
+					<td><input type="time" name="end_am_lundi" id=""></td>
+					<td><input type="time" name="end_am_mardi" id=""></td>
+					<td><input type="time" name="end_am_mercredi" id=""></td>
+					<td><input type="time" name="end_am_jeudi" id=""></td>
+					<td><input type="time" name="end_am_vendredi" id=""></td>
+					<td><input type="time" name="end_am_samedi" id=""></td>
+					<td><input type="time" name="end_am_dimanche" id=""></td>
+				</tr>
+				<tr>
+					<td rowspan="2">Après-midi</td>
+					<td style="padding: 10px 0 0 0"><input type="time" name="start_pm_lundi" id=""></td>
+					<td style="padding: 10px 0 0 0"><input type="time" name="start_pm_mardi" id=""></td>
+					<td style="padding: 10px 0 0 0"><input type="time" name="start_pm_mercredi" id=""></td>
+					<td style="padding: 10px 0 0 0"><input type="time" name="start_pm_jeudi" id=""></td>
+					<td style="padding: 10px 0 0 0"><input type="time" name="start_pm_vendredi" id=""></td>
+					<td style="padding: 10px 0 0 0"><input type="time" name="start_pm_samedi" id=""></td>
+					<td style="padding: 10px 0 0 0"><input type="time" name="start_pm_dimanche" id=""></td>
+				</tr>
+				<tr>
+					<td><input type="time" name="end_pm_lundi" id=""></td>
+					<td><input type="time" name="end_pm_mardi" id=""></td>
+					<td><input type="time" name="end_pm_mercredi" id=""></td>
+					<td><input type="time" name="end_pm_jeudi" id=""></td>
+					<td><input type="time" name="end_pm_vendredi" id=""></td>
+					<td><input type="time" name="end_pm_samedi" id=""></td>
+					<td><input type="time" name="end_pm_dimanche" id=""></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td style="padding: 10px 0 0 0" colspan="2">Durée d'un créneau</td>
+					<td style="padding: 10px 0 0 0"><input type="time" name="duration" id=""></td>
+					<td style="padding: 10px 0 0 0" colspan="2">Pause</td>
+					<td style="padding: 10px 0 0 0"><input type="time" name="pause" id=""></td>
+					<td></td>
+				</tr>
+			</table>
 
-	<p>{{dump(slots)}}</p>
+
+		</form>
+
+
+	</div>
 {% endblock %}
