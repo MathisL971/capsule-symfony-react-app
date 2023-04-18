@@ -59,6 +59,8 @@ class AdminController extends BaseController
             $repo = $this->em->getRepository(USer::class);
             $vars['guests'] = $repo->findAll();
 
+            $repoM = $this->em->getRepository(Meeting::class);
+
             setlocale(LC_TIME, "fr_FR");
 
             if (count($rq->request) == 0) {
@@ -80,25 +82,8 @@ class AdminController extends BaseController
             $vars['after']['button'] = date_format($after, 'Y-m-d');
             $vars['after']['text'] = date_format($after, 'F Y');
 
-            if (date_format($debut, 'w') != 1 and date_format($debut, 'w') != 0) {
-                $interval = date_format($debut, 'w') - 1;
-                $range = $interval + date_format($debut, 't');
-                $interval = 'P' . $interval . 'D';
-                $debut = date_sub($debut, new \DateInterval('P4D'));
-            }
+            $range = date_format($debut, 't');
 
-            if (date_format($debut, 'w') == 0) {
-                $interval = 'P6D';
-                $range = 6 + date_format($now, 't');
-                $debut = date_sub($debut, new \DateInterval($interval));
-            }
-
-            if (date_format($debut, 'w') == 1) {
-                $range = date_format($now, 't');
-            }
-
-            $range = ceil($range / 7) * 7;
-            $vars['range'] = $range;
             $days[0] = ['day' => new \DateTime(date_format($debut, 'Y-m-d'))];
 
             if (date_format($days[0]['day'], 'm') == date_format($debut, 'm')) {
@@ -108,6 +93,8 @@ class AdminController extends BaseController
             for ($i = 1; $i < $range; $i++) {
                 $day = date_add($debut, new \DateInterval('P1D'));
                 $days[$i] = ['day' => new \DateTime(date_format($day, 'Y-m-d'))];
+                // $meetings = $repoM->findByDate($vars['user'], $day);
+                $days[$i]['meetings'] = $repoM->findByDate($vars['user'], $day);
             }
 
             $vars['days'] = $days;
@@ -137,9 +124,9 @@ class AdminController extends BaseController
             ->setContent(($post->get('content')));
 
         if ($post->get('guest')) {
-            $guests[] = $post->get('guest');
+            $guests = $post->get('guest');
 
-            foreach ($guests as $id) {
+            foreach ($_POST['guest'] as $id) {
                 $guest = $repo->findOneBy(['id' => $id]);
                 $meeting->addGuest($guest);
             }

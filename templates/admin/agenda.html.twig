@@ -42,267 +42,62 @@
 	{# Main #}
 
 	<div class="container">
-		<div
-			class="row row-cols-1 row-cols-md-6 g-4">
-			{# Semaine 1 #}
-			<div class="card mb-3 h-100 {{ days.0.class }}" style="max-width: 18rem;">
-				<div class="card-header">{{ days.0.day|date('d.m.Y') }}</div>
+		{% for day in days %}
+			<div class="card text-bg-dark mb-3 h-100">
+				<div class="card-header">
+					<h5>{{ day.day|format_date(locale='fr', pattern='EEEE dd MMMM YYYY') }}</h5>
+				</div>
 				<div class="card-body">
-					<p class="card-text">M1<br>M2<br>M3<br>M4<br>M5</p>
+					<p class="card-text">
+						{% if day.meetings %}
+							{% for meeting in day.meetings %}
+								<div class="card text-center text-bg-secondary">
+									<div class="card-header">
+										{{meeting.datemeeting|format_time(pattern="HH:mm")}}
+										:
+										{{meeting.title}}
+									</div>
+									<div class="card-body">
+										<table style="width:80%; margin: auto">
+											<tr>
+												<td>
+													<p>{{meeting.content|nl2br}}</p>
+												</td>
+												<td>
+													<p class="card-text">
+														Hôte :
+														{{meeting.host.firstName}}
+														{{meeting.host.name}}
+													</p>
+													<p class="card-text">
+														Participants :
+														<br>
+														{% for item in meeting.guest %}
+															-
+															{{item.firstName}}
+															{{item.name}}
+															<br>
+														{% endfor %}
+													</p>
+												</td>
+											</tr>
+										</table>
+									</div>
+									<div class="card-footer text-muted">
+										<form action="/admin/visio2">
+											<input type="submit" value="Accéder à la visio" class="btn btn-primary">
+										</form>
+									</div>
+								</div>
+							{% endfor %}
+						{% endif %}
+
+					</p>
 				</div>
 			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.1.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.2.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.3.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.4.day|date('d.m.Y') }}<br>.</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.5.day|date('d.m.Y') }}<br>{{ days.6.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			{# Semaine 2 #}
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.7.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.8.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.9.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.10.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.11.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.12.day|date('d.m.Y') }}<br>{{ days.13.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			{# Semaine 3 #}
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.14.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.15.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.16.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.17.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.18.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.19.day|date('d.m.Y') }}<br>{{ days.20.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			{# Semaine 4 #}
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.21.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.22.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.23.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.24.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.25.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.26.day|date('d.m.Y') }}<br>{{ days.27.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			{# Semaine 5 #}
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.28.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.29.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.30.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.31.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.32.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-				<div class="card-header">{{ days.33.day|date('d.m.Y') }}<br>{{ days.34.day|date('d.m.Y') }}</div>
-				<div class="card-body">
-					<h5 class="card-title">Dark card title</h5>
-					<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				</div>
-			</div>
-			{# Semaine 6 #}
-			{% if range == 42 %}
-				<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-					<div class="card-header">{{ days.35.day|date('d.m.Y') }}</div>
-					<div class="card-body">
-						<h5 class="card-title">Dark card title</h5>
-						<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					</div>
-				</div>
-				<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-					<div class="card-header">{{ days.36.day|date('d.m.Y') }}</div>
-					<div class="card-body">
-						<h5 class="card-title">Dark card title</h5>
-						<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					</div>
-				</div>
-				<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-					<div class="card-header">{{ days.37.day|date('d.m.Y') }}</div>
-					<div class="card-body">
-						<h5 class="card-title">Dark card title</h5>
-						<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					</div>
-				</div>
-				<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-					<div class="card-header">{{ days.38.day|date('d.m.Y') }}</div>
-					<div class="card-body">
-						<h5 class="card-title">Dark card title</h5>
-						<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					</div>
-				</div>
-				<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-					<div class="card-header">{{ days.39.day|date('d.m.Y') }}</div>
-					<div class="card-body">
-						<h5 class="card-title">Dark card title</h5>
-						<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					</div>
-				</div>
-				<div class="card text-bg-dark mb-3 h-100" style="max-width: 18rem;">
-					<div class="card-header">{{ days.40.day|date('d.m.Y') }}<br>{{ days.41.day|date('d.m.Y') }}</div>
-					<div class="card-body">
-						<h5 class="card-title">Dark card title</h5>
-						<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					</div>
-				</div>
-			{% endif %}
-		</div>
+
+		{% endfor %}
+
 	</div>
 
 	{# Modal Meeting #}

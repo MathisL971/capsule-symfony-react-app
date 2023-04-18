@@ -27,8 +27,7 @@ class Meeting
     private $host;
 
     /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="meetings")
-     * @ORM\JoinTable(name="meeting_user")
+     * @ORM\Column(type="array")
      */
     private $guest;
 
@@ -79,24 +78,21 @@ class Meeting
         return $this;
     }
 
-    /**
-     * @return Collection<int, User>
-     */
-    public function getGuest(): Collection
+    public function getGuest()
     {
         return $this->guest;
     }
 
     public function addGuest(User $guest): self
     {
-        if (!$this->guest->contains($guest)) {
-            $this->guest[] = $guest;
-        }
+
+        $this->guest[] = $guest;
+
 
         return $this;
     }
 
-    public function removeGuest(User $guest): self
+    public function removeGuest($guest): self
     {
         $this->guest->removeElement($guest);
 

@@ -47,8 +47,8 @@ class MeetingRepository extends ServiceEntityRepository
         $tdate = date_format($date, 'Y-m-d') . '-23-59-59';
 
         return $this->createQueryBuilder('m')
-            ->andWhere('m.host = :user AND m.date_meeting BETWEEN :fdate AND :tdate')
-            ->setParameter('user', $user->getId())
+            ->andWhere('m.guest LIKE :user AND m.date_meeting BETWEEN :fdate AND :tdate')
+            ->setParameter('user', '%id";i:' . $user->getId() . '%')
             ->setParameter('fdate', $fdate)
             ->setParameter('tdate', $tdate)
             ->orderBy('m.date_meeting', 'ASC')
@@ -57,28 +57,9 @@ class MeetingRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findAttendedByDate(User $user, DateTime $date)
-    {
-        $fdate = date_format($date, 'Y-m-d') . '-00-00-00';
-        $tdate = date_format($date, 'Y-m-d') . '-23-59-59';
 
-        $query = $this->createQueryBuilder('m')
-            // ->andWhere('m.date_meeting BETWEEN :fdate AND :tdate')
-            // ->setParameter('fdate', $fdate)
-            // ->setParameter('tdate', $tdate)
-            ->leftJoin(User::class, 'u')
-            // ->orderBy('m.date_meeting', 'ASC')
-            ->getQuery();
-        dd($query);
-        // ->getResult();
-    }
 
-    public function test()
-    {
-        $query = $this->_em->createQuery('SELECT m FROM App\Entity\Meeting m LEFT JOIN App\Entity\User u');
-        $results = $query->getResult();
-        dd($results);
-    }
+
 
     //    /**
     //     * @return Meeting[] Returns an array of Meeting objects
