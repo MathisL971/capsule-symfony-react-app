@@ -93,7 +93,6 @@ class AdminController extends BaseController
             for ($i = 1; $i < $range; $i++) {
                 $day = date_add($debut, new \DateInterval('P1D'));
                 $days[$i] = ['day' => new \DateTime(date_format($day, 'Y-m-d'))];
-                // $meetings = $repoM->findByDate($vars['user'], $day);
                 $days[$i]['meetings'] = $repoM->findByDate($vars['user'], $day);
             }
 
@@ -131,6 +130,9 @@ class AdminController extends BaseController
                 $meeting->addGuest($guest);
             }
         }
+
+
+
         $this->em->persist($meeting);
         $this->em->flush();
 
@@ -461,7 +463,6 @@ class AdminController extends BaseController
     public function visios(Request $rq, SessionInterface $session)
     {
         if (AdminController::authentify($session)) {
-
             $vars = [];
 
             $vars['user'] = $session->get('user');
@@ -481,16 +482,32 @@ class AdminController extends BaseController
     public function visio(Request $rq, SessionInterface $session)
     {
         if (AdminController::authentify($session)) {
+            if (count($rq->request)) {
+                $repoM = $this->em->getRepository(Meeting::class);
+                $meeting = $repoM->find($rq->request->get('meeting'));
 
-            $vars = [];
+                $paramRepo = $this->em->getRepository(Param::class);
+                $kid = $paramRepo->findOneBy(['name' => 'kid']);
 
-            $vars['user'] = $session->get('user');
-            $vars['role'] = $session->get('role');
+                $file = fopen('../src/Security/jaasauth.key', 'r');
+                $privateKey = fread($file, filesize('../src/Security/jaasauth.key'));
 
-            $page = $this->twig->render('admin/visio.html.twig', $vars);
 
-            return new Response($page);
+
+                dd($meeting);
+
+                $vars = [];
+
+                $vars['user'] = $session->get('user');
+                $vars['role'] = $session->get('role');
+
+                $page = $this->twig->render('admin/visio.html.twig', $vars);
+
+                return new Response($page);
+            }
         }
+
+        dd("Pas d'info ppour construire la visio");
 
         return new RedirectResponse('/');
     }
@@ -507,8 +524,8 @@ class AdminController extends BaseController
             $vars['user'] = $session->get('user');
             $vars['role'] = $session->get('role');
 
-            $paramRepo = $this->em->getRepository(Param::class);
-            $kid = $paramRepo->findOneBy(['name' => 'kid']);
+            $repoP = $this->em->getRepository(Param::class);
+            $kid = $repoP->findOneBy(['name' => 'kid']);
 
             $file = fopen('../src/Security/jaasauth.key', 'r');
             $privateKey = fread($file, filesize('../src/Security/jaasauth.key'));
@@ -518,7 +535,7 @@ class AdminController extends BaseController
                 "iss" => "chat",
                 "exp" => time() + 3600 * 2,  //ATTENTION A CHANGER !!!! C'est le timestamp d'expiration
                 "nbf" => time(),  //ATTENTION A CHANGER !!!! C'est le timestamp not before
-                "sub" => $paramRepo->findOneBy(['name' => 'sub'])->getValue(),
+                "sub" => $repoP->findOneBy(['name' => 'sub'])->getValue(),
                 "context" => array(
                     "features" => array(
                         "livestreaming" => true,
@@ -544,6 +561,7 @@ class AdminController extends BaseController
             $vars['domain'] = '8x8.vc';
             $vars['room'] = 'vpaas-magic-cookie-e9f22e0cc2264adc9c5beffec3ea2822/SalonDesAdmin';
             $vars['jwt'] = $jwt;
+            $vars['subject'] = "J'aime les fraises tagada !";
 
             $page = $this->twig->render('admin/visio2.html.twig', $vars);
 

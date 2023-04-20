@@ -56,6 +56,11 @@ class Meeting
      */
     private $slot;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $token;
+
     public function __construct()
     {
         $this->guest = new ArrayCollection();
@@ -165,6 +170,18 @@ class Meeting
         }
 
         $this->slot = $slot;
+
+        return $this;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): self
+    {
+        $this->token = $token;
 
         return $this;
     }

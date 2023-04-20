@@ -84,7 +84,8 @@
 										</table>
 									</div>
 									<div class="card-footer text-muted">
-										<form action="/admin/visio2">
+										<form action="/admin/visio" method="post">
+											<input type="hidden" name="meeting" value="{{meeting.id}}">
 											<input type="submit" value="Accéder à la visio" class="btn btn-primary">
 										</form>
 									</div>
