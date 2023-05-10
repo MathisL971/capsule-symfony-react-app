@@ -84,16 +84,12 @@ class AdminController extends BaseController
 
             $range = date_format($debut, 't');
 
-            $days[0] = ['day' => new \DateTime(date_format($debut, 'Y-m-d'))];
+            $day = $debut;
 
-            if (date_format($days[0]['day'], 'm') == date_format($debut, 'm')) {
-                $days[0]['class'] = 'faded';
-            }
-
-            for ($i = 1; $i < $range; $i++) {
-                $day = date_add($debut, new \DateInterval('P1D'));
+            for ($i = 0; $i < $range; $i++) {
                 $days[$i] = ['day' => new \DateTime(date_format($day, 'Y-m-d'))];
                 $days[$i]['meetings'] = $repoM->findByDate($vars['user'], $day);
+                $day = date_add($debut, new \DateInterval('P1D'));
             }
 
             $vars['days'] = $days;
@@ -128,6 +124,10 @@ class AdminController extends BaseController
             foreach ($_POST['guest'] as $id) {
                 $guest = $repo->findOneBy(['id' => $id]);
                 $meeting->addGuest($guest);
+            }
+
+            if ($post->get('visio')) {
+                $meeting->setVisio(AdminController::randomString(64));
             }
         }
 
@@ -493,7 +493,6 @@ class AdminController extends BaseController
                 $privateKey = fread($file, filesize('../src/Security/jaasauth.key'));
 
 
-
                 dd($meeting);
 
                 $vars = [];
@@ -506,6 +505,9 @@ class AdminController extends BaseController
                 return new Response($page);
             }
         }
+
+        $roomName = AdminController::randomString(64);
+        dump($roomName);
 
         dd("Pas d'info ppour construire la visio");
 
@@ -553,15 +555,15 @@ class AdminController extends BaseController
                         "email" => $vars['user']->getEmail()
                     )
                 ),
-                "room" => "SalonDesAdmin"
+                "room" => "31sd564sd654sd654sdf"
             );
 
             $jwt = JWT::encode($payload, $privateKey, 'RS256', null, array('kid' => $kid->getValue()));
 
             $vars['domain'] = '8x8.vc';
-            $vars['room'] = 'vpaas-magic-cookie-e9f22e0cc2264adc9c5beffec3ea2822/SalonDesAdmin';
+            $vars['room'] = 'vpaas-magic-cookie-e9f22e0cc2264adc9c5beffec3ea2822/31sd564sd654sd654sdf';
             $vars['jwt'] = $jwt;
-            $vars['subject'] = "J'aime les fraises tagada !";
+            $vars['subject'] = "Salon des admins";
 
             $page = $this->twig->render('admin/visio2.html.twig', $vars);
 
@@ -672,5 +674,27 @@ class AdminController extends BaseController
             $session->set('flash', 'L\'accès à cette page néceessite d\'être connnecté.e');
             return false;
         }
+    }
+
+    /**
+     * Génération de chaine de caractères aléatoires
+     */
+    static function randomString($length, $special = 0)
+    {
+        $base = 'abcdefghiujklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $specials = '$%*+-=_-;:!§.#&€';
+
+        if ($special) {
+            $base .= $specials;
+        }
+
+        $nb = strlen($base);
+        $string = '';
+
+        for ($i = 1; $i <= $length; $i++) {
+            $string .= substr($base, rand(1, $nb), 1);
+        }
+
+        return $string;
     }
 }

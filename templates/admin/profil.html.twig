@@ -1,40 +1,60 @@
 {% extends "admin/navbar.html.twig" %}
 
 {% block body %}
-
-	<h4>Mon profil</h4>
-
 	<div class="container text-center">
-		<div class="row row-cols-1 row-cols-md-3 g-4">
-			<div class="col-3 h-100 profilAdmin">
-				<img src="/{{ user.profilePic }}" alt="Photo de profil" style="max-width: 150px; height: auto">
-			</div>
-			<div class="col align-self-center profilAdmin" style="height: 150px; padding: 15px 0">
-				<h1>{{ user.firstName}}
-					{{ user.name}}</h1>
-				{{ user.email }}<br>
-				{{ user.phoneMobile}}
-			</div>
-			<div class="col h-100 profilAdmin">
-				{{ user.street1 }}<br>
-				{{ user.street2}}<br>
-				{{ user.postcode }}
-				{{ user.city }}
-			</div>
+		<h1>{{ user.firstName}}
+			{{ user.name}}</h1>
+
+
+		<div class="row">
+			<button class="btn btn-dark" style="width: 200px; margin: auto; background: black" onclick="reveal('infos')">Infos</button>
+			<button class="btn btn-dark" style="width: 200px; margin: auto; background: black" onclick="reveal('interest')">Centres d'intérêts</button>
+			<button class="btn btn-dark" style="width: 200px; margin: auto; background: black" onclick="reveal('services')">Prestations</button>
+			<button class="btn btn-dark" style="width: 200px; margin: auto; background: black" onclick="reveal('hours')">Horaires</button>
+			<button class="btn btn-dark" style="width: 200px; margin: auto; background: black" onclick="reveal('payments')">Moyens de paiement</button>
+			<button class="btn btn-dark" style="width: 200px; margin: auto; background: black" onclick="reveal('family')">Famille</button>
 		</div>
-	</div>
-	<div class="container text-center">Div 2 update (caché)
-		<form action="" method="post" enctype="multipart/form-data">
-			<input type="hidden" name="MAX_FILE_SIZE" value="1100000"/>
-			<input type="file" name="pic" accept="image/png, image/jpg, image/jpeg, image/gif, image/svg">
-			<input type="submit" value="Sauvegarder">
-		</form>
-	</div>
-	<div
-		class="supera">
-		{# {{ dump(user) }} #}
-		{{ (user.role == 'SuperAdmin') ? dump(user) }}
+		<div class="row" id="infos" style"display: block" name="bloc">
+			{{ dump(user.profilPic)}}<br>
+			{{ user.email }}<br>
+			{{ user.phoneMobile}}
+		</div>
+		<div class="row" id="interest" style="display: none" name="bloc">Interest</div>
+		<div class="row" id="services" style="display: none" name="bloc">services</div>
+		<div class="row" id="hours" style="display: none" name="bloc">hours</div>
+		<div class="row" id="payments" style="display: none" name="bloc">payments</div>
+		<div class="row" id="family" style="display: none" name="bloc">family</div>
 
 	</div>
+</div>
+<div class="container text-center">Div 2 update (caché)
+	<form action="" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="MAX_FILE_SIZE" value="1100000"/>
+		<input type="file" name="pic" accept="image/png, image/jpg, image/jpeg, image/gif, image/svg">
+		<input type="submit" value="Sauvegarder">
+	</form>
+</div>
+<div
+	class="supera">
+	{# {{ dump(user) }} #}
+	{{ (user.role == 'SuperAdmin') ? dump(user) }}
 
-{% endblock %}
+</div>{% endblock %}{% block script %}
+<script>
+	function reveal(div) {
+let d1 = document.getElementById("infos");
+let d2 = document.getElementById("interest");
+let d3 = document.getElementById("services");
+let d4 = document.getElementById("hours");
+let d5 = document.getElementById("payments");
+let d6 = document.getElementById("family");
+d1.style.display = "none";
+d2.style.display = "none";
+d3.style.display = "none";
+d4.style.display = "none";
+d5.style.display = "none";
+d6.style.display = "none";
+let d = document.getElementById(div);
+d.style.display = "block";
+}
+</script>{% endblock %}

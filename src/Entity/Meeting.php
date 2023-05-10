@@ -61,6 +61,12 @@ class Meeting
      */
     private $token;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * Si meeting en visio : contient le nom de la salle
+     */
+    private $visio;
+
     public function __construct()
     {
         $this->guest = new ArrayCollection();
@@ -182,6 +188,18 @@ class Meeting
     public function setToken(?string $token): self
     {
         $this->token = $token;
+
+        return $this;
+    }
+
+    public function getVisio(): ?string
+    {
+        return $this->visio;
+    }
+
+    public function setVisio(?string $visio): self
+    {
+        $this->visio = $visio;
 
         return $this;
     }

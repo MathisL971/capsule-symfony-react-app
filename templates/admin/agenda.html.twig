@@ -84,7 +84,7 @@
 										</table>
 									</div>
 									<div class="card-footer text-muted">
-										<form action="/admin/visio" method="post">
+										<form action="/admin/visio2" method="post">
 											<input type="hidden" name="meeting" value="{{meeting.id}}">
 											<input type="submit" value="Accéder à la visio" class="btn btn-primary">
 										</form>
@@ -124,6 +124,9 @@
 						</p>
 						<p>
 							<textarea name="content" cols="38" rows="5"></textarea>
+						</p>
+						<p>Visio
+							<input type="checkbox" name="visio">
 						</p>
 					</div>
 					<div class="modal-footer" style="background: black">

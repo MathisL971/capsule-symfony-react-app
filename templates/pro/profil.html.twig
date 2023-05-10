@@ -1,82 +1,121 @@
 {% extends "pro/navbar.html.twig" %}
 
 {% block body %}
-	<h1>Profil</h1>
-	<h2>Gestion des créneaux</h2>
-	<div class="container">
-		<form method="post">
-			<table style="width: 80%; margin: 20px auto">
-				<tr>
-					<th style="width: 12.5%"></th>
-					<th style="width: 12.5%">Lundi</th>
-					<th style="width: 12.5%">Mardi</th>
-					<th style="width: 12.5%">Mercredi</th>
-					<th style="width: 12.5%">Jeudi</th>
-					<th style="width: 12.5%">Vendredi</th>
-					<th style="width: 12.5%">Samedi</th>
-					<th style="width: 12.5%">Dimanche</th>
-				</tr>
-				<tr>
-					<td></td>
-					<td><input type="checkbox" name="lundi"></td>
-					<td><input type="checkbox" name="mardi"></td>
-					<td><input type="checkbox" name="mercredi"></td>
-					<td><input type="checkbox" name="jeudi"></td>
-					<td><input type="checkbox" name="vendredi"></td>
-					<td><input type="checkbox" name="samedi"></td>
-					<td><input type="checkbox" name="dimanche"></td>
-				</tr>
-				<tr>
-					<td rowspan="2">Matin</td>
-					<td style="padding: 10px 0 0 0"><input type="time" name="start_am_lundi" id=""></td>
-					<td style="padding: 10px 0 0 0"><input type="time" name="start_am_mardi" id=""></td>
-					<td style="padding: 10px 0 0 0"><input type="time" name="start_am_mercredi" id=""></td>
-					<td style="padding: 10px 0 0 0"><input type="time" name="start_am_jeudi" id=""></td>
-					<td style="padding: 10px 0 0 0"><input type="time" name="start_am_vendredi" id=""></td>
-					<td style="padding: 10px 0 0 0"><input type="time" name="start_am_samedi" id=""></td>
-					<td style="padding: 10px 0 0 0"><input type="time" name="start_am_dimanche" id=""></td>
-				</tr>
-				<tr>
-					<td><input type="time" name="end_am_lundi" id=""></td>
-					<td><input type="time" name="end_am_mardi" id=""></td>
-					<td><input type="time" name="end_am_mercredi" id=""></td>
-					<td><input type="time" name="end_am_jeudi" id=""></td>
-					<td><input type="time" name="end_am_vendredi" id=""></td>
-					<td><input type="time" name="end_am_samedi" id=""></td>
-					<td><input type="time" name="end_am_dimanche" id=""></td>
-				</tr>
-				<tr>
-					<td rowspan="2">Après-midi</td>
-					<td style="padding: 10px 0 0 0"><input type="time" name="start_pm_lundi" id=""></td>
-					<td style="padding: 10px 0 0 0"><input type="time" name="start_pm_mardi" id=""></td>
-					<td style="padding: 10px 0 0 0"><input type="time" name="start_pm_mercredi" id=""></td>
-					<td style="padding: 10px 0 0 0"><input type="time" name="start_pm_jeudi" id=""></td>
-					<td style="padding: 10px 0 0 0"><input type="time" name="start_pm_vendredi" id=""></td>
-					<td style="padding: 10px 0 0 0"><input type="time" name="start_pm_samedi" id=""></td>
-					<td style="padding: 10px 0 0 0"><input type="time" name="start_pm_dimanche" id=""></td>
-				</tr>
-				<tr>
-					<td><input type="time" name="end_pm_lundi" id=""></td>
-					<td><input type="time" name="end_pm_mardi" id=""></td>
-					<td><input type="time" name="end_pm_mercredi" id=""></td>
-					<td><input type="time" name="end_pm_jeudi" id=""></td>
-					<td><input type="time" name="end_pm_vendredi" id=""></td>
-					<td><input type="time" name="end_pm_samedi" id=""></td>
-					<td><input type="time" name="end_pm_dimanche" id=""></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td style="padding: 10px 0 0 0" colspan="2">Durée d'un créneau</td>
-					<td style="padding: 10px 0 0 0"><input type="time" name="duration" id=""></td>
-					<td style="padding: 10px 0 0 0" colspan="2">Pause</td>
-					<td style="padding: 10px 0 0 0"><input type="time" name="pause" id=""></td>
-					<td></td>
-				</tr>
-			</table>
+	<div class="container" style="margin-bottom: 30px">
+		<h1 style="margin: 25px 0">{{ user.firstName}}
+			{{ user.name}}</h1>
 
 
-		</form>
+		<div class="row">
+			<button class="btn btn-dark" style="width: 200px; margin: auto; background: white; color: black; border: 1px solid rgb(255,237,121)" onclick="reveal('infos')">Infos</button>
+			<button class="btn btn-dark" style="width: 200px; margin: auto; background: white; color: black; border: 1px solid rgb(255,237,121)" onclick="reveal('interest')">Centres d'intérêts</button>
+			<button class="btn btn-dark" style="width: 200px; margin: auto; background: white; color: black; border: 1px solid rgb(255,237,121)" onclick="reveal('services')">Prestations</button>
+			<button class="btn btn-dark" style="width: 200px; margin: auto; background: white; color: black; border: 1px solid rgb(255,237,121)" onclick="reveal('hours')">Horaires</button>
+			<button class="btn btn-dark" style="width: 200px; margin: auto; background: white; color: black; border: 1px solid rgb(255,237,121)" onclick="reveal('payments')">Moyens de paiement</button>
+		</div>
+		<div class="row" id="infos" style"display: block; margin: 15px 0">
+			{{ dump(user.profilPic)}}<br>
+			<p>{{ user.email }}<br>
+				{{ user.phoneMobile}}</p>
+		</div>
+		<div class="row" id="interest" style="display: none; margin: 15px 0">Interest</div>
+		<div class="row" id="services" style="display: none; margin: 15px 0">services</div>
+		<div class="row" id="hours" style="display: none; margin: 15px 0">
+			<div class="container">
+				<form method="post">
+					<table style="width: 80%; margin: 20px auto">
+						<tr>
+							<th style="width: 12.5%"></th>
+							<th style="width: 12.5%">Lundi</th>
+							<th style="width: 12.5%">Mardi</th>
+							<th style="width: 12.5%">Mercredi</th>
+							<th style="width: 12.5%">Jeudi</th>
+							<th style="width: 12.5%">Vendredi</th>
+							<th style="width: 12.5%">Samedi</th>
+							<th style="width: 12.5%">Dimanche</th>
+						</tr>
+						<tr>
+							<td></td>
+							<td><input type="checkbox" name="lundi"></td>
+							<td><input type="checkbox" name="mardi"></td>
+							<td><input type="checkbox" name="mercredi"></td>
+							<td><input type="checkbox" name="jeudi"></td>
+							<td><input type="checkbox" name="vendredi"></td>
+							<td><input type="checkbox" name="samedi"></td>
+							<td><input type="checkbox" name="dimanche"></td>
+						</tr>
+						<tr>
+							<td rowspan="2">Matin</td>
+							<td style="padding: 10px 0 0 0"><input type="time" name="start_am_lundi" id=""></td>
+							<td style="padding: 10px 0 0 0"><input type="time" name="start_am_mardi" id=""></td>
+							<td style="padding: 10px 0 0 0"><input type="time" name="start_am_mercredi" id=""></td>
+							<td style="padding: 10px 0 0 0"><input type="time" name="start_am_jeudi" id=""></td>
+							<td style="padding: 10px 0 0 0"><input type="time" name="start_am_vendredi" id=""></td>
+							<td style="padding: 10px 0 0 0"><input type="time" name="start_am_samedi" id=""></td>
+							<td style="padding: 10px 0 0 0"><input type="time" name="start_am_dimanche" id=""></td>
+						</tr>
+						<tr>
+							<td><input type="time" name="end_am_lundi" id=""></td>
+							<td><input type="time" name="end_am_mardi" id=""></td>
+							<td><input type="time" name="end_am_mercredi" id=""></td>
+							<td><input type="time" name="end_am_jeudi" id=""></td>
+							<td><input type="time" name="end_am_vendredi" id=""></td>
+							<td><input type="time" name="end_am_samedi" id=""></td>
+							<td><input type="time" name="end_am_dimanche" id=""></td>
+						</tr>
+						<tr>
+							<td rowspan="2">Après-midi</td>
+							<td style="padding: 10px 0 0 0"><input type="time" name="start_pm_lundi" id=""></td>
+							<td style="padding: 10px 0 0 0"><input type="time" name="start_pm_mardi" id=""></td>
+							<td style="padding: 10px 0 0 0"><input type="time" name="start_pm_mercredi" id=""></td>
+							<td style="padding: 10px 0 0 0"><input type="time" name="start_pm_jeudi" id=""></td>
+							<td style="padding: 10px 0 0 0"><input type="time" name="start_pm_vendredi" id=""></td>
+							<td style="padding: 10px 0 0 0"><input type="time" name="start_pm_samedi" id=""></td>
+							<td style="padding: 10px 0 0 0"><input type="time" name="start_pm_dimanche" id=""></td>
+						</tr>
+						<tr>
+							<td><input type="time" name="end_pm_lundi" id=""></td>
+							<td><input type="time" name="end_pm_mardi" id=""></td>
+							<td><input type="time" name="end_pm_mercredi" id=""></td>
+							<td><input type="time" name="end_pm_jeudi" id=""></td>
+							<td><input type="time" name="end_pm_vendredi" id=""></td>
+							<td><input type="time" name="end_pm_samedi" id=""></td>
+							<td><input type="time" name="end_pm_dimanche" id=""></td>
+						</tr>
+						<tr>
+							<td></td>
+							<td style="padding: 10px 0 0 0" colspan="2">Durée d'un créneau</td>
+							<td style="padding: 10px 0 0 0"><input type="time" name="duration" id=""></td>
+							<td style="padding: 10px 0 0 0" colspan="2">Pause</td>
+							<td style="padding: 10px 0 0 0"><input type="time" name="pause" id=""></td>
+							<td></td>
+						</tr>
+					</table>
+					<input type="submit" value="Enregistrer">
+
+				</form>
 
 
+			</div>
+		</div>
+		<div class="row" id="payments" style="display: none; margin: 15px 0">payments</div>
 	</div>
+{% endblock %}
+{% block script %}
+	<script>
+		function reveal(div) {
+let d1 = document.getElementById("infos");
+let d2 = document.getElementById("interest");
+let d3 = document.getElementById("services");
+let d4 = document.getElementById("hours");
+let d5 = document.getElementById("payments");
+d1.style.display = "none";
+d2.style.display = "none";
+d3.style.display = "none";
+d4.style.display = "none";
+d5.style.display = "none";
+let d = document.getElementById(div);
+d.style.display = "block";
+}
+	</script>
 {% endblock %}

@@ -24,8 +24,9 @@ roomName: data.dataset.room,
 jwt: data.dataset.jwt,
 parentNode: document.querySelector('#meet')
 };
-const subject = data.dataset.subject;
+
 api = new JitsiMeetExternalAPI(domain, options);
+api.executeCommand('subject', data.dataset.subject);
 }
 
 window.onload = () => {
