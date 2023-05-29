@@ -15,9 +15,53 @@
 			<button class="btn btn-dark" style="width: 200px; margin: auto; background: black" onclick="reveal('family')">Famille</button>
 		</div>
 		<div class="row" id="infos" style"display: block" name="bloc">
-			{{ dump(user.profilPic)}}<br>
-			{{ user.email }}<br>
-			{{ user.phoneMobile}}
+			<div class="row">
+				<div class="col-3">
+					<p><img src="/{{user.profilePic}}" alt="Photo de profil" style="height: 20vw; max-height: 200px; width: auto"></p>
+				</div>
+				<div class="col">
+					<table class="profile">
+						<tr>
+							<td class="adminLabel">Adresse&nbsp;:</td>
+							<td class="value">{{user.street1}}<br>
+								{{user.street2}}<br>
+								{{user.postcode}}
+								{{user.city}}<br>
+								{{user.country}}</td>
+						</tr>
+						<tr>
+							<td class="adminLabel">Email&nbsp;:</td>
+							<td class="value">{{ user.email }}</td>
+						</tr>
+						<tr>
+							<td class="adminLabel">Bureau&nbsp;:</td>
+							<td class="value">{{ user.phoneOffice }}</td>
+						</tr>
+						<tr>
+							<td class="adminLabel">Portable&nbsp;:</td>
+							<td class="value">{{ user.phoneOffice }}</td>
+						</tr>
+						<tr>
+							<td class="adminLabel">Compte&nbsp;:</td>
+							<td class="value">{{user.role}}</td>
+						</tr>
+						<tr>
+							<td class="adminLabel">Date&nbsp;de&nbsp;naissance&nbsp;:</td>
+							<td class="value">
+								{% if user.birthDate %}
+									{{user.birthDate|date("d/m/Y")}}
+								{% endif %}
+							</td>
+						</tr>
+						<tr>
+							<td class="adminLabel">Mot&nbsp;de&nbsp;passe&nbsp;:</td>
+							<td class="value">
+								<a href="/admin/updatePassword" style="border-radius: 10px; padding: 5px 5px 8px 5px; color: white; border:1px solid white; background:none">Mettre à jour</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
 		</div>
 		<div class="row" id="interest" style="display: none" name="bloc">Interest</div>
 		<div class="row" id="services" style="display: none" name="bloc">services</div>
@@ -27,13 +71,7 @@
 
 	</div>
 </div>
-<div class="container text-center">Div 2 update (caché)
-	<form action="" method="post" enctype="multipart/form-data">
-		<input type="hidden" name="MAX_FILE_SIZE" value="1100000"/>
-		<input type="file" name="pic" accept="image/png, image/jpg, image/jpeg, image/gif, image/svg">
-		<input type="submit" value="Sauvegarder">
-	</form>
-</div>
+
 <div
 	class="supera">
 	{# {{ dump(user) }} #}

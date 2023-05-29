@@ -58,3 +58,44 @@ div.supera {
 div.navbar-nav a.nav-link {
     margin: auto
 }
+
+table.profile {
+    width: 100%;
+}
+
+td.label {
+    padding-left: 5px;
+    padding-right: 15px;
+    text-align: left;
+    color: grey;
+}
+
+td.adminLabel {
+    padding-left: 5px;
+    padding-right: 15px;
+    text-align: left;
+    color: white;
+}
+
+td.value {
+    padding-left: 5px;
+    text-align: left;
+}
+
+div.adoHome {
+    border-radius: 25px;
+    padding: 1vw 0;
+}
+
+p.adoHome {
+    color: black;
+    text-decoration: none;
+    margin: 1vw 0 0 0;
+}
+
+a.adoHome {
+    color: black;
+    font-size: 1em;
+    text-decoration: none;
+    margin: 15px 0;
+}

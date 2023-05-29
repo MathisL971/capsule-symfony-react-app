@@ -12,6 +12,7 @@
 			{% if profile.status == 'suspended' %}
 				<a href="/admin/user/reactivate/{{profile.id}}/" class="btn btn-primary">Réactiver</a>
 			{% endif %}
+			<a href="/admin/user/resetpass/{{ profile.id }}" class="btn btn-info">Nouveau mot de passe</a>
 			{% if user.role == 'SuperAdmin' %}
 				<a href="/admin/user/upgrade/{{ profile.id }}" class="btn btn-warning">Nommer Admin</a>
 				<a href="/admin/user/upgrade2/{{ profile.id }}" class="btn btn-warning">Nommer SuperAdmin</a>

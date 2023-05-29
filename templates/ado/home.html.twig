@@ -3,7 +3,9 @@
 {% block body %}
 	<div class="container text-center">
 		<div class="row" style="padding: 50px">
-			<div class="col col-3">Image</div>
+			<div class="col col-3">
+				<p><img src="/{{user.profilePic}}" alt="Photo de profil" style="height: 20vw; max-height: 200px; width: auto"></p>
+			</div>
 			<div class="col col-9" style="text-align: left">
 				<h1>Salut
 					{{ user.firstName }}</h1>
@@ -12,42 +14,86 @@
 					<br>** Idée : plusieurs textes accueil aléatoires **</p>
 			</div>
 		</div>
-		<div class="row row-cols-1 row-cols-md-4 g-4">
-			<div class="col">
-				<a href="/ado/agenda"><img src="/images/ado_agenda.png" alt="Ton agenda" height="250px" width="auto" title="Mon agenda"></a>
+		<div class="row row-cols-1 row-cols-md-5">
+			<div class="col" style="padding: 0 1vw; margin-bottom: 2vw">
+				<div class="adoHome" style="background: rgba(127,217,208, 1);">
+					<a href="/ado/notes"><img src="/images/ado_notes.jpg" alt="post it" style="width: 80%; height: auto; border-radius: 25px"></a>
+					<p class="adoHome" style="margin: 1vw 0 0 0">
+						<a class="adoHome" href="/ado/notes">Tes notes</a>
+					</p>
+				</div>
 			</div>
-			<div class="col">
-				<img src="/images/ado_journal.png" alt="Ton journal" height="250px" width="auto" style="opacity: 25%" title="Coming soon">
+			<div class="col" style="padding: 0 1vw; margin-bottom: 2vw">
+				<div class="adoHome" style="background: rgba(127,217,208, 0.8);">
+					<img src="/images/62daf98d587b549878220ab20213db8d.jpg" alt="Ton journal" style="width: 80%; height: auto; border-radius: 25px" title="Coming soon">
+					<p class="adoHome" style="margin: 1vw 0 0 0">
+						<a class="adoHome" href="/ado/agenda">Espace famille</a>
+					</p>
+				</div>
 			</div>
-			<div class="col">
-				<a href="/ado/videos"><img src="/images/ado_videos.png" alt="Tes videos" height="250px" width="auto"></a>
+			<div class="col" style="padding: 0 1vw; margin-bottom: 2vw">
+				<div class="adoHome" style="background: rgba(127,217,208, 0.6);">
+					<a href="/ado/journal"><img src="/images/ado_journal.jpg" alt="post it" style="width: 80%; height: auto; border-radius: 25px"></a>
+					<p class="adoHome" style="margin: 1vw 0 0 0">
+						<a class="adoHome" href="/ado/journal">Ton journal</a>
+					</p>
+				</div>
 			</div>
-			<div class="col">
-				<a href="/ado/podcasts"><img src="/images/ado_podcasts.png" alt="Tes podcasts" height="250px" width="auto"></a>
+			<div class="col" style="padding: 0 1vw; margin-bottom: 2vw">
+				<div class="adoHome" style="background: rgba(127,217,208, 0.4);">
+					<a href="/ado/agenda"><img src="/images/ado_agenda.jpg" alt="post it" style="width: 80%; height: auto; border-radius: 25px"></a>
+					<p class="adoHome" style="margin: 1vw 0 0 0">
+						<a class="adoHome" href="/ado/agenda">Ton agenda</a>
+					</p>
+				</div>
 			</div>
-			<div class="col">
-				<a href="/ado/audiobooks"><img src="/images/ado_audiobooks.png" alt="Tes audiobooks" height="250px" width="auto"></a>
+			<div class="col" style="padding: 0 1vw; margin-bottom: 2vw">
+				<div class="adoHome" style="background: rgba(127,217,208, 0.2);">
+					<a href="/ado/messages"><img src="/images/ado_messages.jpg" alt="post it" style="width: 80%; height: auto; border-radius: 25px"></a>
+					<p class="adoHome" style="margin: 1vw 0 0 0">
+						<a class="adoHome" href="/ado/messages">Tes messages</a>
+					</p>
+				</div>
 			</div>
-			<div class="col">
-				<a href="/ado/messages"><img src="/images/ado_messages.png" alt="Tes messages" height="250px" width="auto"></a>
+			<div class="col" style="padding: 0 1vw; margin-bottom: 2vw">
+				<div class="adoHome" style="background: rgba(127,217,208, 1);">
+					<a href="/ado/audiobooks"><img src="/images/ado_audiobooks.jpg" alt="post it" style="width: 80%; height: auto; border-radius: 25px"></a>
+					<p class="adoHome" style="margin: 1vw 0 0 0">
+						<a class="adoHome" href="/ado/audiobooks">Tes audiobooks</a>
+					</p>
+				</div>
 			</div>
-			<div class="col">
-				<img src="/images/ado_family.png" alt="Espace famille" height="250px" width="auto" style="opacity: 25%" title="Coming soon">
+			<div class="col" style="padding: 0 1vw; margin-bottom: 2vw">
+				<div class="adoHome" style="background: rgba(127,217,208, 0.8);">
+					<img src="/images/ado_videos.jpg" alt="Ton journal" style="width: 80%; height: auto; border-radius: 25px" title="Coming soon">
+					<p class="adoHome" style="margin: 1vw 0 0 0">
+						<a class="adoHome" href="/ado/videos">Tes vidéos</a>
+					</p>
+				</div>
 			</div>
-			<div class="col">
-				<img src="/images/ado_news.png" alt="Tes news" height="250px" width="auto" style="opacity: 25%" title="Coming soon">
+			<div class="col" style="padding: 0 1vw; margin-bottom: 2vw">
+				<div class="adoHome" style="background: rgba(127,217,208, 0.6);">
+					<a href="/ado/podcasts"><img src="/images/ado_podcasts.jpg" alt="post it" style="width: 80%; height: auto; border-radius: 25px"></a>
+					<p class="adoHome" style="margin: 1vw 0 0 0">
+						<a class="adoHome" href="/ado/podcasts">Tes podcasts</a>
+					</p>
+				</div>
 			</div>
-			<div class="col">
-				<img src="/images/ado_notes.png" alt="Tes notes" height="250px" width="auto" style="opacity: 25%" title="Coming soon">
+			<div class="col" style="padding: 0 1vw; margin-bottom: 2vw">
+				<div class="adoHome" style="background: rgba(127,217,208, 0.4);">
+					<a href="/ado/news"><img src="/images/ado_news.jpg" alt="post it" style="width: 80%; height: auto; border-radius: 25px"></a>
+					<p class="adoHome" style="margin: 1vw 0 0 0">
+						<a class="adoHome" href="/ado/news">Les news</a>
+					</p>
+				</div>
 			</div>
-			<div class="col">
-				<img src="/images/ado_community.png" alt="Ta communauté" height="250px" width="auto" style="opacity: 25%" title="Coming soon">
-			</div>
-			<div class="col">
-				<img src="/images/ado_timing.png" alt="Tes timing" height="250px" width="auto" style="opacity: 25%" title="Coming soon">
-			</div>
-			<div class="col">
-				<a href="/ado/visio"><img src="/images/ado_visio.png" alt="Ta visio" height="250px" width="auto"></a>
+			<div class="col" style="padding: 0 1vw; margin-bottom: 2vw">
+				<div class="adoHome" style="background: rgba(127,217,208, 0.2);">
+					<a href="/ado/community"><img src="/images/ado_community.jpg" alt="post it" style="width: 80%; height: auto; border-radius: 25px"></a>
+					<p class="adoHome" style="margin: 1vw 0 0 0">
+						<a class="adoHome" href="/ado/community">Communauté</a>
+					</p>
+				</div>
 			</div>
 		</div>
 

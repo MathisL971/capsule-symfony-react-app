@@ -41,65 +41,43 @@
 
 	{# Main #}
 
-	<div class="container">
-		{% for day in days %}
-			<div class="card text-bg-dark mb-3 h-100">
-				<div class="card-header">
-					<h5>{{ day.day|format_date(locale='fr', pattern='EEEE dd MMMM YYYY') }}</h5>
+	<div class="row row-cols-1 row-cols-md-6 g-4" style="padding: 0 1vw">
+		{% for week in days %}
+			{% for day in week %}
+				<div class="col">
+					<div class="card text-bg-dark mb-3 h-100">
+						<div class="card-header">
+							<h6>{{ day.day }}</h6>
+						</div>
+						<div class="card-body" style="height: 15vh; overflow-y: auto">
+							{% if day.meetings %}
+								{% for meeting in day.meetings %}
+									<table style="width: 100%">
+										<tr>
+											<td style="text-align: left">
+												<a href="/admin/meeting/{{ meeting.id }}" style="color: white; font-size: 0.9em">
+													{{meeting.datemeeting|format_time(pattern="HH:mm")}}
+													:
+													{{meeting.title}}
+												</a>
+											</td>
+											<td style="width: 25px">
+												<form action="/admin/visio2" method="post" target="_blank">
+													<input type="hidden" name="meeting" value="{{meeting.id}}">
+													<input type="submit" value="&#x1F3A5;" class="btn btn-light btn-sm" style="padding: 0 2px 2px 2px">
+												</form>
+											</td>
+										</tr>
+									</table>
+								{% endfor %}
+							{% endif %}
+						</div>
+					</div>
 				</div>
-				<div class="card-body">
-					<p class="card-text">
-						{% if day.meetings %}
-							{% for meeting in day.meetings %}
-								<div class="card text-center text-bg-secondary">
-									<div class="card-header">
-										{{meeting.datemeeting|format_time(pattern="HH:mm")}}
-										:
-										{{meeting.title}}
-									</div>
-									<div class="card-body">
-										<table style="width:80%; margin: auto">
-											<tr>
-												<td>
-													<p>{{meeting.content|nl2br}}</p>
-												</td>
-												<td>
-													<p class="card-text">
-														Hôte :
-														{{meeting.host.firstName}}
-														{{meeting.host.name}}
-													</p>
-													<p class="card-text">
-														Participants :
-														<br>
-														{% for item in meeting.guest %}
-															-
-															{{item.firstName}}
-															{{item.name}}
-															<br>
-														{% endfor %}
-													</p>
-												</td>
-											</tr>
-										</table>
-									</div>
-									<div class="card-footer text-muted">
-										<form action="/admin/visio2" method="post">
-											<input type="hidden" name="meeting" value="{{meeting.id}}">
-											<input type="submit" value="Accéder à la visio" class="btn btn-primary">
-										</form>
-									</div>
-								</div>
-							{% endfor %}
-						{% endif %}
-
-					</p>
-				</div>
-			</div>
-
+			{% endfor %}
 		{% endfor %}
-
 	</div>
+
 
 	{# Modal Meeting #}
 	<div class="modal fade" id="newMeeting" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -134,10 +112,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
-
-	{# Modal task #}
-	<div class="modal fade" id="newTask" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	</div>{# Modal task #}<div class="modal fade" id="newTask" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" style="border: 2px solid white; border-radius: 10px">
 			<div class="modal-content">
 				<div class="modal-header" style="background: black">

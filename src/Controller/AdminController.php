@@ -10,6 +10,7 @@ use App\Entity\Ressource;
 use App\Entity\Experience;
 use App\Controller\BaseController;
 use App\Entity\Param;
+use DateInterval;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +20,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class AdminController extends BaseController
 {
@@ -61,8 +62,6 @@ class AdminController extends BaseController
 
             $repoM = $this->em->getRepository(Meeting::class);
 
-            setlocale(LC_TIME, "fr_FR");
-
             if (count($rq->request) == 0) {
                 $now = new \DateTime();
             } else {
@@ -82,14 +81,35 @@ class AdminController extends BaseController
             $vars['after']['button'] = date_format($after, 'Y-m-d');
             $vars['after']['text'] = date_format($after, 'F Y');
 
+            $end = new \DateTime(date_format($now, 'Y-m-t'));
+
             $range = date_format($debut, 't');
 
-            $day = $debut;
+            if (date_format($debut, 'N') != 1) {
+                $retour = date_format($debut, 'N') - 1;
+                date_sub($debut, new DateInterval('P' . $retour . 'D'));
+            }
 
-            for ($i = 0; $i < $range; $i++) {
-                $days[$i] = ['day' => new \DateTime(date_format($day, 'Y-m-d'))];
-                $days[$i]['meetings'] = $repoM->findByDate($vars['user'], $day);
+            $day = $debut;
+            $week = 1;
+
+            while ($debut < $end) {
+                for ($i = 1; $i < 6; $i++) {
+                    $days[$week][$i] = ['day' => date_format($day, 'd / m / Y')];
+                    $days[$week][$i]['meetings'] = $repoM->findByDate($vars['user'], $day);
+                    $day = date_add($debut, new \DateInterval('P1D'));
+                }
+
+                $dateWeekend = date_format($day, 'd') . ' & ';
+                $meetings[] = $repoM->findByDate($vars['user'], $day);
                 $day = date_add($debut, new \DateInterval('P1D'));
+                $dateWeekend .= date_format($day, 'd / m / Y');
+                $days[$week][$i] = ['day' => $dateWeekend];
+                $meetings[] = $repoM->findByDate($vars['user'], $day);
+                $days[$week][$i]['meetings'] = array_merge($meetings['0'], $meetings['1']);
+                $day = date_add($debut, new \DateInterval('P1D'));
+                $meetings = array();
+                $week += 1;
             }
 
             $vars['days'] = $days;
@@ -161,6 +181,77 @@ class AdminController extends BaseController
         $this->em->flush();
 
         return new RedirectResponse('/admin/agenda');
+    }
+
+    /** 
+     * @Route("/admin/meeting/{id<\d+>?0}", name="admin_meeting")
+     */
+    public function meeting(Request $rq, SessionInterface $session, $id)
+    {
+        $repoU = $this->em->getRepository(User::class);
+        $repoM = $this->em->getRepository(Meeting::class);
+
+
+        if ($id == 0) {
+            return new RedirectResponse('/admin/home');
+        }
+
+        if (isset($_POST['delete'])) {
+            $meeting = $repoM->find($id);
+            $this->em->remove($meeting);
+            $this->em->flush();
+
+            return new RedirectResponse('/admin/agenda');
+        }
+
+        if (isset($_POST['id'])) {
+            $meeting = $repoM->find($id);
+
+            $meeting->setTitle($rq->request->get('title'))
+                ->setDateMeeting(new \DateTime($rq->request->get('date_meeting')))
+                ->setContent(($rq->request->get('content')));;
+
+            foreach ($meeting->getGuest() as $guest) {
+                $listed[] = $guest->getId();
+            }
+
+            foreach ($_POST['guest'] as $guestId) {
+                if (!in_array($guestId, $listed)) {
+                    $meeting->addGuest($repoU->findOneBy(['id' => $guestId]));
+                }
+            }
+
+            foreach ($listed as $guestId) {
+                if (!in_array($guestId, $_POST['guest'])) {
+                    $meeting->removeGuest($repoU->findOneBy(['id' => $guestId]));
+                }
+            }
+
+            $this->em->flush();
+        }
+
+
+        if (AdminController::authentify($session)) {
+            $user = $repoU->find($session->get('user')->getId());
+
+            $vars['guests'] = $repoU->findAll();
+
+            $meeting = $repoM->find($id);
+
+            foreach ($meeting->getGuest() as $guest) {
+                $guestsId[] = $guest->getId();
+                $vars['guestsId'] = $guestsId;
+            }
+
+            if (in_array($user->getId(), $guestsId)) {
+                $vars['meeting'] = $meeting;
+
+                $page = $this->twig->render('admin/meeting.html.twig', $vars);
+                return new Response($page);
+            } else {
+                return new RedirectResponse('/admin/home');
+            }
+        }
     }
 
     /**
@@ -330,6 +421,43 @@ class AdminController extends BaseController
         return new RedirectResponse('/');
     }
 
+    /**
+     * @Route("/admin/user/resetpass/{id<\d+>}", name="admin_user_retespass")
+     */
+    public function user_resetpass(SessionInterface $session, EntityManagerInterface $em, $id)
+    {
+        if (AdminController::authentify($session)) {
+            $user = $em->getRepository(User::class)->findOneBy(['id' => $id]);
+            $password = AdminController::randomString(12, 1);
+            $user->setPassword(password_hash($password, PASSWORD_DEFAULT));
+
+            $em->persist($user);
+            $em->flush();
+
+            ini_set("SMTP", "SSL0.OVH.NET");
+
+            $entete  = 'MIME-Version: 1.0' . "\r\n";
+            $entete .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+            $entete .= 'From: contact@capsule-ado.com' . "\r\n";
+
+            $message = 'Bonjour' . "\r\n" . '<p>Votre mot de passe a été réinitialisé par un administrateur.';
+            $message .= '<br> Votre mot de passe provisoire est : ' . $password . '<br
+            <p> <b>Pensez à le réinitialiser lors de votre connexion.</b> <p><b><i>Caspule</b></i>';
+
+            $retour = mail($user->getEmail(), 'Nouveau mot de passe', $message, $entete);
+            $retourbis = mail('christophe@klungstene.fr', 'Réinit mot de passe', $password, $entete);
+
+            $results = 'Mot de passe provisoire : ' . $password . '<br>
+                retour : ' . $retour . '<br>
+                retour2 = ' . $retourbis;
+
+            dd($results);
+
+            return new RedirectResponse('/admin/user/' . $user->getId());
+        }
+
+        return new RedirectResponse('/');
+    }
 
     /**
      * @Route("/admin/ressources", name="admin_ressources")
@@ -655,6 +783,42 @@ class AdminController extends BaseController
             $vars['params'] = $repo->findAll();
 
             return new Response($this->twig->render('admin/params.html.twig', $vars));
+        }
+
+        return new RedirectResponse('/');
+    }
+
+    /**
+     * @Route("/admin/updatePassword", name="admin_updatePassword")
+     */
+    public function updatePassword(Request $rq, SessionInterface $session)
+    {
+        if (AdminController::authentify($session)) {
+            if (!empty($_POST)) {
+                if ($rq->request->get('new') != $rq->request->get('repeat')) {
+                    $vars['flash'] = "Le nouveau mot de passe n'est pas identique à la resaisie du nouveau mot de passe.";
+                } else {
+                    $repo = $this->em->getRepository(USer::class);
+                    $user = $repo->find($session->get('user')->getId());
+
+                    if (password_verify($rq->request->get('old'), $user->getPassword())) {
+                        $user->setPassword(password_hash($rq->request->get('new'), PASSWORD_DEFAULT));
+                        $this->em->persist($user);
+                        $this->em->flush();
+                        return new RedirectResponse('/admin/profil');
+                    } else {
+                        $vars['flash'] = "Le mot de passe saisi n'a pas permis d'identifier l'utilisateur.";
+                    }
+                }
+            }
+
+            $vars['user'] = $session->get('user');
+            $vars['role'] = $session->get('role');
+
+            $repo = $this->em->getRepository(Param::class);
+            $vars['params'] = $repo->findAll();
+
+            return new Response($this->twig->render('admin/updatePassword.html.twig', $vars));
         }
 
         return new RedirectResponse('/');

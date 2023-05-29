@@ -23,7 +23,7 @@ class LandingController extends BaseController
         if (!empty($_POST)) {
             $repo = $this->em->getRepository(User::class);
             $user = $repo->findOneBy(['email' => $rq->request->get('email')]);
-            $vars['flash'] = "L'authentification a échouée";
+            $vars['flash'] = "L'authentification a échouée<br><a class=\"btn btn-outline-primary\" href=\"/reset\">Réinitialiser le mot de passe ? </a>";
 
             if (!$user) {
                 $vars['flash'] = "Hmmm... Etrange ! Cet email n'est pas reconnu.";
@@ -46,7 +46,7 @@ class LandingController extends BaseController
                 $message .= "<p> Ton identifiant : " . $user->getEmail() . '.<br></p>' . "\r\n";
                 $message .= "<p>A bientôt dans ton espace Capsule.";
 
-                // mail($user->getEmail(), 'Active ton compte Capsule', $message, $entete);
+                mail($user->getEmail(), 'Active ton compte Capsule', $message, $entete);
 
                 return new Response($this->twig->render('landing/home.html.twig', $vars));
             }
@@ -324,25 +324,25 @@ class LandingController extends BaseController
                         ->setStatus('active')
                         ->setActivationKey($user->generateKey(47));
 
-                    // $this->em->persist($user);
-                    // $this->em->flush();
+                    $this->em->persist($user);
+                    $this->em->flush();
 
                     // Envoi d'un mail de confirmation
                     ini_set("SMTP", "SSL0.OVH.NET");
 
                     $entete  = 'MIME-Version: 1.0' . "\r\n";
                     $entete .= 'Content-type: text/html; charset=utf-8' . "\r\n";
-                    $entete .= 'From: postmaster@klungstene.fr' . "\r\n";
+                    $entete .= 'From: contact@capsule-ado.com' . "\r\n";
 
                     $message = 'Bonjour ' . $user->getFirstName() . ',<br>' . "\r\n";
                     $message .= "<p>Merci d'avoir créé ton compte chez Capsule. Active le dès maintenant : <a href=\"https://capsule.klungstene.xyz/activate/" . $user->getActivationKey() . "\">capsule.klungstene.xyz" . '</a>.<br>' . "\r\n";
                     $message .= "<p> Ton identifiant : " . $user->getEmail() . '.<br></p>' . "\r\n";
                     $message .= "<p>A bientôt dans ton espace Capsule.";
 
-                    echo "<a href=\"http://mvpsymfony/activate/" . $user->getActivationKey() . "\">capsule.klungstene.xyz" . '</a>';
-                    dd($message);
+                    //echo "<a href=\"http://mvpsymfony/activate/" . $user->getActivationKey() . "\">capsule.klungstene.xyz" . '</a>';
 
-                    // mail($user->getEmail(), 'Bienvenue chez Capsule !', $message, $entete);
+
+                    $mail = mail($user->getEmail(), 'Bienvenue chez Capsule !', $message, $entete);
 
                     return new RedirectResponse('/');
                 } else {
@@ -365,33 +365,26 @@ class LandingController extends BaseController
     public function activate($key, Request $rq)
     {
         $repo = $this->em->getRepository(User::class);
-        $vars['user'] = $repo->findOneBy(['activationKey' => $key]);
+        $profile = $repo->findOneBy(['activationKey' => $key]);
+        $vars['user'] = $profile;
 
-        if (count($rq->request)) {
-            $data = $rq->request;
-            $repo = $this->em->getRepository(User::class);
-            $profile = $repo->findOneBy(['id' => $vars['user']->getId()]);
-            $profile->setFirstName($data->get('firstName'))
-                ->setName($data->get('name'))
-                ->setEmail($data->get('email'))
-                ->setPhoneMobile($data->get('mobile'))
-                ->setStreet1($data->get('street1'))
-                ->setStreet2($data->get('street2'))
-                ->setPostcode($data->get('postcode'))
-                ->setCity($data->get('city'))
-                ->setCountry($data->get('country'))
-                ->setActivationKey(NULL);
-            $this->em->persist($profile);
-            $this->em->flush();
+        $profile->setActivationKey(NULL);
+        $this->em->persist($profile);
+        $this->em->flush();
 
-            $this->session->set('user', $profile);
-            $vars['user'] = $profile;
-            $vars['role'] = $profile->getRole();
+        $this->session->set('user', $profile);
+        $vars['user'] = $profile;
+        $vars['role'] = $profile->getRole();
 
-            return new RedirectResponse('/' . strtolower($vars['role']) . '/home');
-        }
+        return new RedirectResponse('/' . strtolower($vars['role']) . '/home');
+    }
 
-        return new Response($this->twig->render('landing/profil.html.twig', $vars));
+    /**
+     * @Route("/reset", name="landing_reset")
+     */
+    public function FunctionName()
+    {
+        dd('First step !');
     }
 
     /**

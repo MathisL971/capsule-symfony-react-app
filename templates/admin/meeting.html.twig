@@ -1,0 +1,143 @@
+{% extends "admin/navbar.html.twig" %}
+
+{% block body %}
+	<div id="data">
+		<p>Le
+			{{meeting.dateMeeting | date('d.m.Y à H:i')}}
+			:
+			<b>
+				<i>{{meeting.title}}</i>
+			</b>
+		</p>
+
+		<table style="margin: auto; width: 100%; max-width: 800px">
+			<tr>
+				<th>Participants :</th>
+				<th>Détails :</th>
+			</tr>
+			<tr>
+				<td>
+					{% for guest in meeting.guest %}
+						-
+						{{guest.title}}
+						{{guest.firstName}}
+						{{guest.name}}<br>
+					{% endfor %}
+				</td>
+				<td>
+					{{ meeting.content|nl2br }}</td>
+			</tr>
+		</table>
+		<table style="margin: auto; width: 100%; max-width: 600px; margin-top: 25px">
+			<tr>
+				<td style="width: 25%; text-align: center">
+					<form action="/admin/visio" method="post" target="_blank">
+						<input type="hidden" name="meeting" value="{{meeting.id}}">
+						<button class="btn btn-sm btn-primary" style="width: 5vw">Visio</button>
+					</form>
+				</td>
+				<td style="width: 25%; text-align: center">
+					<button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#newMeeting" style="width: 5vw">Cloner</button>
+				</td>
+				<td style="width: 25%; text-align: center">
+					<button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#updateMeeting" style="width: 5vw">Modifier</button>
+				</td>
+				<td style="width: 25%; text-align: center">
+					<form method="post">
+						<input type="hidden" name="delete" value="1">
+						<button class="btn btn-sm btn-danger" style="width: 5vw">Supprimer</button>
+					</form>
+				</td>
+			</tr>
+
+		</table>
+	</div>
+
+	<div id"form" style="display: none">
+		form
+	</div>
+
+	{# Modal clone Meeting #}
+	<div class="modal fade" id="newMeeting" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" style="border: 2px solid white; border-radius: 10px">
+			<div class="modal-content">
+				<div class="modal-header" style="background: black">
+					<h1 class="modal-title fs-5" id="exampleModalLabel">Cloner le rendez-vous</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="color: white">X</button>
+				</div>
+				<div class="modal-body" style="background: black">
+					<form action="/admin/agenda/addMeeting" method="post">
+						<p><input type="text" name="title" value="{{ meeting.title }}" required>
+						</p>
+						<p><input type="datetime-local" name="date_meeting" value="{{meeting.dateMeeting | date('Y-m-d H:i')}}" required><br></p>
+						<p>
+							<select multiple class="form-control" size="4" name="guest[]">
+								{% for guest in guests %}
+									<option value={{ guest.id }} {% if guest.id in guestsId %} selected {% endif %}>{{ guest.firstName }}
+										{{ guest.name }}</option>
+								{% endfor %}
+							</select>
+						</p>
+						<p>
+							<textarea name="content" cols="38" rows="5">{{ meeting.content|nl2br }}</textarea>
+						</p>
+						<p>Visio
+							<input type="checkbox" name="visio" {% if meeting.visio %} checked {% endif %}>
+						</p>
+					</div>
+					<div class="modal-footer" style="background: black">
+						<input class="btn btn-primary" type="submit" value="Enregistrer"></form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{# Modal update Meeting #}
+	<div class="modal fade" id="updateMeeting" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" style="border: 2px solid white; border-radius: 10px">
+			<div class="modal-content">
+				<div class="modal-header" style="background: black">
+					<h1 class="modal-title fs-5" id="exampleModalLabel">Modifier le rendez-vous</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="color: white">X</button>
+				</div>
+				<div class="modal-body" style="background: black">
+					<form action="/admin/meeting/{{ meeting.id }}" method="post">
+						<input type="hidden" name="id" value="{{ meeting.id }}">
+						<input type="hidden" name="host" value="{{ meeting.host.id }}">
+						<p><input type="text" name="title" value="{{ meeting.title }}" required>
+						</p>
+						<p><input type="datetime-local" name="date_meeting" value="{{meeting.dateMeeting | date('Y-m-d H:i')}}" required><br></p>
+						<p>
+							<select multiple class="form-control" size="4" name="guest[]">
+								{% for guest in guests %}
+									<option value={{ guest.id }} {% if guest.id in guestsId %} selected {% endif %}>{{ guest.firstName }}
+										{{ guest.name }}</option>
+								{% endfor %}
+							</select>
+						</p>
+						<p>
+							<textarea name="content" cols="38" rows="5">{{ meeting.content }}</textarea>
+						</p>
+						<p>Visio
+							<input type="checkbox" name="visio" {% if meeting.visio %} checked {% endif %}>
+						</p>
+					</div>
+					<div class="modal-footer" style="background: black">
+						<input class="btn btn-primary" type="submit" value="Modifier"></form>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block script %}
+	<script>
+		function update() {
+let datadiv = document.getElementById('data');
+datadiv.style.display = "none";
+
+let formdiv = document.getElementById('form');
+formdiv.style.display = "block";
+}
+	</script>
+{% endblock %}

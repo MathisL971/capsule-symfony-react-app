@@ -1,0 +1,40 @@
+{% extends "parent/navbar.html.twig" %}
+
+{% block body %}
+	<div class="container" style="margin-bottom: 30px">
+		<h1 style="margin: 25px 0">{{ user.firstName}}
+			{{ user.name}}</h1>
+
+
+		<div class="row">
+			<button class="btn btn-dark" style="width: 200px; margin: auto; background: white; color: black; border: 1px solid rgb(220, 121, 244)" onclick="reveal('infos')">Infos</button>
+			<button class="btn btn-dark" style="width: 200px; margin: auto; background: white; color: black; border: 1px solid rgb(220, 121, 244)" onclick="reveal('interest')">Centres d'intérêts</button>
+			<button class="btn btn-dark" style="width: 200px; margin: auto; background: white; color: black; border: 1px solid rgb(220, 121, 244)" onclick="reveal('family')">Famille</button>
+			<button class="btn btn-dark" style="width: 200px; margin: auto; background: white; color: black; border: 1px solid rgb(220, 121, 244)" onclick="reveal('payments')">Paiements</button>
+		</div>
+		<div class="row" id="infos" style"display: block; margin: 15px 0">
+			{{ dump(user.profilPic)}}<br>
+			<p>{{ user.email }}<br>
+				{{ user.phoneMobile}}</p>
+		</div>
+		<div class="row" id="interest" style="display: none; margin: 15px 0">Interest</div>
+		<div class="row" id="family" style="display: none; margin: 15px 0">family</div>
+		<div class="row" id="payments" style="display: none; margin: 15px 0">Paiements</div>
+	</div>
+{% endblock %}
+{% block script %}
+	<script>
+		function reveal(div) {
+let d1 = document.getElementById("infos");
+let d2 = document.getElementById("interest");
+let d3 = document.getElementById("family");
+let d4 = document.getElementById("payments");
+d1.style.display = "none";
+d2.style.display = "none";
+d3.style.display = "none";
+d4.style.display = "none";
+let d = document.getElementById(div);
+d.style.display = "block";
+}
+	</script>
+{% endblock %}

@@ -77,6 +77,13 @@ class Meeting
         return $this->id;
     }
 
+    public function setId(?int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getHost(): ?User
     {
         return $this->host;
@@ -99,13 +106,16 @@ class Meeting
 
         $this->guest[] = $guest;
 
-
         return $this;
     }
 
     public function removeGuest($guest): self
     {
-        $this->guest->removeElement($guest);
+        foreach ($this->guest as $key => $value) {
+            if ($guest->getId() == $value->getId()) {
+                unset($this->guest[$key]);
+            }
+        }
 
         return $this;
     }

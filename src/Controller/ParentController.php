@@ -220,6 +220,27 @@ class ParentController extends BaseController
     }
 
     /**
+     * @Route("/parent/profil", name="parent_profil")
+     */
+    public function profil(Request $rq)
+    {
+        if (ParentController::authentify($this->session)) {
+
+            $vars['user'] = $this->session->get('user');
+            $vars['role'] = $this->session->get('role');
+
+            $post = $rq->request;
+
+
+
+            return new Response($this->twig->render('parent/profil.html.twig', $vars));
+        }
+
+        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
+        return new RedirectResponse('/');
+    }
+
+    /**
      * Authentification des parents
      */
     static function authentify(SessionInterface $session)
