@@ -12,6 +12,7 @@ use App\Controller\BaseController;
 use App\Entity\Param;
 use DateInterval;
 use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -610,34 +611,74 @@ class AdminController extends BaseController
     public function visio(Request $rq, SessionInterface $session)
     {
         if (AdminController::authentify($session)) {
+            $vars = [];
+
+            $vars['user'] = $session->get('user');
+            $vars['role'] = $session->get('role');
+
             if (count($rq->request)) {
                 $repoM = $this->em->getRepository(Meeting::class);
                 $meeting = $repoM->find($rq->request->get('meeting'));
+                //dump($meeting);
 
-                $paramRepo = $this->em->getRepository(Param::class);
-                $kid = $paramRepo->findOneBy(['name' => 'kid']);
+                // if (time() < (date_timestamp_get($meeting->getDateMeeting()) - 2 * 60 * 60)) {
+                //     dump('timestamp now : ' . number_format(date_timestamp_get(new DateTime('now', new DateTimeZone('Europe/Paris'))), 0, ",", " "));
+                //     dump('timestamp meeting : ' . number_format(date_timestamp_get($meeting->getDateMeeting()), 0, ",", " "));
+                //     dd('Trop tôt');
+                // }
+
+                // if (time() > (date_timestamp_get($meeting->getDateMeeting()) + 2 * 60 * 60)) {
+                //     return new RedirectResponse('/admin/agenda');
+                // }
+
+                $repoP = $this->em->getRepository(Param::class);
+                $kid = $repoP->findOneBy(['name' => 'kid']);
 
                 $file = fopen('../src/Security/jaasauth.key', 'r');
                 $privateKey = fread($file, filesize('../src/Security/jaasauth.key'));
+                $moderator = false;
+                if ($meeting->getHost()->getId() == $vars['user']->getId()) {
+                    $moderator = true;
+                }
 
+                $payload = array(
+                    "aud" => "jitsi",
+                    "iss" => "chat",
+                    "exp" => time() + 3600 * 2,  //ATTENTION A CHANGER !!!! C'est le timestamp d'expiration
+                    "nbf" => time(),  //ATTENTION A CHANGER !!!! C'est le timestamp not before
+                    "sub" => $repoP->findOneBy(['name' => 'sub'])->getValue(),
+                    "context" => array(
+                        "features" => array(
+                            "livestreaming" => true,
+                            "outbound-call" => true,
+                            "sip-outbound-call" => false,
+                            "transcription" => true,
+                            "recording" => true
+                        ),
+                        "user" => array(
+                            "hidden-from-recorder" => false,
+                            "moderator" => $moderator,
+                            "name" => $vars['user']->getFirstName(),
+                            "id" => "auth0|63749560694ed42ee589972d",
+                            "avatar" => "",
+                            "email" => $vars['user']->getEmail()
+                        )
+                    ),
+                    "room" => $meeting->getVisio(),
+                );
 
-                dd($meeting);
+                $jwt = JWT::encode($payload, $privateKey, 'RS256', null, array('kid' => $kid->getValue()));
 
-                $vars = [];
+                $vars['domain'] = '8x8.vc';
+                $vars['room'] = 'vpaas-magic-cookie-e9f22e0cc2264adc9c5beffec3ea2822/' . $meeting->getVisio();
+                $vars['jwt'] = $jwt;
+                $vars['subject'] = $meeting->getTitle();
 
-                $vars['user'] = $session->get('user');
-                $vars['role'] = $session->get('role');
-
-                $page = $this->twig->render('admin/visio.html.twig', $vars);
+                $page = $this->twig->render('admin/visio2.html.twig', $vars);
 
                 return new Response($page);
             }
         }
-
-        $roomName = AdminController::randomString(64);
-        dump($roomName);
-
-        dd("Pas d'info ppour construire la visio");
 
         return new RedirectResponse('/');
     }
@@ -710,12 +751,32 @@ class AdminController extends BaseController
 
             $vars = [];
 
-            $vars['user'] = $session->get('user');
+            $user = $session->get('user');
+            $vars['user'] = $user;
             $vars['role'] = $session->get('role');
 
             $post = $rq->request;
 
             if (count($post) > 0) {
+                if ($post->get('form') == 'infos') {
+
+                    dump($user);
+                    dump($post);
+
+                    foreach ($post as $key => $value) {
+                        $method = 'set' . ucfirst($key);
+                        if ($key == 'birthDate') {
+                            $value  = new DateTime($post->get('birthDate'));
+                        }
+
+                        if (is_callable([$user, $method])) {
+                            $user->$method($value);
+                        }
+                    }
+
+                    dd($user);
+                }
+
                 $file = $_FILES['pic'];
                 $repo = $this->em->getRepository(User::class);
                 $user = $repo->find($vars['user']->getId());

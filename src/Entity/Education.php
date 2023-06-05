@@ -19,7 +19,7 @@ class Education
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="educations")
+     * @ORM\ManyToOne(targetEntity=User::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $userId;

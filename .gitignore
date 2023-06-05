@@ -15,3 +15,7 @@
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+
+# Journaux de suivi
+/Journal de suivi.txt
+/Journal de suivi - Juridique.txt

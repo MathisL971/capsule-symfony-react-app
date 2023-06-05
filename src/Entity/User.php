@@ -3,9 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
+// use Doctrine\Common\Collections\ArrayCollection;
+// use Doctrine\Common\Collections\Collection;
+// use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -79,24 +79,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $city;
 
     /**
-     * @ORM\OneToMany(targetEntity=Experience::class, mappedBy="userId", orphanRemoval=true)
-     */
-    private $experiences;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Education::class, mappedBy="userId", orphanRemoval=true)
-     */
-    private $educations;
-
-    /**
      * @ORM\Column(type="string", length=25, nullable=true)
      */
     private $status;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="user", orphanRemoval=true)
-     */
-    private $comments;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -139,11 +124,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $socid;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $timezone;
+
     public function __construct()
     {
-        $this->experiences = new ArrayCollection();
-        $this->educations = new ArrayCollection();
-        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -353,66 +340,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Experience>
-     */
-    public function getExperiences(): Collection
-    {
-        return $this->experiences;
-    }
-
-    public function addExperience(Experience $experience): self
-    {
-        if (!$this->experiences->contains($experience)) {
-            $this->experiences[] = $experience;
-            $experience->setUserId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeExperience(Experience $experience): self
-    {
-        if ($this->experiences->removeElement($experience)) {
-            // set the owning side to null (unless already changed)
-            if ($experience->getUserId() === $this) {
-                $experience->setUserId(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Education>
-     */
-    public function getEducations(): Collection
-    {
-        return $this->educations;
-    }
-
-    public function addEducation(Education $education): self
-    {
-        if (!$this->educations->contains($education)) {
-            $this->educations[] = $education;
-            $education->setUserId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEducation(Education $education): self
-    {
-        if ($this->educations->removeElement($education)) {
-            // set the owning side to null (unless already changed)
-            if ($education->getUserId() === $this) {
-                $education->setUserId(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * liste : valid, pending, suspended, disabled
      */
     public function getStatus(): ?string
@@ -423,36 +350,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setStatus(string $status): self
     {
         $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Comment>
-     */
-    public function getComments(): Collection
-    {
-        return $this->comments;
-    }
-
-    public function addComment(Comment $comment): self
-    {
-        if (!$this->comments->contains($comment)) {
-            $this->comments[] = $comment;
-            $comment->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeComment(Comment $comment): self
-    {
-        if ($this->comments->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
-            if ($comment->getUser() === $this) {
-                $comment->setUser(null);
-            }
-        }
 
         return $this;
     }
@@ -486,7 +383,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->birthDate;
     }
 
-    public function setBirthDate(?\DateTimeInterface $birthDate): self
+    public function setBirthDate(?\DateTime $birthDate): self
     {
         $this->birthDate = $birthDate;
 
@@ -556,5 +453,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles()
     {
         # code...
+    }
+
+    public function getTimezone(): ?string
+    {
+        return $this->timezone;
+    }
+
+    public function setTimezone(string $timezone): self
+    {
+        $this->timezone = $timezone;
+
+        return $this;
     }
 }

@@ -27,6 +27,7 @@ parentNode: document.querySelector('#meet')
 
 api = new JitsiMeetExternalAPI(domain, options);
 api.executeCommand('subject', data.dataset.subject);
+api.executeCommand('toggleLobby', true);
 }
 
 window.onload = () => {
