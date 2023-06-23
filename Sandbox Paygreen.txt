@@ -1,0 +1,13 @@
+Sandbox :
+User christophe@capsule-ado.com
+PW Ufea88f7cfa85527!_!
+Boutique sh_2dbb5184ba9b422f81d2659da1303b97
+Boutique sh_9cc7d137d12f4c7b9d72ef4a279b3d2d
+public key pk_c90dd11dc12c4f5b8593ed7b5c2608c6
+private key sk_140f823d462e46efa73597bffeb53aa9
+
+Endpoints :
+API : https://sb-api.paygreen.fr
+PayGreenJS : https://sb-pgjs.paygreen.fr/latest/paygreen.min.js
+Back-office : https://sb-app.paygreen.fr
+

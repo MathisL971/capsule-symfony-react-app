@@ -41,7 +41,50 @@
 
 	{# Main #}
 
-	<div class="row row-cols-1 row-cols-md-6 g-4" style="padding: 0 1vw">
+	<div class="row row-cols-1 row-cols-md-6 g-4" style="padding: 0 1vw; margin-top: 1vh">
+		<div class="col">
+			<div class="card text-bg-dark mb-3 h-100">
+				<div class="card-header">
+					<h6>{{ "lundi" }}</h6>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card text-bg-dark mb-3 h-100">
+				<div class="card-header">
+					<h6>{{ "mardi" }}</h6>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card text-bg-dark mb-3 h-100">
+				<div class="card-header">
+					<h6>{{ "mercredi" }}</h6>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card text-bg-dark mb-3 h-100">
+				<div class="card-header">
+					<h6>{{ "jeudi" }}</h6>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card text-bg-dark mb-3 h-100">
+				<div class="card-header">
+					<h6>{{ "vendredi" }}</h6>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="card text-bg-dark mb-3 h-100">
+				<div class="card-header">
+					<h6>{{ "samedi | dimanche" }}</h6>
+				</div>
+			</div>
+		</div>
+
 		{% for week in days %}
 			{% for day in week %}
 				<div class="col">
@@ -56,7 +99,7 @@
 										<tr>
 											<td style="text-align: left">
 												<a href="/admin/meeting/{{ meeting.id }}" style="color: white; font-size: 0.9em">
-													{{meeting.datemeeting|format_time(pattern="HH:mm")}}
+													{{meeting.datemeeting|date('H:i', false)}}
 													:
 													{{meeting.title}}
 												</a>
@@ -71,6 +114,7 @@
 									</table>
 								{% endfor %}
 							{% endif %}
+							<div data-bs-toggle="modal" data-bs-target="#newMeeting" style="height: 100%"></div>
 						</div>
 					</div>
 				</div>

@@ -55,7 +55,8 @@ class AdminController extends BaseController
 
             $vars = [];
 
-            $vars['user'] = $this->session->get('user');
+            $user = $this->session->get('user');
+            $vars['user'] = $user;
             $vars['role'] = $this->session->get('role');
 
             $repo = $this->em->getRepository(USer::class);
@@ -69,8 +70,8 @@ class AdminController extends BaseController
                 $now = new \DateTime($rq->request->get('month'));
             }
 
-            $range = 0;
             $debut = new \DateTime(date_format($now, 'Y-m') . '-01');
+            $debutQuery = new \DateTimeImmutable(date_format($now, 'Y-m') . '-01', new DateTimeZone($user->getTimezone()));
 
             $before = new \DateTime(date_format($now, 'Y-m') . '-01');
             date_sub($before, new \DateInterval('P1M'));
@@ -84,35 +85,38 @@ class AdminController extends BaseController
 
             $end = new \DateTime(date_format($now, 'Y-m-t'));
 
-            $range = date_format($debut, 't');
-
             if (date_format($debut, 'N') != 1) {
                 $retour = date_format($debut, 'N') - 1;
                 date_sub($debut, new DateInterval('P' . $retour . 'D'));
+                $debutQuery = $debutQuery->sub(new DateInterval('P' . $retour . 'D'));
             }
 
             $day = $debut;
             $week = 1;
+            $dayQuery = $debutQuery->setTimezone(new DateTimeZone('UTC'));
 
             while ($debut < $end) {
                 for ($i = 1; $i < 6; $i++) {
                     $days[$week][$i] = ['day' => date_format($day, 'd / m / Y')];
-                    $days[$week][$i]['meetings'] = $repoM->findByDate($vars['user'], $day);
+                    $days[$week][$i]['meetings'] = $repoM->findByDate($vars['user'], $dayQuery);
                     $day = date_add($debut, new \DateInterval('P1D'));
+                    $dayQuery = $dayQuery->add(new \DateInterval('P1D'));
                 }
 
                 $dateWeekend = date_format($day, 'd') . ' & ';
-                $meetings[] = $repoM->findByDate($vars['user'], $day);
+                $meetings[] = $repoM->findByDate($vars['user'], $dayQuery);
                 $day = date_add($debut, new \DateInterval('P1D'));
+                $dayQuery = $dayQuery->add(new \DateInterval('P1D'));
                 $dateWeekend .= date_format($day, 'd / m / Y');
                 $days[$week][$i] = ['day' => $dateWeekend];
-                $meetings[] = $repoM->findByDate($vars['user'], $day);
+                $meetings[] = $repoM->findByDate($vars['user'], $dayQuery);
                 $days[$week][$i]['meetings'] = array_merge($meetings['0'], $meetings['1']);
                 $day = date_add($debut, new \DateInterval('P1D'));
+                $dayQuery = $dayQuery->add(new \DateInterval('P1D'));
                 $meetings = array();
                 $week += 1;
             }
-
+            //dd($days);
             $vars['days'] = $days;
 
             return new Response($this->twig->render('admin/agenda.html.twig', $vars));
@@ -132,16 +136,17 @@ class AdminController extends BaseController
         $user = $this->session->get('user');
         $host = $repo->findOneBy(['id' => $user->getId()]);
 
+        $dateM = new \DateTime($post->get('date_meeting'), new DateTimeZone($user->getTimezone()));
+        $dateM->setTimezone(new DateTimeZone('UTC'));
+
         $meeting = new Meeting;
         $meeting->setTitle($post->get('title'))
-            ->setDateMeeting(new \DateTime($post->get('date_meeting')))
+            ->setDateMeeting($dateM)
             ->setDateCreate(new \DateTime())
             ->setHost($host)
             ->setContent(($post->get('content')));
 
         if ($post->get('guest')) {
-            $guests = $post->get('guest');
-
             foreach ($_POST['guest'] as $id) {
                 $guest = $repo->findOneBy(['id' => $id]);
                 $meeting->addGuest($guest);
@@ -192,52 +197,59 @@ class AdminController extends BaseController
         $repoU = $this->em->getRepository(User::class);
         $repoM = $this->em->getRepository(Meeting::class);
 
-
-        if ($id == 0) {
-            return new RedirectResponse('/admin/home');
-        }
-
-        if (isset($_POST['delete'])) {
-            $meeting = $repoM->find($id);
-            $this->em->remove($meeting);
-            $this->em->flush();
-
-            return new RedirectResponse('/admin/agenda');
-        }
-
-        if (isset($_POST['id'])) {
-            $meeting = $repoM->find($id);
-
-            $meeting->setTitle($rq->request->get('title'))
-                ->setDateMeeting(new \DateTime($rq->request->get('date_meeting')))
-                ->setContent(($rq->request->get('content')));;
-
-            foreach ($meeting->getGuest() as $guest) {
-                $listed[] = $guest->getId();
-            }
-
-            foreach ($_POST['guest'] as $guestId) {
-                if (!in_array($guestId, $listed)) {
-                    $meeting->addGuest($repoU->findOneBy(['id' => $guestId]));
-                }
-            }
-
-            foreach ($listed as $guestId) {
-                if (!in_array($guestId, $_POST['guest'])) {
-                    $meeting->removeGuest($repoU->findOneBy(['id' => $guestId]));
-                }
-            }
-
-            $this->em->flush();
-        }
-
-
         if (AdminController::authentify($session)) {
+
+            if ($id == 0) {
+                return new RedirectResponse('/admin/home');
+            }
+
+            if (isset($_POST['delete'])) {
+                $meeting = $repoM->find($id);
+                $this->em->remove($meeting);
+                $this->em->flush();
+
+                return new RedirectResponse('/admin/agenda');
+            }
+
+            if (isset($_POST['id'])) {
+                $meeting = $repoM->find($id);
+
+                $meeting->setTitle($rq->request->get('title'))
+                    ->setDateMeeting(new \DateTime($rq->request->get('date_meeting')))
+                    ->setContent(($rq->request->get('content')));;
+
+                if ($meeting->getGuest()) {
+                    foreach ($meeting->getGuest() as $guest) {
+                        $listed[] = $guest->getId();
+                    }
+                    foreach ($_POST['guest'] as $guestId) {
+                        if (!in_array($guestId, $listed)) {
+                            $meeting->addGuest($repoU->findOneBy(['id' => $guestId]));
+                        }
+                    }
+
+                    foreach ($listed as $guestId) {
+                        if (!in_array($guestId, $_POST['guest'])) {
+                            $meeting->removeGuest($repoU->findOneBy(['id' => $guestId]));
+                        }
+                    }
+                } else {
+                    foreach ($_POST['guest'] as $guestId) {
+                        $meeting->addGuest($repoU->findOneBy(['id' => $guestId]));
+                    }
+                }
+
+                $this->em->persist($meeting);
+                $this->em->flush();
+            }
+
+
             $user = $repoU->find($session->get('user')->getId());
 
             $vars['guests'] = $repoU->findAll();
 
             $meeting = $repoM->find($id);
+            $meeting->setDateMeeting($meeting->getDateMeeting()->setTimezone(new DateTimeZone($user->getTimezone())));
 
             foreach ($meeting->getGuest() as $guest) {
                 $guestsId[] = $guest->getId();
@@ -744,6 +756,7 @@ class AdminController extends BaseController
 
     /**
      * @Route("/admin/profil", name="admin_profil")
+     * @Route("/superadmin/profil", name="superadmin_profil")
      */
     public function profil(Request $rq, SessionInterface $session)
     {
@@ -756,42 +769,43 @@ class AdminController extends BaseController
             $vars['role'] = $session->get('role');
 
             $post = $rq->request;
-
             if (count($post) > 0) {
-                if ($post->get('form') == 'infos') {
+                $repo = $this->em->getRepository(User::class);
+                $user = $repo->find($vars['user']->getId());
 
-                    dump($user);
-                    dump($post);
+                if ($post->get('form') == 'infos') {
 
                     foreach ($post as $key => $value) {
                         $method = 'set' . ucfirst($key);
                         if ($key == 'birthDate') {
-                            $value  = new DateTime($post->get('birthDate'));
-                        }
+                            if ($value != "") {
+                                $value  = new DateTime($post->get('birthDate'));
+                                $user->$method($value);
+                            }
+                        } else {
 
-                        if (is_callable([$user, $method])) {
-                            $user->$method($value);
+                            if (is_callable([$user, $method])) {
+                                $user->$method($value);
+                            }
                         }
                     }
-
-                    dd($user);
                 }
 
-                $file = $_FILES['pic'];
-                $repo = $this->em->getRepository(User::class);
-                $user = $repo->find($vars['user']->getId());
-                $name = $file['tmp_name'];
-                $fileExt = "." . strtolower(substr(strrchr($file['name'], '.'), 1));
-                $dest = 'profilepics/' . $vars['user']->getId() . $fileExt;
+                $file = $_FILES['profilePic'];
+                if ($file['size'] > 0) {
+                    $name = $file['tmp_name'];
+                    $fileExt = "." . strtolower(substr(strrchr($file['name'], '.'), 1));
+                    $dest = 'profilepics/' . $vars['user']->getId() . $fileExt;
 
-                $resultat = move_uploaded_file($name, $dest);
-
-                if ($resultat) {
-                    $user->setProfilePic($dest);
-                    $this->em->persist($user);
-                    $this->em->flush();
-                    $vars['user'] = $user;
+                    $resultat = move_uploaded_file($name, $dest);
+                    if ($resultat) {
+                        $user->setProfilePic($dest);
+                    }
                 }
+
+                $this->em->persist($user);
+                $this->em->flush();
+                $vars['user'] = $user;
             }
 
             return new Response($this->twig->render('admin/profil.html.twig', $vars));
@@ -859,7 +873,7 @@ class AdminController extends BaseController
                 if ($rq->request->get('new') != $rq->request->get('repeat')) {
                     $vars['flash'] = "Le nouveau mot de passe n'est pas identique à la resaisie du nouveau mot de passe.";
                 } else {
-                    $repo = $this->em->getRepository(USer::class);
+                    $repo = $this->em->getRepository(User::class);
                     $user = $repo->find($session->get('user')->getId());
 
                     if (password_verify($rq->request->get('old'), $user->getPassword())) {
@@ -875,9 +889,6 @@ class AdminController extends BaseController
 
             $vars['user'] = $session->get('user');
             $vars['role'] = $session->get('role');
-
-            $repo = $this->em->getRepository(Param::class);
-            $vars['params'] = $repo->findAll();
 
             return new Response($this->twig->render('admin/updatePassword.html.twig', $vars));
         }

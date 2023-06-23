@@ -1,0 +1,25 @@
+RDV 29.05.2023
+G/C + Mathis :
+
+Ordre du jour : entretien Mathis : apports au projet ?
+
+C/M : déjà échangé via WhatsApp :
+  - création compte Capsule + passage Admin
+  - connection GitHub
+  - échanges techniques (framework Symfony / PHP  // Mathis : React + Node.js : Ø utilisé dans notre projet... => vanilla JS)
+
+Comment ca peut matcher ?
+  - front : react ? comment ca s'intègre ?
+	pour mobile existe React native ? => permettrait de garder le même stack ? (vérifier si éligible iOs & Android)
+  - React = framework utilisé par grosse cie (+ Angular & VUE)
+
+Hébergeur HDS :
+  - prendre contact
+  - mettre en place l'hébergement
+  - voir la DB + cryptage
+  - tester !!!!
+
+Cours conseillé par Mathis : https://fullstackopen.com/fr/
+
+Idée IA : assistant scolaire perso pour adapter les leçons au niveau des élèves et au vocabulaire de leurs passions (=>gamification)
+

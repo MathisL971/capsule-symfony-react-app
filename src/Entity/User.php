@@ -315,30 +315,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function generate($length)
-    {
-        $list = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$&@!.-_%€?;:,µ=+#';
-        $chaine = '';
-        $max = mb_strlen($list) - 1;
-        for ($i = 0; $i < $length; $i++) {
-            $chaine .= $list[random_int(0, $max)];
-        }
-
-        return $chaine;
-    }
-
-    public function generateKey($length)
-    {
-        $list = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $chaine = '';
-        $max = mb_strlen($list) - 1;
-        for ($i = 0; $i < $length; $i++) {
-            $chaine .= $list[random_int(0, $max)];
-        }
-
-        return $chaine;
-    }
-
     /**
      * liste : valid, pending, suspended, disabled
      */
@@ -465,5 +441,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->timezone = $timezone;
 
         return $this;
+    }
+
+    public function generate($length)
+    {
+        $list = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$&@!.-_%;:,?=+';
+        $chaine = '';
+        $max = mb_strlen($list) - 1;
+        for ($i = 0; $i < $length; $i++) {
+            $chaine .= $list[random_int(0, $max)];
+        }
+
+        return $chaine;
+    }
+
+    public function generateKey($length)
+    {
+        $list = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $chaine = '';
+        $max = mb_strlen($list) - 1;
+        for ($i = 0; $i < $length; $i++) {
+            $chaine .= $list[random_int(0, $max)];
+        }
+
+        return $chaine;
     }
 }

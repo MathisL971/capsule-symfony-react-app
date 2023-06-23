@@ -3,8 +3,12 @@
 namespace App\Repository;
 
 use DateTime;
+use DateInterval;
+use DateTimeZone;
 use App\Entity\User;
+use DateTimeImmutable;
 use App\Entity\Meeting;
+use Doctrine\DBAL\Types\DateIntervalType;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
@@ -41,12 +45,12 @@ class MeetingRepository extends ServiceEntityRepository
         }
     }
 
-    public function findByDate(User $user, DateTime $date)
+    public function findByDate(User $user, DateTimeImmutable $date)
     {
-        $fdate = date_format($date, 'Y-m-d') . '-00-00-00';
-        $tdate = date_format($date, 'Y-m-d') . '-23-59-59';
+        $fdate = date_format($date, 'Y-m-d-H-i-s');
+        $tdate = date_format($date->add(new DateInterval('P1D')), 'Y-m-d-H-i-s');
 
-        return $this->createQueryBuilder('m')
+        $meetings =  $this->createQueryBuilder('m')
             ->andWhere('m.guest LIKE :user AND m.date_meeting BETWEEN :fdate AND :tdate')
             ->setParameter('user', '%id";i:' . $user->getId() . '%')
             ->setParameter('fdate', $fdate)
@@ -55,6 +59,13 @@ class MeetingRepository extends ServiceEntityRepository
             ->setMaxResults(10)
             ->getQuery()
             ->getResult();
+
+        if ($meetings) {
+            foreach ($meetings as $meeting) {
+                $meeting->setDateMeeting($meeting->getDateMeeting()->setTimezone(new DateTimeZone($user->getTimezone())));
+            }
+        }
+        return $meetings;
     }
 
 

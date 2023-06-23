@@ -1,0 +1,18 @@
+{% extends "landing/navbar.html.twig" %}
+{% block title %}
+	Capsule
+{% endblock %}
+{% block body %}
+	<div style="min-height: 80vh">
+		<h1>Réinitialiser le mot de passe</h1>
+		<form method="POST">
+			<p><input type="email" name="email" placeholder="Email" required></p>
+			<p><input type="submit" value="Réinitialiser"></p>
+		</form>
+
+		<div class="col" style="margin: 100px">
+			<a href="/" role="button" class="btn btn-dark">Retour à l'accueil</a>
+		</div>
+	</div>
+
+{% endblock %}

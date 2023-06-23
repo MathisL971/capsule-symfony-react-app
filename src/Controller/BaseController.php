@@ -22,7 +22,6 @@ class BaseController
         $this->twig = new Environment($loader, ['debug' => true]);
         $this->twig->addExtension(new DebugExtension());
         $this->twig->addExtension(new IntlExtension());
-        // $this->rq = $rq;
         $this->em = $em;
         $this->session = $session;
     }

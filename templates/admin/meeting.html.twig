@@ -3,7 +3,7 @@
 {% block body %}
 	<div id="data">
 		<p>Le
-			{{meeting.dateMeeting | date('d.m.Y à H:i')}}
+			{{meeting.dateMeeting | date('d.m.Y à H:i', false)}}
 			:
 			<b>
 				<i>{{meeting.title}}</i>
