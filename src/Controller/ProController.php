@@ -3,12 +3,13 @@
 namespace App\Controller;
 
 use DateTime;
+use DateInterval;
+use DateTimeZone;
 use App\Entity\Slot;
 use App\Entity\User;
 use App\Entity\Meeting;
 use App\Entity\Education;
 use App\Entity\Experience;
-use DateInterval;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,14 +30,6 @@ class ProController extends BaseController
             $vars['role'] = $this->session->get('role');
 
             $vars['date'] = ProController::datecomplete(new \DateTime());
-
-            $repoM = $this->em->getRepository(Meeting::class);
-
-            $hostedMeetings = $repoM->findByDate($this->session->get('user'), new DateTime());
-
-            // $attendedMeetings = $repoM->findAttendedByDate($this->session->get('user'), new DateTime());
-
-            $vars['meetings'] = $hostedMeetings;
 
             return new Response($this->twig->render('pro/home.html.twig', $vars));
         }
@@ -74,23 +67,6 @@ class ProController extends BaseController
             $vars['id'] = $rq->query->get('id', 0);
 
             return new Response($this->twig->render('pro/patient.html.twig', $vars));
-        }
-
-        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
-        return new RedirectResponse('/');
-    }
-
-    /**
-     * @Route("/pro/agenda", name="pro_agenda")
-     */
-    public function agenda(Request $rq)
-    {
-        if (ProController::authentify($this->session)) {
-
-            $vars['user'] = $this->session->get('user');
-            $vars['role'] = $this->session->get('role');
-
-            return new Response($this->twig->render('pro/agenda.html.twig', $vars));
         }
 
         $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
@@ -243,7 +219,6 @@ class ProController extends BaseController
                         $education->setDate(new DateTime($rq->request->get('date' . $i)))
                             ->setDegree($rq->request->get('degree' . $i))
                             ->setSchool($rq->request->get('school' . $i));
-                        $user->addEducation($education);
                         $this->em->persist($education);
                     }
                 }
@@ -260,7 +235,6 @@ class ProController extends BaseController
                         } else {
                             $experience->setDateEnd(null);
                         }
-                        $user->addExperience($experience);
                         $this->em->persist($experience);
                     }
                 }

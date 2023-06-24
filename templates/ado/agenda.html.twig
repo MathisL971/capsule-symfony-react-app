@@ -1,13 +1,301 @@
 {% extends "ado/navbar.html.twig" %}
 
 {% block title %}
-	Capsule - Agenda
+	Agenda
 {% endblock %}
 
 {% block body %}
-	<h1>Ton agenda</h1>
-
-	<div class="col" style="margin: 100px">
-		<a href="/ado/home" role="button" class="btn btn-dark">Retour à l'accueil</a>
+	<div class="container" style="padding-top: 3vh">
+		<div class="row align-items-center">
+			<div class="col-1">
+				<form action="" method="post">
+					<input type="hidden" name="month" value={{before.button}}>
+					<input type="submit" value="{{before.text}}">
+				</form>
+			</div>
+			<div class="col">
+				<h1>Agenda
+					<div class="dropdown">
+						<button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#newMeeting" style="background: var(--caps-ado);">
+							Nouveau rendez vous
+						</button>
+					</div>
+				</h1>
+			</div>
+			<div class="col-1">
+				<form action="" method="post">
+					<input type="hidden" name="month" value={{after.button}}>
+					<input type="submit" value="{{after.text}}">
+				</form>
+			</div>
+		</div>
 	</div>
+
+	{# Main #}
+
+	<div class="row row-cols-1 row-cols-md-6 g-4" style="padding: 0 1vw; margin-top: 1vh;">
+		<div class="col">
+			<div class="text-bg-ado mb-3 h-100 d-flex align-items-center justify-content-center">
+				lundi
+			</div>
+		</div>
+		<div class="col">
+			<div class="text-bg-ado mb-3 h-100 d-flex align-items-center justify-content-center">
+				mardi
+			</div>
+		</div>
+		<div class="col">
+			<div class="text-bg-ado mb-3 h-100 d-flex align-items-center justify-content-center">
+				mercredi
+			</div>
+		</div>
+		<div class="col">
+			<div class="text-bg-ado mb-3 h-100 d-flex align-items-center justify-content-center">
+				jeudi
+			</div>
+		</div>
+		<div class="col">
+			<div class="text-bg-ado mb-3 h-100 d-flex align-items-center justify-content-center">
+				vendredi
+			</div>
+		</div>
+		<div class="col">
+			<div class="text-bg-ado mb-3 h-100 d-flex align-items-center justify-content-center">
+				samedi | dimanche
+			</div>
+		</div>
+	</div>
+	<div class="row row-cols-1 row-cols-md-6 g-4" style="padding: 0 1vw; margin-top: 1vh; margin-bottom : 5vh; max-height: 70vh; overflow-y: auto;">
+		{% for week in days %}
+			{% for day in week %}
+				<div class="col">
+					<div class="card text-bg-ado mb-3 h-100">
+						<div class="card-header">
+							<h6>{{ day.day }}</h6>
+						</div>
+						<div class="card-body" style="height: 15vh; overflow-y: auto">
+							{% if day.meetings %}
+								{% for meeting in day.meetings %}
+									<table style="width: 100%">
+										<tr>
+											<td style="text-align: left">
+												<a href="/admin/meeting/{{ meeting.id }}" style="color: black; font-size: 0.9em">
+													{{meeting.datemeeting|date('H:i', false)}}
+													:
+													{{meeting.title}}
+												</a>
+											</td>
+											<td style="width: 25px">
+												<form action="/admin/visio" method="post" target="_blank">
+													<input type="hidden" name="meeting" value="{{meeting.id}}">
+													<input type="submit" value="&#x1F3A5;" class="btn btn-light btn-sm" style="padding: 0 2px 2px 2px">
+												</form>
+											</td>
+										</tr>
+									</table>
+								{% endfor %}
+							{% endif %}
+							<div data-bs-toggle="modal" data-bs-target="#newMeeting" style="height: 100%"></div>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		{% endfor %}
+	</div>
+
+
+	{# Modal Meeting #}
+	<div class="modal fade" id="newMeeting" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" style="border: 2px solid white; border-radius: 10px">
+			<div class="modal-content" style="background: var(--caps-ado)">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="exampleModalLabel">Nouveau rendez-vous</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="color: white"></button>
+				</div>
+				<div class="modal-body">
+					<form action="/admin/agenda/addMeeting" method="post">
+						<p><input type="text" name="title" placeholder="titre *" required>
+						</p>
+						<p><input type="datetime-local" name="date_meeting" required><br></p>
+						<p>Visio
+							<input type="checkbox" name="visio">
+						</p>
+						<p>
+							<textarea name="content" cols="38" rows="5"></textarea>
+						</p>
+
+						<button class="btn" onclick="toggleDiv()" form="" style="background: rgb(127,217,208); border: 1px solid black">Gérer les participants :</button><br>
+						<p id="attending"></p>
+
+						<select name="guests[]" id="hiddenSelection" multiple style="width: 250px" size="5" hidden></select>
+
+						<div class="container" id="addressBook" style="display: none">
+							<div class="row">
+								<p>
+									<u>
+										<i>Carnet d'adresses</i>
+									</u>
+								</p>
+							</div>
+							<div class="row row-cols-1 row-cols-md-2">
+								<div class="col">
+									<p><input type="text" id="inputSearch" placeholder="Rechercher..."/></p>
+								</div>
+								<div class="col"></div>
+								<div class="col">
+									<p>
+										<select id="availableItems" size="5" multiple style="width: 200px"></select>
+									</p>
+									<button type="button" id="btnAdd">Ajouter</button>
+
+								</div>
+								<div class="col">
+									<div>
+										<p>
+											<select id="selectedItems" size="5" multiple style="width: 200px"></select>
+										</p>
+										<button type="button" id="btnRemove">Supprimer</button>
+									</div>
+								</div>
+
+							</div>
+							<div class="row">
+								<button id="btnValid" form="">Valider</button>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<input class="btn btn-primary" type="submit" value="Enregistrer"></form>
+				</div>
+			</div>
+		</div>
+	</div>{# Modal task #}<div class="modal fade" id="newTask" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" style="border: 2px solid white; border-radius: 10px">
+			<div class="modal-content">
+				<div class="modal-header" style="background: black">
+					<h1 class="modal-title fs-5" id="exampleModalLabel">Nouvelle tâche</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="color: white">X</button>
+				</div>
+				<div class="modal-body" style="background: black">
+					<form action="/admin/agenda/addTask" method="post">
+						<p><input type="text" name="title" placeholder="titre *" required>
+						</p>
+						<p><input type="date" name="due_date" required><br></p>
+						<p>
+							<textarea name="content" cols="38" rows="5"></textarea>
+						</p>
+					</div>
+					<div class="modal-footer" style="background: black">
+						<input class="btn btn-primary" type="submit" value="Enregistrer"></form>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+{% block javascripts %}
+	<script src="/scripts/popper.js"></script>
+	<script src="/scripts/bootstrap.js"></script>
+
+	<div class="js-data" data-contacts={{contacts}}></div>
+	<script>
+		// Récupérer les éléments du DOM
+const inputSearch = document.getElementById('inputSearch');
+const availableItems = document.getElementById('availableItems');
+const btnAdd = document.getElementById('btnAdd');
+const btnRemove = document.getElementById('btnRemove');
+const btnValid = document.getElementById('btnValid');
+const selectedItems = document.getElementById('selectedItems');
+const hiddenSelection = document.getElementById('hiddenSelection');
+var data = document.querySelector('.js-data')
+
+// Options disponibles
+var options = {{ contacts|raw }};
+
+// Remplir la liste des options disponibles
+options.forEach(option => {
+const optionElement = document.createElement('option');
+optionElement.value = option.id;
+optionElement.textContent = option.name;
+availableItems.appendChild(optionElement);
+});
+
+// Filtrer les options disponibles en fonction de la recherche
+inputSearch.addEventListener('input', () => {
+const searchValue = inputSearch.value.toLowerCase();
+const filteredOptions = options.filter(option => option.name.toLowerCase().includes(searchValue));
+
+// Vider la liste des options disponibles
+availableItems.innerHTML = '';
+
+// Remplir la liste avec les options filtrées
+filteredOptions.forEach(option => {
+const optionElement = document.createElement('option');
+optionElement.value = option.id;
+optionElement.textContent = option.name;
+availableItems.appendChild(optionElement);
+});
+});
+
+// Ajouter les options sélectionnées à la liste en cours
+btnAdd.addEventListener('click', () => {
+const selectedOptions = Array.from(availableItems.selectedOptions);
+
+selectedOptions.forEach(option => {
+const optionElement = document.createElement('option');
+optionElement.value = option.value;
+optionElement.textContent = option.textContent;
+selectedItems.appendChild(optionElement);
+option.remove();
+})
+})
+
+// Supprimer les options sélectionnées de la liste en cours
+btnRemove.addEventListener('click', () => {
+const selectedOptions = Array.from(selectedItems.selectedOptions);
+
+selectedOptions.forEach(option => {
+const optionElement = document.createElement('option');
+optionElement.value = option.value
+optionElement.textContent = option.textContent;
+availableItems.appendChild(optionElement);
+option.remove();
+});
+});
+
+// Ajouter les options à la liste des résultats conservés
+btnValid.addEventListener('click', () => {
+const selectedOptions = Array.from(selectedItems);
+
+attending.innerHTML = '';
+hiddenSelection.innerHTML = '';
+
+selectedOptions.forEach(option => {
+const optionElement = document.createElement('option');
+optionElement.value = option.value
+optionElement.textContent = option.textContent
+optionElement.selected = true
+hiddenSelection.appendChild(optionElement);
+
+var text = document.createTextNode(option.textContent);
+attending.appendChild(text);
+
+var lineBreak = document.createElement('br');
+attending.appendChild(lineBreak);
+
+var div = document.getElementById("addressBook");
+div.style.display = "none";
+});
+});
+	</script>
+
+	<script>
+		function toggleDiv() {
+var div = document.getElementById("addressBook");
+if (div.style.display === "none") {
+div.style.display = "block";
+} else {
+div.style.display = "none";
+}
+}
+	</script>
 {% endblock %}

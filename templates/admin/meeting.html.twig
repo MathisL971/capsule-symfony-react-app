@@ -40,16 +40,19 @@
 					<button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#newMeeting" style="width: 5vw">Cloner</button>
 				</td>
 				<td style="width: 25%; text-align: center">
-					<button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#updateMeeting" style="width: 5vw">Modifier</button>
+					{% if user.id == meeting.host.id %}
+						<button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#updateMeeting" style="width: 5vw">Modifier</button>
+					{% endif %}
 				</td>
 				<td style="width: 25%; text-align: center">
-					<form method="post">
-						<input type="hidden" name="delete" value="1">
-						<button class="btn btn-sm btn-danger" style="width: 5vw">Supprimer</button>
-					</form>
+					{% if user.id == meeting.host.id %}
+						<form method="post">
+							<input type="hidden" name="delete" value="1">
+							<button class="btn btn-sm btn-danger" style="width: 5vw">Supprimer</button>
+						</form>
+					{% endif %}
 				</td>
 			</tr>
-
 		</table>
 	</div>
 

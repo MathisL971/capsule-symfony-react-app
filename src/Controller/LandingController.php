@@ -400,14 +400,14 @@ class LandingController extends BaseController
 
                 $entete  = 'MIME-Version: 1.0' . "\r\n";
                 $entete .= 'Content-type: text/html; charset=utf-8' . "\r\n";
-                $entete .= 'From: postmaster@klungstene.fr' . "\r\n";
+                $entete .= 'From: noreply@klungstene.fr' . "\r\n";
 
                 $message = 'Bonjour ' . $user->getFirstName() . ',<br>' . "\r\n";
-                $message .= "<p>Un mot de passe provisoire a été défini : <b><i>" . $tempPw . "</i></b> . Pour redéfinir un mot de passe personnalisé, rendez-vous ici : <a href=\"http://mvpsymfony/updatePassword/" . $user->getActivationKey() . "\">Réinitialiser mon mot de passe" . '</a>.<br>' . "\r\n";
+                $message .= "<p>Un mot de passe provisoire a été défini : <b><i>" . $tempPw . "</i></b> . Pour redéfinir un mot de passe personnalisé, rendez-vous ici : <a href=\"https://capsule.klungstene.xyz/updatePassword/" . $user->getActivationKey() . "\">Réinitialiser mon mot de passe" . '</a>.<br>' . "\r\n";
                 $message .= "<p>A bientôt dans ton espace Capsule.";
 
-                echo $message;
-                // mail($user->getEmail(), 'Active ton compte Capsule', $message, $entete);
+                //echo $message;
+                mail($user->getEmail(), 'Mot de passe provisoire', $message, $entete);
                 $this->em->flush();
             } else {
                 // Envoi d'un mail : compte inconnu
@@ -415,15 +415,15 @@ class LandingController extends BaseController
 
                 $entete  = 'MIME-Version: 1.0' . "\r\n";
                 $entete .= 'Content-type: text/html; charset=utf-8' . "\r\n";
-                $entete .= 'From: postmaster@klungstene.fr' . "\r\n";
+                $entete .= 'From: noreply@klungstene.fr' . "\r\n";
 
                 $message = 'Bonjour,<br>' . "\r\n";
                 $message .= "<p>Cette adresse email n'est rattachée à aucun compte Capsules.<br>" . "\r\n";
                 $message .= "<p> Pour créer un compte, rendez-vous ici : <a href=\"https://capsule.klungstene.xyz/new/\">Capsules</a>." . "\r\n";
                 $message .= "<p>A bientôt dans ton espace Capsule.";
 
-                echo $message;
-                //mail($user->getEmail(), 'Capsules', $message, $entete);
+                //echo $message;
+                mail($user->getEmail(), 'Capsules', $message, $entete);
             }
 
             $vars['flash'] = "Un email a été envoyé à l'adresse " . $rq->request->get('email') . ".";

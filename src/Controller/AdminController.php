@@ -20,8 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-use Symfony\Component\HttpFoundation\Session\Session;
+use SessionIdInterface;
 
 class AdminController extends BaseController
 {
@@ -47,89 +46,12 @@ class AdminController extends BaseController
     }
 
     /**
-     * @Route("/admin/agenda", name="admin_agenda")
-     */
-    public function agenda(Request $rq)
-    {
-        if (AdminController::authentify($this->session)) {
-
-            $vars = [];
-
-            $user = $this->session->get('user');
-            $vars['user'] = $user;
-            $vars['role'] = $this->session->get('role');
-
-            $repo = $this->em->getRepository(USer::class);
-            $vars['guests'] = $repo->findAll();
-
-            $repoM = $this->em->getRepository(Meeting::class);
-
-            if (count($rq->request) == 0) {
-                $now = new \DateTime();
-            } else {
-                $now = new \DateTime($rq->request->get('month'));
-            }
-
-            $debut = new \DateTime(date_format($now, 'Y-m') . '-01');
-            $debutQuery = new \DateTimeImmutable(date_format($now, 'Y-m') . '-01', new DateTimeZone($user->getTimezone()));
-
-            $before = new \DateTime(date_format($now, 'Y-m') . '-01');
-            date_sub($before, new \DateInterval('P1M'));
-            $vars['before']['button'] = date_format($before, 'Y-m-d');
-            $vars['before']['text'] = date_format($before, 'F Y');
-
-            $after =  new \DateTime(date_format($now, 'Y-m') . '-01');
-            date_add($after, new \DateInterval('P1M'));
-            $vars['after']['button'] = date_format($after, 'Y-m-d');
-            $vars['after']['text'] = date_format($after, 'F Y');
-
-            $end = new \DateTime(date_format($now, 'Y-m-t'));
-
-            if (date_format($debut, 'N') != 1) {
-                $retour = date_format($debut, 'N') - 1;
-                date_sub($debut, new DateInterval('P' . $retour . 'D'));
-                $debutQuery = $debutQuery->sub(new DateInterval('P' . $retour . 'D'));
-            }
-
-            $day = $debut;
-            $week = 1;
-            $dayQuery = $debutQuery->setTimezone(new DateTimeZone('UTC'));
-
-            while ($debut < $end) {
-                for ($i = 1; $i < 6; $i++) {
-                    $days[$week][$i] = ['day' => date_format($day, 'd / m / Y')];
-                    $days[$week][$i]['meetings'] = $repoM->findByDate($vars['user'], $dayQuery);
-                    $day = date_add($debut, new \DateInterval('P1D'));
-                    $dayQuery = $dayQuery->add(new \DateInterval('P1D'));
-                }
-
-                $dateWeekend = date_format($day, 'd') . ' & ';
-                $meetings[] = $repoM->findByDate($vars['user'], $dayQuery);
-                $day = date_add($debut, new \DateInterval('P1D'));
-                $dayQuery = $dayQuery->add(new \DateInterval('P1D'));
-                $dateWeekend .= date_format($day, 'd / m / Y');
-                $days[$week][$i] = ['day' => $dateWeekend];
-                $meetings[] = $repoM->findByDate($vars['user'], $dayQuery);
-                $days[$week][$i]['meetings'] = array_merge($meetings['0'], $meetings['1']);
-                $day = date_add($debut, new \DateInterval('P1D'));
-                $dayQuery = $dayQuery->add(new \DateInterval('P1D'));
-                $meetings = array();
-                $week += 1;
-            }
-            //dd($days);
-            $vars['days'] = $days;
-
-            return new Response($this->twig->render('admin/agenda.html.twig', $vars));
-        }
-
-        return new RedirectResponse('/');
-    }
-
-    /**
      * @Route("/admin/agenda/addMeeting", name="admin_add_meeting")
      */
-    public function add_meeting(Request $rq)
+    public function add_meeting(Request $rq, SessionInterface $session)
     {
+        $vars['role'] = $session->get('role');
+
         $post = $rq->request;
 
         $repo = $this->em->getRepository(User::class);
@@ -146,18 +68,19 @@ class AdminController extends BaseController
             ->setHost($host)
             ->setContent(($post->get('content')));
 
-        if ($post->get('guest')) {
-            foreach ($_POST['guest'] as $id) {
+        if (!in_array($host->getId(), $_POST['guests'])) {
+            $meeting->addGuest($host);
+        }
+
+        if ($post->get('guests')) {
+            foreach ($_POST['guests'] as $id) {
                 $guest = $repo->findOneBy(['id' => $id]);
                 $meeting->addGuest($guest);
             }
-
             if ($post->get('visio')) {
                 $meeting->setVisio(AdminController::randomString(64));
             }
         }
-
-
 
         $this->em->persist($meeting);
         $this->em->flush();
@@ -194,6 +117,8 @@ class AdminController extends BaseController
      */
     public function meeting(Request $rq, SessionInterface $session, $id)
     {
+        $vars['role'] = $session->get('role');
+
         $repoU = $this->em->getRepository(User::class);
         $repoM = $this->em->getRepository(Meeting::class);
 
@@ -245,7 +170,7 @@ class AdminController extends BaseController
 
 
             $user = $repoU->find($session->get('user')->getId());
-
+            $vars['user'] = $user;
             $vars['guests'] = $repoU->findAll();
 
             $meeting = $repoM->find($id);
@@ -259,8 +184,7 @@ class AdminController extends BaseController
             if (in_array($user->getId(), $guestsId)) {
                 $vars['meeting'] = $meeting;
 
-                $page = $this->twig->render('admin/meeting.html.twig', $vars);
-                return new Response($page);
+                return new Response($this->twig->render('admin/meeting.html.twig', $vars));
             } else {
                 return new RedirectResponse('/admin/home');
             }

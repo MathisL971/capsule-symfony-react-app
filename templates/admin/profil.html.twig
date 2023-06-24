@@ -91,14 +91,21 @@
 							<input type="hidden" name="id" value="{{user.id}}" id="infos">
 							<input type="hidden" name="form" value="infos">
 							<input type="hidden" name="MAX_FILE_SIZE" value="4194304" id="infos">
+							<p>
+								<input type="text" name="title" style="width: 350px" {{ (user.title) ? 'value=' ~ user.title ~ '' : 'placeholder="Civilité"' }}>
+								<input type="text" name="name" style="width: 350px" {{ (user.name) ? 'value=' ~ user.name ~ '' : 'placeholder="Nom de famille"' }}>
+								<input type="text" name="firstName" style="width: 350px" {{ (user.firstName) ? 'value=' ~ user.firstName ~ '' : 'placeholder="Prénom"' }} required>
+								<input type="text" name="alias" style="width: 350px" {{ (user.alias) ? 'value=' ~ user.alias ~ '' : 'placeholder="Pseudo"' }} required>
+							</p>
+
 							<p>Photo de profil :<br>
 								<input type="file" name="profilePic" accept="image/*">
 							</p>
 							<p>Adresse :<br>
-								<input type="text" name="street1" id="infos" style="width: 350px" {{ (user.street1) ? 'value=' ~ user.street1 ~ '' : 'placeholder="Numéro et rue"' }}><br>
-								<input type="text" name="street2" id="infos" style="width: 350px" {{ (user.street2) ? 'value=' ~ user.street2 ~ '' : 'placeholder="Complément"' }}><br>
-								<input type="text" name="postCode" id="infos" style="width: 75px" {{ (user.postCode) ? 'value=' ~ user.postCode ~ '' : 'placeholder="Code postal"' }}><input type="text" name="city" id="infos" style="width: 275px" value="{{ (user.city) ? user.city }}" {{(user.city) ?: 'placeholder="Ville"'}}><br>
-								<input type="text" name="country" id="infos" style="width: 350px" {{ (user.country) ? 'value=' ~ user.country ~ '' : 'placeholder="Pays"' }}>
+								<input type="text" name="street1" style="width: 350px" {{ (user.street1) ? 'value=' ~ user.street1 ~ '' : 'placeholder="Numéro et rue"' }}><br>
+								<input type="text" name="street2" style="width: 350px" {{ (user.street2) ? 'value=' ~ user.street2 ~ '' : 'placeholder="Complément"' }}><br>
+								<input type="text" name="postCode" style="width: 75px" {{ (user.postCode) ? 'value=' ~ user.postCode ~ '' : 'placeholder="Code postal"' }}><input type="text" name="city" id="infos" style="width: 275px" value="{{ (user.city) ? user.city }}" {{(user.city) ?: 'placeholder="Ville"'}}><br>
+								<input type="text" name="country" style="width: 350px" {{ (user.country) ? 'value=' ~ user.country ~ '' : 'placeholder="Pays"' }}>
 							</p>
 							<p>Fuseau horaire :<br>
 								<input list="timezones" name="timezone" id="infos " {{ (user.timezone) ? 'value=' ~ user.timezone ~ '' }}>

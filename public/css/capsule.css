@@ -1,5 +1,8 @@
 :root {
     --caps-green-50: rgba(48, 180, 167, 0.5);
+    --caps-ado: rgb(127, 217, 208);
+    --caps-parent: rgb(220, 121, 244);
+    --caps-pro: rgb(255, 237, 121);
 }
 
 h1.landing {
@@ -98,4 +101,34 @@ a.adoHome {
     font-size: 1em;
     text-decoration: none;
     margin: 15px 0;
+}
+
+.text-bg-ado {
+    background: rgb(127, 217, 208);
+    border-radius: 5px;
+}
+
+.btn-ado {
+    background: vars(--caps-ado);
+    border: 1px solid black
+}
+
+.text-bg-parent {
+    background: var(--caps-parent);
+    border-radius: 5px;
+}
+
+.btn-parent {
+    background: vars(--caps-parent);
+    border: 1px solid black
+}
+
+.text-bg-pro {
+    background: var(--caps-pro);
+    border-radius: 5px;
+}
+
+.btn-pro {
+    background: vars(--caps-pro);
+    border: 1px solid black
 }

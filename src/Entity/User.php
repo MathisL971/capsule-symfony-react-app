@@ -129,6 +129,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $timezone;
 
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $alias;
+
     public function __construct()
     {
     }
@@ -443,6 +448,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getAlias(): ?string
+    {
+        return $this->alias;
+    }
+
+    public function setAlias(string $alias): self
+    {
+        $this->alias = $alias;
+
+        return $this;
+    }
+
     public function generate($length)
     {
         $list = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$&@!.-_%;:,?=+';
@@ -465,5 +482,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $chaine;
+    }
+
+    public function getSlug()
+    {
+        $slug = '';
+        if ($this->title == 'Dr' | $this->title == 'Pr') {
+            $slug = $this->title . ' ';
+        }
+        $slug .= $this->first_name . ' ' . $this->name . ' (' . $this->alias . ')';
+        return $slug;
     }
 }

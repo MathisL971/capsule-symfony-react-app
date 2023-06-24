@@ -25,21 +25,6 @@ class AdoController extends BaseController
     }
 
     /**
-     * @Route("/ado/agenda"), name="ado_agenda")
-     */
-    public function agenda(Request $rq)
-    {
-        $vars = [];
-
-        $vars['user'] = $this->session->get('user');
-        $vars['role'] = $this->session->get('role');
-
-        $page = $this->twig->render('ado/agenda.html.twig', $vars);
-
-        return new Response($page);
-    }
-
-    /**
      * @Route("/ado/journal"), name="ado_journal")
      */
     public function journal(Request $rq)

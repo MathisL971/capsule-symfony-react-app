@@ -56,7 +56,6 @@ class MeetingRepository extends ServiceEntityRepository
             ->setParameter('fdate', $fdate)
             ->setParameter('tdate', $tdate)
             ->orderBy('m.date_meeting', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult();
 

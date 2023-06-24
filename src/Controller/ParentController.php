@@ -30,25 +30,6 @@ class ParentController extends BaseController
     }
 
     /**
-     * @Route("/parent/agenda", name="parent_agenda")
-     */
-    public function agenda(Request $rq)
-    {
-        $vars = [];
-
-        if (ParentController::authentify($this->session)) {
-            $vars['user'] = $this->session->get('user');
-            $vars['role'] = $this->session->get('role');
-            $vars['menu2'] = true;
-
-            return new Response($this->twig->render('parent/agenda.html.twig', $vars));
-        }
-
-        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
-        return new RedirectResponse('/');
-    }
-
-    /**
      * @Route("/parent/journal", name="parent_journal")
      */
     public function journal(Request $rq)
