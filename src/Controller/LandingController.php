@@ -20,85 +20,85 @@ class LandingController extends BaseController
     {
         $vars = [];
 
-        if (!empty($_POST)) {
-            $repo = $this->em->getRepository(User::class);
-            $user = $repo->findOneBy(['email' => $rq->request->get('email')]);
+        // if (!empty($_POST)) {
+        //     $repo = $this->em->getRepository(User::class);
+        //     $user = $repo->findOneBy(['email' => $rq->request->get('email')]);
 
-            $vars['flash'] = ('L\'authentification a échouée <p> <a href="/reset">Réinitialiser le mot de passe ?</a>');
-            //echo nl2br("L'authentification a échouée <br> Réinitialiser le mot de passe ?");
+        //     $vars['flash'] = ('L\'authentification a échouée <p> <a href="/reset">Réinitialiser le mot de passe ?</a>');
+        //     //echo nl2br("L'authentification a échouée <br> Réinitialiser le mot de passe ?");
 
-            if (!$user) {
-                return new Response($this->twig->render('landing/home.html.twig', $vars));
-            }
+        //     if (!$user) {
+        //         return new Response($this->twig->render('landing/home.html.twig', $vars));
+        //     }
 
-            if ($user->getActivationKey()) {
-                $vars['flash'] = 'Ce compte n\'a pas été activé. Un email avec un lien d\'activation a été renvoyé.';
+        //     if ($user->getActivationKey()) {
+        //         $vars['flash'] = 'Ce compte n\'a pas été activé. Un email avec un lien d\'activation a été renvoyé.';
 
-                // Envoi d'un mail de confirmation
-                ini_set("SMTP", "SSL0.OVH.NET");
+        //         // Envoi d'un mail de confirmation
+        //         ini_set("SMTP", "SSL0.OVH.NET");
 
-                $entete  = 'MIME-Version: 1.0' . "\r\n";
-                $entete .= 'Content-type: text/html; charset=utf-8' . "\r\n";
-                $entete .= 'From: postmaster@klungstene.fr' . "\r\n";
+        //         $entete  = 'MIME-Version: 1.0' . "\r\n";
+        //         $entete .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+        //         $entete .= 'From: postmaster@klungstene.fr' . "\r\n";
 
-                $message = 'Bonjour ' . $user->getFirstName() . ',<br>' . "\r\n";
-                $message .= "<p>Merci d'avoir créé ton compte chez Capsule. Active-le dès maintenant : <a href=\"https://capsule.klungstene.xyz/activate/" . $user->getActivationKey() . "\">Activer mon compte" . '</a>.<br>' . "\r\n";
-                $message .= "<p> Ton identifiant : " . $user->getEmail() . '.<br></p>' . "\r\n";
-                $message .= "<p>A bientôt dans ton espace Capsule.";
+        //         $message = 'Bonjour ' . $user->getFirstName() . ',<br>' . "\r\n";
+        //         $message .= "<p>Merci d'avoir créé ton compte chez Capsule. Active-le dès maintenant : <a href=\"https://capsule.klungstene.xyz/activate/" . $user->getActivationKey() . "\">Activer mon compte" . '</a>.<br>' . "\r\n";
+        //         $message .= "<p> Ton identifiant : " . $user->getEmail() . '.<br></p>' . "\r\n";
+        //         $message .= "<p>A bientôt dans ton espace Capsule.";
 
-                mail($user->getEmail(), 'Active ton compte Capsule', $message, $entete);
+        //         mail($user->getEmail(), 'Active ton compte Capsule', $message, $entete);
 
-                return new Response($this->twig->render('landing/home.html.twig', $vars));
-            }
+        //         return new Response($this->twig->render('landing/home.html.twig', $vars));
+        //     }
 
-            if (password_verify($rq->request->get('password'), $user->getPassword())) {
-                $this->session->set('user', $user);
-                $this->session->set('role', $user->getRole());
+        //     if (password_verify($rq->request->get('password'), $user->getPassword())) {
+        //         $this->session->set('user', $user);
+        //         $this->session->set('role', $user->getRole());
 
-                $vars['flash'] = "Bienvenue " . $user->getName();
+        //         $vars['flash'] = "Bienvenue " . $user->getName();
 
-                if ($user->getStatus() == 'suspended') {
-                    return new Response('landing/suspended.html.twig');
-                } elseif ($user->getStatus() == 'pending') {
-                    return new Response('landing/pending.html.twig');
-                } else {
-                    if ($user->getRole() == 'SuperAdmin') {
-                        return new RedirectResponse('/admin/home');
-                    } else {
-                        return new RedirectResponse('/' . strtolower($user->getRole()) . '/home');
-                    }
-                }
-            }
-        }
+        //         if ($user->getStatus() == 'suspended') {
+        //             return new Response('landing/suspended.html.twig');
+        //         } elseif ($user->getStatus() == 'pending') {
+        //             return new Response('landing/pending.html.twig');
+        //         } else {
+        //             if ($user->getRole() == 'SuperAdmin') {
+        //                 return new RedirectResponse('/admin/home');
+        //             } else {
+        //                 return new RedirectResponse('/' . strtolower($user->getRole()) . '/home');
+        //             }
+        //         }
+        //     }
+        // }
 
-        if ($this->session->has('flash')) {
-            $vars['flash'] = $this->session->get('flash');
-            $this->session->remove('flash');
-        }
+        // if ($this->session->has('flash')) {
+        //     $vars['flash'] = $this->session->get('flash');
+        //     $this->session->remove('flash');
+        // }
 
-        $repo = $this->em->getRepository(User::class);
-        $pros = $repo->findBy(['role' => 'pro']);
+        // $repo = $this->em->getRepository(User::class);
+        // $pros = $repo->findBy(['role' => 'pro']);
 
-        $liste = [];
-        $vars['pros'] = [];
+        // $liste = [];
+        // $vars['pros'] = [];
 
-        if (count($pros) < 3) {
-            $limit = count($pros);
-        } else {
-            $limit = 3;
-        }
-        while (count($liste) < $limit) {
+        // if (count($pros) < 3) {
+        //     $limit = count($pros);
+        // } else {
+        //     $limit = 3;
+        // }
+        // while (count($liste) < $limit) {
 
-            $row = rand(0, count($pros) - 1);
+        //     $row = rand(0, count($pros) - 1);
 
-            if (!in_array($row, $liste)) {
-                $liste[] = $row;
-                $vars['pros'][] = $pros[$row];
-            }
-        }
+        //     if (!in_array($row, $liste)) {
+        //         $liste[] = $row;
+        //         $vars['pros'][] = $pros[$row];
+        //     }
+        // }
 
-        $vars['user'] = $this->session->get('user');
-        $vars['role'] = $this->session->get('role');
+        // $vars['user'] = $this->session->get('user');
+        // $vars['role'] = $this->session->get('role');
 
         return new Response($this->twig->render('landing/home.html.twig', $vars));
     }

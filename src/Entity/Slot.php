@@ -4,9 +4,12 @@ namespace App\Entity;
 
 use App\Repository\SlotRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+
 
 /**
  * @ORM\Entity(repositoryClass=SlotRepository::class)
+ * @ApiResource
  */
 class Slot
 {

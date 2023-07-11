@@ -4,9 +4,12 @@ namespace App\Entity;
 
 use App\Repository\ParamRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+
 
 /**
  * @ORM\Entity(repositoryClass=ParamRepository::class)
+ * @ApiResource
  */
 class Param
 {
