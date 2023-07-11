@@ -1,0 +1,1 @@
+# capsule-symfony-react-app
