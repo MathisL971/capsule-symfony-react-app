@@ -2,26 +2,24 @@ import React from "react";
 
 import { Field, ErrorMessage } from "formik";
 
-const FormField = ({ name, label, type, as, options }) => {
-  let optionsArr = [`-- Select a ${name} --`];
-  if (options) {
-    options.forEach((element) => {
+const FormField = ({ label, ...fieldProp }) => {
+  let optionsArr = [`-- Select a ${fieldProp.name} --`];
+  if (fieldProp.options) {
+    fieldProp.options.forEach((element) => {
       optionsArr.push(element);
     });
   }
 
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={name} className="text-teal-50 font-bold">
+      <label htmlFor={fieldProp.name} className="text-teal-900 font-medium">
         {label}
       </label>
       <Field
-        name={name}
-        type={type}
-        as={as}
+        {...fieldProp}
         className="rounded-sm py-0.5 px-1 border-2 border-teal-900"
       >
-        {options &&
+        {fieldProp.options &&
           optionsArr.map((option) => {
             return (
               <option key={option} value={option}>
@@ -32,7 +30,7 @@ const FormField = ({ name, label, type, as, options }) => {
       </Field>
       <span className="text-sm text-red-700 font-bold">
         {" "}
-        <ErrorMessage name={name} />
+        <ErrorMessage name={fieldProp.name} />
       </span>
     </div>
   );
