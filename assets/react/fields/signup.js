@@ -3,32 +3,6 @@ const { getData } = require("country-list");
 
 const countries = getData().map((d) => d.name);
 
-export const initialValues = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  password: "",
-  confirmPassword: "",
-  birthDate: "",
-  username: "",
-  role: "",
-  timezone: "",
-  title: "",
-  profession: "",
-  bio: "",
-  phoneMobile: "",
-  phoneOffice: "",
-  street1: "",
-  street2: "",
-  postalCode: "",
-  city: "",
-  country: "",
-  educations: [{ diploma: "", institution: "", dateCompleted: "" }],
-  experiences: [
-    { position: "", employer: "", dateStarted: "", dateCompleted: "" },
-  ],
-};
-
 export const topField = {
   name: "role",
   as: "select",

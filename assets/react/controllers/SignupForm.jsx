@@ -1,6 +1,6 @@
 // Utility imports
-import React, { useState } from "react";
-import { FieldArray, Form, Formik, useFormikContext } from "formik";
+import React from "react";
+import { FieldArray, Form, Formik } from "formik";
 
 // Services
 import userService from "../services/user";
@@ -11,10 +11,10 @@ import EducationField from "./EducationField";
 import ExperienceField from "./ExperienceField";
 
 // Validations
-import { signupValidation } from "../validations/signup";
+import { validationSchema, initialValues } from "../validations/signup";
 
 // Fields
-import { initialValues, topField, fields } from "../fields/signup";
+import { topField, fields } from "../fields/signup";
 
 const SignUpForm = () => {
   const handleSubmit = (values, setSubmitting, resetForm) => {
@@ -28,7 +28,7 @@ const SignUpForm = () => {
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={signupValidation}
+      validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting, resetForm }) =>
         handleSubmit(values, setSubmitting, resetForm)
       }
@@ -38,10 +38,10 @@ const SignUpForm = () => {
           <Form className="flex flex-col w-3/4 h-min p-10 m-auto bg-teal-400 rounded-md gap-8 border-emerald-900 border-4">
             <div className="flex flex-col gap-3">
               <h1 className="text-5xl text-teal-950 font-extrabold">
-                Welcome to Capsule!
+                Bienvenue sur Capsule!
               </h1>
               <h4 className="text-2xl text-teal-800 font-bold">
-                Let's get you set up with an account.
+                Commençons par créer votre compte.
               </h4>
             </div>
 
@@ -163,16 +163,16 @@ const SignUpForm = () => {
                   : "rounded-lg bg-teal-950 py-4 text-teal-50 font-extrabold shadow-lg"
               }
             >
-              Submit
+              S'inscrire
             </button>
 
             <p className="text-center font-medium">
-              Already have an account?{" "}
+              Vous possédez déjà un compte ?{" "}
               <button
                 type="button"
                 onClick={() => console.log("Navigating to login page")}
               >
-                <u>Login here!</u>
+                <u>Clickez ici pour vous connecter!</u>
               </button>{" "}
             </p>
           </Form>

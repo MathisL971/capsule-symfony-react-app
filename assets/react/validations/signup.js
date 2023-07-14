@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-export const signupValidation = Yup.object({
+export const validationSchema = Yup.object({
   role: Yup.string().required("Required"),
   timezone: Yup.string().required("Required"),
   username: Yup.string()
@@ -96,3 +96,29 @@ export const signupValidation = Yup.object({
     )
     .required("At least one experience record is required"),
 });
+
+export const initialValues = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+  birthDate: "",
+  username: "",
+  role: "",
+  timezone: "",
+  title: "",
+  profession: "",
+  bio: "",
+  phoneMobile: "",
+  phoneOffice: "",
+  street1: "",
+  street2: "",
+  postalCode: "",
+  city: "",
+  country: "",
+  educations: [{ diploma: "", institution: "", dateCompleted: "" }],
+  experiences: [
+    { position: "", employer: "", dateStarted: "", dateCompleted: "" },
+  ],
+};
