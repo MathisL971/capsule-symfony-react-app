@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 	<head>
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,16 +8,26 @@
 			{% block title %}Capsule
 			{% endblock %}
 		</title>
-		{% block stylesheet %}
-			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-			<link rel="stylesheet" href="/css/capsule.css">
-		{% endblock %}
+		
 		{% block favicon %}
 			<link rel="shortcut icon" href="/images/logo.png" sizes="16x16" type="image/x-icon">
 		{% endblock %}
-		{% block script %}{% endblock %}
+
+		{% block stylesheet %}
+			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+			<link rel="stylesheet" href="/css/capsule.css">
+			{# {{ encore_entry_link_tags('app') }} #}
+		{% endblock %}
+		{% block javascripts %}
+			{# {{ encore_entry_script_tags('app') }} #}
+			<script src="/scripts/popper.js"></script>
+			<script src="/scripts/bootstrap.js"></script>
+		{% endblock %}
 	</head>
-	<body style="width: 100%;"> {% block navbar %}{% endblock %}
+	<body style="width: 100%;"> 
+
+		{% block navbar %}
+		{% endblock %}
 
 		{% if flash %}
 			<div class="alert alert-warning text-center">
@@ -113,43 +123,39 @@
 			{% endif %}
 		</div>
 
-		<div class="col text-center"> {% block body %}{% endblock %}
-			</div>
-
-			{% block footer %}
-				<footer style="margin-top: 00px; margin-bottom: 10px">
-					<div class="col text-center">
-						<a href="https://www.facebook.com/Capsule.ado" target="_blank"><img src="/images/logo_fb.png" alt="Facebook"></a>
-
-						<a href="https://www.instagram.com/capsule.ado/" target="_blank"><img src="/images/logo_insta.png" alt="Instagram"></a>
-
-						<a href="https://www.tiktok.com/@gaellepelloille" target="_blank"><img src="/images/logo_tiktok.png" alt="TikTok"></a>
-
-						<a href="https://twitter.com/CapsuleAdo" target="_blank"><img src="/images/logo_tw.png" alt="Twitter"></a>
-
-						<a href="https://www.linkedin.com/showcase/capsule-ado/" target="_blank"><img src="/images/logo_li.png" alt="LinkedIn"></a>
-					</div>
-					<div class="col text-center" style="margin-top: 15px">
-						<a href="/mentions">Mentions légales</a>
-						-
-						<a href="/rgpd">RGPD</a>
-						-
-						<a href="/cgs">Conditions générales de service</a>
-						-
-						<a href="/faq">FAQ</a>
-						- &copy;Capsule 2023
-					</div>
-				</footer>
+		<div class="col text-center"> 
+			{% block body %}
 			{% endblock %}
+		</div>
 
-			{% block javascripts %}
-				<script src="/scripts/popper.js"></script>
-				<script src="/scripts/bootstrap.js"></script>
-			{% endblock %}
+		{% block footer %}
+			<footer style="margin-top: 00px; margin-bottom: 10px">
+				<div class="col text-center">
+					<a href="https://www.facebook.com/Capsule.ado" target="_blank"><img src="/images/logo_fb.png" alt="Facebook"></a>
 
+					<a href="https://www.instagram.com/capsule.ado/" target="_blank"><img src="/images/logo_insta.png" alt="Instagram"></a>
 
-			{% if role == 'SuperAdmin' %}
-				{% block admin %}{% endblock %}
-			{% endif %}
-		</body>
-	</html>
+					<a href="https://www.tiktok.com/@gaellepelloille" target="_blank"><img src="/images/logo_tiktok.png" alt="TikTok"></a>
+
+					<a href="https://twitter.com/CapsuleAdo" target="_blank"><img src="/images/logo_tw.png" alt="Twitter"></a>
+
+					<a href="https://www.linkedin.com/showcase/capsule-ado/" target="_blank"><img src="/images/logo_li.png" alt="LinkedIn"></a>
+				</div>
+				<div class="col text-center" style="margin-top: 15px">
+					<a href="/mentions">Mentions légales</a>
+					-
+					<a href="/rgpd">RGPD</a>
+					-
+					<a href="/cgs">Conditions générales de service</a>
+					-
+					<a href="/faq">FAQ</a>
+					- &copy;Capsule 2023
+				</div>
+			</footer>
+		{% endblock %}
+
+		{% if role == 'SuperAdmin' %}
+			{% block admin %}{% endblock %}
+		{% endif %}
+	</body>
+</html>

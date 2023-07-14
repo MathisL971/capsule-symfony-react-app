@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseUrl = "http://localhost:3001/api/users";
+const baseUrl = "https://127.0.0.1:8001/api/users";
 
 const getAll = async () => {
   const response = await axios.get(baseUrl);
@@ -7,6 +7,7 @@ const getAll = async () => {
 };
 
 const create = async (newUser) => {
+  console.log("Making request to localhost 8001");
   const response = await axios.post(baseUrl, newUser);
   return response.data;
 };
