@@ -35,7 +35,7 @@ const SignUpForm = () => {
     >
       {({ values, isSubmitting }) => {
         return (
-          <Form className="flex flex-col w-3/4 h-min p-10 m-auto bg-teal-400 rounded-md gap-8 border-emerald-900 border-4">
+          <Form className="flex flex-col w-1/2 h-min p-10 m-auto bg-teal-400 rounded-md gap-8 border-emerald-900 border-4">
             <div className="flex flex-col gap-3">
               <h1 className="text-5xl text-teal-950 font-extrabold">
                 Bienvenue sur Capsule!
@@ -67,22 +67,12 @@ const SignUpForm = () => {
                       </label>
                       {values.educations.map((ed, id) => {
                         return (
-                          <div
+                          <EducationField
                             key={id}
-                            className="flex flex-row gap-1 justify-between"
-                          >
-                            <EducationField
-                              index={id}
-                              name={`educations.${id}`}
-                            ></EducationField>
-                            <button
-                              type="button"
-                              onClick={() => arrayHelpers.remove(id)}
-                              className="w-2/12 bg-red-500 hover:bg-red-700 text-white text-sm font-bold py-2 px-4 rounded-md"
-                            >
-                              Delete
-                            </button>
-                          </div>
+                            index={id}
+                            name={`educations.${id}`}
+                            handleDelete={arrayHelpers.remove}
+                          ></EducationField>
                         );
                       })}
                       <button
@@ -116,22 +106,12 @@ const SignUpForm = () => {
                       </label>
                       {values.experiences.map((ex, id) => {
                         return (
-                          <div
+                          <ExperienceField
                             key={id}
-                            className="flex flex-row gap-1 justify-between"
-                          >
-                            <ExperienceField
-                              index={id}
-                              name={`experiences.${id}`}
-                            ></ExperienceField>
-                            <button
-                              type="button"
-                              onClick={() => arrayHelpers.remove(id)}
-                              className="w-2/12 bg-red-500 hover:bg-red-700 text-white text-sm font-bold py-2 px-4 rounded-md"
-                            >
-                              Delete
-                            </button>
-                          </div>
+                            index={id}
+                            name={`experiences.${id}`}
+                            handleDelete={arrayHelpers.remove}
+                          ></ExperienceField>
                         );
                       })}
                       <button

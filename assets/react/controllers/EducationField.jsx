@@ -1,29 +1,27 @@
 import React from "react";
 import { Field, useFormikContext } from "formik";
 
-const EducationField = ({ name, index }) => {
+const EducationField = ({ name, index, handleDelete }) => {
   const { errors, touched } = useFormikContext();
 
   return (
-    <div className="flex flex-row gap-1 justify-between w-10/12">
-      <div className="flex flex-col w-2/5">
-        <Field
-          type="text"
-          name={`${name}.diploma`}
-          placeholder="Diplome ou titre obtenu"
-          className={
-            errors.educations &&
-            errors.educations[index] &&
-            touched.educations &&
-            touched.educations[index] &&
-            "diploma" in errors.educations[index] &&
-            "diploma" in touched.educations[index]
-              ? "rounded-md py-0.5 px-1 border-2 border-red-700 h-full"
-              : "rounded-md py-0.5 px-1 border-2 border-teal-900 h-full"
-          }
-        ></Field>
-      </div>
-      <div className="flex flex-col w-2/5">
+    <div className="flex flex-col gap-1 justify-between w-full">
+      <Field
+        type="text"
+        name={`${name}.diploma`}
+        placeholder="Diplome ou titre obtenu"
+        className={
+          errors.educations &&
+          errors.educations[index] &&
+          touched.educations &&
+          touched.educations[index] &&
+          "diploma" in errors.educations[index] &&
+          "diploma" in touched.educations[index]
+            ? "rounded-md p-1.5 border-2 border-red-700 h-full"
+            : "rounded-md p-1.5 border-2 border-teal-900 h-full"
+        }
+      ></Field>
+      <div className="flex flex-row gap-1">
         <Field
           type="text"
           name={`${name}.institution`}
@@ -35,12 +33,10 @@ const EducationField = ({ name, index }) => {
             touched.educations[index] &&
             "institution" in errors.educations[index] &&
             "institution" in touched.educations[index]
-              ? "rounded-md py-0.5 px-1 border-2 border-red-700 h-full"
-              : "rounded-md py-0.5 px-1 border-2 border-teal-900 h-full"
+              ? "flex-grow rounded-md p-1.5 border-2 border-red-700 h-full"
+              : "flex-grow rounded-md p-1.5 border-2 border-teal-900 h-full"
           }
         ></Field>
-      </div>
-      <div className="flex flex-col w-1/5">
         <Field
           type="date"
           name={`${name}.dateCompleted`}
@@ -51,10 +47,17 @@ const EducationField = ({ name, index }) => {
             touched.educations[index] &&
             "dateCompleted" in errors.educations[index] &&
             "dateCompleted" in touched.educations[index]
-              ? "rounded-md py-0.5 px-1 border-2 border-red-700 h-full"
-              : "rounded-md py-0.5 px-1 border-2 border-teal-900 h-full"
+              ? "px-1 rounded-md border-2 border-red-700 h-auto"
+              : "px-1 rounded-md border-2 border-teal-900 h-auto"
           }
         ></Field>
+        <button
+          type="button"
+          onClick={() => handleDelete(index)}
+          className="bg-red-500 hover:bg-red-700 text-white text-sm font-bold py-1.5 px-4 rounded-md"
+        >
+          Delete
+        </button>
       </div>
     </div>
   );

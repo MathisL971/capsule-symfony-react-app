@@ -1,5 +1,5 @@
 import React from "react";
-import { Field, ErrorMessage, useFormikContext } from "formik";
+import { Field, ErrorMessage, useField } from "formik";
 
 const FormField = ({ label, ...fieldProp }) => {
   let optionsArr = [`-- Select a ${fieldProp.name} --`];
@@ -9,7 +9,7 @@ const FormField = ({ label, ...fieldProp }) => {
     });
   }
 
-  const { errors, touched } = useFormikContext();
+  const [field, meta] = useField(fieldProp);
 
   return (
     <div className="flex flex-col gap-1">
@@ -20,7 +20,8 @@ const FormField = ({ label, ...fieldProp }) => {
       <Field
         {...fieldProp}
         className={
-          fieldProp.name in errors && fieldProp.name in touched
+          // fieldProp.name in errors && fieldProp.name in touched
+          meta.error && meta.touched
             ? "rounded-md py-1 px-1 border-2 border-red-700 "
             : "rounded-md py-1 px-1 border-2 border-teal-900"
         }

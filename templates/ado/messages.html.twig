@@ -5,9 +5,9 @@
 {% endblock %}
 
 {% block body %}
-	<h1>Tes messages</h1>
-
-	<div class="col" style="margin: 100px">
-		<a href="/ado/home" role="button" class="btn btn-dark">Retour à l'accueil</a>
+	{# <h1>Tes messages</h1> #}
+	{# <div class="col" style="margin: 100px"><a href="/ado/home" role="button" class="btn btn-dark">Retour à l'accueil</a></div> #}
+	<div class="bg-white">
+		<div {{ react_component('SignupForm') }}></div>
 	</div>
 {% endblock %}

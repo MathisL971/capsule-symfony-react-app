@@ -110,34 +110,32 @@ class LandingController extends BaseController
     {
         $vars = [];
 
-        $vars['user'] = $this->session->get('user');
-        $vars['role'] = $this->session->get('role');
+        // $vars['user'] = $this->session->get('user');
+        // $vars['role'] = $this->session->get('role');
 
-        $repo = $this->em->getRepository(User::class);
-        $pros = $repo->findBy(['role' => 'pro']);
+        // $repo = $this->em->getRepository(User::class);
+        // $pros = $repo->findBy(['role' => 'pro']);
 
-        $liste = [];
-        $vars['pros'] = [];
+        // $liste = [];
+        // $vars['pros'] = [];
 
-        if (count($pros) < 3) {
-            $limit = count($pros);
-        } else {
-            $limit = 3;
-        }
+        // if (count($pros) < 3) {
+        //     $limit = count($pros);
+        // } else {
+        //     $limit = 3;
+        // }
 
-        while (count($liste) < $limit) {
+        // while (count($liste) < $limit) {
 
-            $row = rand(0, count($pros) - 1);
+        //     $row = rand(0, count($pros) - 1);
 
-            if (!in_array($row, $liste)) {
-                $liste[] += $row;
-                $vars['pros'][] = $pros[$row];
-            }
-        }
-
-        $page = $this->twig->render('landing/jeune.html.twig', $vars);
-
-        return new Response($page);
+        //     if (!in_array($row, $liste)) {
+        //         $liste[] += $row;
+        //         $vars['pros'][] = $pros[$row];
+        //     }
+        // }
+        
+        return new Response($this->twig->render('landing/jeune.html.twig', $vars));
     }
 
     /**

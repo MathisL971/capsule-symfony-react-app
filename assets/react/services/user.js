@@ -7,7 +7,6 @@ const getAll = async () => {
 };
 
 const create = async (newUser) => {
-  console.log("Making request to localhost 8001");
   const response = await axios.post(baseUrl, newUser);
   return response.data;
 };
