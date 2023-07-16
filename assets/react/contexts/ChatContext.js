@@ -8,15 +8,15 @@ const ChatContext = createContext();
 const conversations = [
   {
     id: 1,
-    date_created: new Date(now),
-    date_last_message: new Date(now),
+    date_created: new Date(),
+    date_last_message: new Date(),
     id_creator: 1,
     id_correspondant: 2,
   },
   {
     id: 2,
-    date_created: new Date(now),
-    date_last_message: new Date(now),
+    date_created: new Date(),
+    date_last_message: new Date(),
     id_creator: 2,
     id_correspondant: 1,
   },
@@ -77,9 +77,16 @@ export const useConversations = () => {
   return conversations;
 };
 
+export const useSelectedConversation = () => {
+  const { selectedConversation } = useContext(ChatContext);
+  return selectedConversation;
+};
+
 export const ChatContextProvider = (props) => {
   return (
-    <ChatContext.Provider value={{ messages, correspondants, conversations }}>
+    <ChatContext.Provider
+      value={{ messages, correspondants, conversations, selectedConversation }}
+    >
       {props.children}
     </ChatContext.Provider>
   );

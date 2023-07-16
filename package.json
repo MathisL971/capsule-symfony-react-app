@@ -29,6 +29,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "@headlessui/react": "^1.7.15",
         "axios": "^1.4.0",
         "country-list": "^2.3.0",
         "formik": "^2.4.2",

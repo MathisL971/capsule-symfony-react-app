@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseUrl = "https://127.0.0.1:8001/api/messages";
+const baseUrl = "http://localhost:3001/api/messages";
 
 const getAll = async () => {
   const response = await axios.get(baseUrl);
@@ -13,6 +13,7 @@ const create = async (newMessage) => {
 
 const getMessage = async (messageId) => {
   const response = await axios.get(`${baseUrl}/${messageId}`);
+  return response.data;
 };
 
 const getConvoMessage = async (convoId, messageId) => {
@@ -27,11 +28,11 @@ const getConvoMessages = async (convoId) => {
   return response.data;
 };
 
-const conversationService = {
+const messageService = {
   getAll,
   create,
   getMessage,
   getConvoMessage,
   getConvoMessages,
 };
-export default conversationService;
+export default messageService;

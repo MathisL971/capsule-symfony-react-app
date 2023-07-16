@@ -1,8 +1,6 @@
 import React from "react";
 
-const ChatBubble = ({ message }) => {
-  const sessionUserId = 1;
-
+const ChatBubble = ({ message, sessionUserId }) => {
   const { text, id_sender } = message;
 
   return (

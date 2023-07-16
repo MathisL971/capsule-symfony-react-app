@@ -16,7 +16,10 @@ import { validationSchema, initialValues } from "../validations/login";
 const LoginForm = () => {
   const handleSubmit = (values, setSubmitting, resetForm) => {
     setTimeout(() => {
-      console.log(values);
+      loginService.authenticate(values).then((id) => {
+        sessionStorage.setItem("sessionUserId", JSON.stringify(id));
+        window.location.href = "/message";
+      });
       resetForm();
       setSubmitting(false);
     }, 1000);

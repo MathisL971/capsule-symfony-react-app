@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseUrl = "https://127.0.0.1:8001/api/conversations";
+const baseUrl = "http://localhost:3001/api/conversations";
 
 const getAll = async () => {
   const response = await axios.get(baseUrl);
@@ -16,5 +16,5 @@ const getConvo = async (id) => {
   return response.data;
 };
 
-const conversationService = { getAll, create };
+const conversationService = { getAll, create, getConvo };
 export default conversationService;
