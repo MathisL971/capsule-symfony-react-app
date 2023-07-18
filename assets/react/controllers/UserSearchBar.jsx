@@ -2,7 +2,7 @@ import React from "react";
 import { Fragment, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 
-export default function UserSearchBar({ handleNewConvo, connections }) {
+export default function UserSearchBar({ handleConvoSearchOpen, connections }) {
   const [selected, setSelected] = useState("");
   const [query, setQuery] = useState("");
 
@@ -19,10 +19,10 @@ export default function UserSearchBar({ handleNewConvo, connections }) {
   return (
     <div>
       <Combobox value={selected} onChange={setSelected}>
-        <div className="relative mt-1">
+        <div className="relative">
           <div>
             <Combobox.Input
-              className="border-2 border-teal-800 rounded-md w-full py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
+              className="border-2 border-teal-800 rounded-md w-full py-2 px-3 text-sm leading-5 text-gray-900 focus:ring-0"
               //   displayValue={(person) => person.name}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Rechercher une connection..."
@@ -51,7 +51,7 @@ export default function UserSearchBar({ handleNewConvo, connections }) {
                     }
                     value={person}
                     onClick={() => {
-                      handleNewConvo(person.id);
+                      handleConvoSearchOpen(person.id);
                     }}
                   >
                     {({ selected, active }) => (

@@ -67,6 +67,12 @@ app.post("/api/login", (request, response) => {
   }
 });
 
+app.get("/api/users/:id", (request, response) => {
+  const userId = request.params.id;
+  const user = users.filter((u) => userId === u.id);
+  response.json(user);
+});
+
 app.get("/api/conversations", (request, response) => {
   response.json(conversations);
 });
@@ -77,6 +83,14 @@ app.post("/api/conversations", (request, response) => {
   response.status(200).json(newConvo);
 });
 
+app.get("/api/conversations/:id", (request, response) => {
+  const userId = request.params.id;
+  const userConvos = conversations.filter(
+    (convo) => userId === convo.id_creator || userId === convo.id_correspondant
+  );
+  response.json(userConvos);
+});
+
 app.get("/api/messages", (request, response) => {
   response.json(messages);
 });
@@ -85,6 +99,12 @@ app.post("/api/messages", (request, response) => {
   const newMessage = { ...request.body, id: generateRandomId(20) };
   messages = messages.concat(newMessage);
   response.status(200).json(newMessage);
+});
+
+app.get("/api/messages/conversation/:id", (request, response) => {
+  const convoId = request.params.id;
+  const convoMessages = messages.filter((m) => m.id_convo === convoId);
+  response.json(convoMessages);
 });
 
 app.get("/api/connections/:id", (request, response) => {

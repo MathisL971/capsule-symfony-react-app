@@ -1,8 +1,13 @@
 import axios from "axios";
-const baseUrl = "https://127.0.0.1:8001/api/users";
+const baseUrl = "http://localhost:3001/api/users";
 
 const getAll = async () => {
   const response = await axios.get(baseUrl);
+  return response.data;
+};
+
+const getUser = async (id) => {
+  const response = await axios.get(`${baseUrl}/${id}`);
   return response.data;
 };
 
@@ -11,5 +16,5 @@ const create = async (newUser) => {
   return response.data;
 };
 
-const userService = { getAll, create };
+const userService = { getAll, create, getUser };
 export default userService;

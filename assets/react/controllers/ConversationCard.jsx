@@ -1,25 +1,28 @@
 import React from "react";
 
 const ConversationCard = ({
+  sessionUserId,
   convo,
+  connections,
   styles,
-  handleConvoOpen,
+  handleConvoSideOpen,
   selectedConversationId,
 }) => {
-  const { id, id_correspondant } = convo;
+  console.log(connections);
+
+  const connection = connections.find(
+    (c) => c.id === convo.id_creator || c.id === convo.id_correspondant
+  );
 
   return (
     <div
       className={styles}
       onClick={() => {
-        if (selectedConversationId !== id) handleConvoOpen(id);
+        if (selectedConversationId !== convo.id) handleConvoSideOpen(convo);
       }}
     >
       <span className="bg-gray-300 rounded-full w-20 h-20"></span>
-      <div>
-        <p className="font-bold">Correspondant Id: {id_correspondant}</p>
-        <p>{"First name, Last name"}</p>
-      </div>
+      {connection && <h2>{connection.name}</h2>}
     </div>
   );
 };
