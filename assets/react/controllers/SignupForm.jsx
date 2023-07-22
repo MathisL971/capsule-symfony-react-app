@@ -150,7 +150,7 @@ const SignUpForm = () => {
               Vous possédez déjà un compte ?{" "}
               <button
                 type="button"
-                onClick={() => console.log("Navigating to login page")}
+                onClick={() => (window.location.href = "/login")}
               >
                 <u>Clickez ici pour vous connecter!</u>
               </button>{" "}

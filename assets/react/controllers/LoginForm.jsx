@@ -20,14 +20,15 @@ const LoginForm = () => {
         .authenticate(values)
         .then((user) => {
           sessionStorage.setItem("sessionUserId", JSON.stringify(user.id));
-          console.log(user.role);
-          switch (user.role) {
-            case "adolescent":
-              window.location.href = "/ado/home";
-            case "parent":
-              window.location.href = "/parent/home";
-            case "professionel":
-              window.location.href = "/pro/home";
+
+          if (user.role === "adolescent") {
+            window.location.href = "/ado/home";
+          } else if (user.role === "parent") {
+            window.location.href = "/parent/home";
+          } else if (user.role === "professionel") {
+            window.location.href = "/pro/home";
+          } else {
+            window.location.href = "/";
           }
         })
         .catch((e) => {
@@ -75,11 +76,12 @@ const LoginForm = () => {
             >
               Se connecter
             </button>
+
             <p className="text-center font-medium">
               Première fois sur Capsule?{" "}
               <button
                 type="button"
-                onClick={() => console.log("Navigating to sign up page")}
+                onClick={() => (window.location.href = "/signup")}
               >
                 <u>Clickez ici pour vous inscrire!</u>
               </button>{" "}
