@@ -5,8 +5,43 @@ import conversationService from "../services/conversation";
 import connectionService from "../services/connections";
 import messageService from "../services/message";
 import userService from "../services/user";
+import { add } from "@hotwired/stimulus";
 
 const GENERAL_SOCKET_CONNECTION_ID = "123456789";
+
+// Helpers
+function generateRandomId(length) {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let id = "";
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    id += characters.charAt(randomIndex);
+  }
+
+  return id;
+}
+
+function compareConvoDates(date1, date2) {
+  if (date1 > date2) {
+    return -1;
+  } else if (date1 < date2) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+
+function compareMessageDates(date1, date2) {
+  if (date1 > date2) {
+    return 1;
+  } else if (date1 < date2) {
+    return -1;
+  } else {
+    return 0;
+  }
+}
 
 const ChatApp = () => {
   const [sessionUserId, setSessionUserId] = useState(null);
@@ -34,15 +69,15 @@ const ChatApp = () => {
       setSessionUserId(sessionUserId);
       userService
         .getUser(sessionUserId)
-        .then((arr) => {
-          setSessionUser(arr[0]);
+        .then((user) => {
+          setSessionUser(user);
         })
         .catch((e) => console.error(e));
     } else {
       window.location.href = "/login";
     }
 
-    openGeneralWebSocketConnection(GENERAL_SOCKET_CONNECTION_ID);
+    openWebSocketConnection(GENERAL_SOCKET_CONNECTION_ID);
 
     connectionService
       .getUserConnections(sessionUserId)
@@ -55,16 +90,6 @@ const ChatApp = () => {
       .catch((e) => console.error(e));
   }, []);
 
-  // Rerending convo messages of receiver
-  useEffect(() => {
-    if (
-      latestMessageObject &&
-      sessionUserId === latestMessageObject.id_receiver
-    ) {
-      setConvoMessages(convoMessages.concat(latestMessageObject));
-    }
-  }, [latestMessageObject]);
-
   // Send messages in backlog
   useEffect(() => {
     if (messageToSend) {
@@ -73,13 +98,47 @@ const ChatApp = () => {
     }
   }, [socketConnection]);
 
+  // Rerending convo messages of receiver
+  useEffect(() => {
+    if (
+      latestMessageObject &&
+      sessionUserId === latestMessageObject.id_receiver
+    ) {
+      console.log("lastestMessageObject:", latestMessageObject);
+      console.log("sessionUserId:", sessionUserId);
+
+      const updatedConversations = conversations.map((convo) => {
+        return convo.id === latestMessageObject.id_convo
+          ? { ...convo, date_last_message: latestMessageObject.sent_time }
+          : convo;
+      });
+
+      console.log("Updated conversations:", updatedConversations);
+
+      setConversations(updatedConversations);
+
+      if (selectedConversationId === latestMessageObject.id_convo) {
+        console.log("Selected conversation id:", selectedConversationId);
+
+        const updatedMessages = convoMessages.concat(latestMessageObject);
+        console.log("Updated messages:", updatedMessages);
+
+        setConvoMessages(updatedMessages);
+      }
+    }
+    setLatestMessageObject(null);
+  }, [latestMessageObject]);
+
   // Handle general broadcast
   useEffect(() => {
     if (broadcast && broadcast.receiver_id === sessionUserId) {
+      console.log("I am the receiver of that broadcast:", broadcast);
+
       conversationService
         .getUserConvos(broadcast.receiver_id)
-        .then((conversations) => {
-          setConversations(conversations);
+        .then((userConversations) => {
+          console.log("My conversations:", userConversations);
+          setConversations(userConversations);
         })
         .catch((e) => console.error(e));
     }
@@ -95,7 +154,7 @@ const ChatApp = () => {
         handleConvoSideOpen(existingConvo);
       } else {
         const newPotentialConvo = {
-          id: "dummy_id",
+          id: generateRandomId(20),
           date_created: null,
           date_last_message: null,
           id_creator: sessionUserId,
@@ -111,6 +170,77 @@ const ChatApp = () => {
     } catch (error) {
       // Handle the error appropriately
       console.error("Error opening conversation:", error);
+    }
+  };
+
+  const onMessageSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      let addedMessage;
+
+      if (potentialConvo) {
+        const newConvo = await conversationService.create({
+          ...potentialConvo,
+          date_created: new Date().toISOString(),
+          date_last_message: new Date().toISOString(),
+        });
+
+        openWebSocketConnection(newConvo.id);
+
+        setPotentialConvo(null);
+
+        setConversations(conversations.concat(newConvo));
+
+        setSelectedConversationId(newConvo.id);
+
+        addedMessage = await messageService.create({
+          text: newMessage,
+          sent_time: newConvo.date_last_message,
+          seen_time: null,
+          id_sender: sessionUserId,
+          id_receiver: correspondantId,
+          id_convo: newConvo.id,
+        });
+
+        setMessageToSend(addedMessage);
+      } else {
+        addedMessage = await messageService.create({
+          text: newMessage,
+          sent_time: new Date().toISOString(),
+          seen_time: null,
+          id_sender: sessionUserId,
+          id_receiver: correspondantId,
+          id_convo: selectedConversationId,
+        });
+
+        // Make request to modify date latest message for convo in db
+        conversationService
+          .modifyConvo(selectedConversationId, {
+            new_time: new Date().toISOString(),
+          })
+          .then((convos) => {
+            setConversations(convos);
+          })
+          .catch((e) => console.error(e));
+
+        socketConnection.send(JSON.stringify(addedMessage));
+      }
+
+      setConvoMessages((prevConvoMessages) =>
+        prevConvoMessages.concat(addedMessage)
+      );
+
+      generalSocketConnection.send(
+        JSON.stringify({
+          receiver_id: correspondantId,
+        })
+      );
+
+      setNewMessage("");
+    } catch (error) {
+      // Handle the error appropriately
+      console.error("Error submitting message:", error);
     }
   };
 
@@ -137,93 +267,45 @@ const ChatApp = () => {
     }
   };
 
-  const openGeneralWebSocketConnection = (generalId) => {
-    const genConn = new WebSocket(`ws://localhost:8080/${generalId}`);
-
-    genConn.onopen = (e) => {
-      console.log("Connection established!");
-      setGeneralSocketConnection(genConn);
-    };
-
-    genConn.onmessage = (e) => {
-      setBroadcast(JSON.parse(e.data));
-    };
-  };
-
   const openWebSocketConnection = (convoId) => {
     const conn = new WebSocket(`ws://localhost:8080/${convoId}`);
 
-    conn.onopen = (e) => {
-      console.log("Connection established!");
-      setSocketConnection(conn);
-    };
+    if (convoId === GENERAL_SOCKET_CONNECTION_ID) {
+      conn.onopen = (e) => {
+        console.log("Public connection established!");
+        setGeneralSocketConnection(conn);
+      };
 
-    conn.onmessage = (e) => {
-      const object = JSON.parse(e.data);
-      // Render new message onto receiver screen
-      setLatestMessageObject(object);
-    };
-  };
+      conn.onmessage = (e) => {
+        console.log("Setting broadcast to:", JSON.parse(e.data));
+        setBroadcast(JSON.parse(e.data));
+      };
+    } else {
+      conn.onopen = (e) => {
+        console.log("Private connection established!");
+        setSocketConnection(conn);
+      };
 
-  const onMessageSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      let addedMessage;
-
-      if (potentialConvo) {
-        const newConvo = await conversationService.create({
-          ...potentialConvo,
-          date_created: new Date(),
-          date_last_message: new Date(),
-        });
-
-        openWebSocketConnection(newConvo.id);
-        setPotentialConvo(null);
-        setConversations(conversations.concat(newConvo));
-        setSelectedConversationId(newConvo.id);
-
-        addedMessage = await messageService.create({
-          text: newMessage,
-          sent_time: new Date(),
-          seen_time: null,
-          id_sender: sessionUserId,
-          id_receiver: correspondantId,
-          id_convo: newConvo.id,
-        });
-      } else {
-        addedMessage = await messageService.create({
-          text: newMessage,
-          sent_time: new Date(),
-          seen_time: null,
-          id_sender: sessionUserId,
-          id_receiver: correspondantId,
-          id_convo: selectedConversationId,
-        });
-      }
-
-      if (socketConnection) {
-        socketConnection.send(JSON.stringify(addedMessage));
-      } else {
-        setMessageToSend(addedMessage);
-      }
-
-      setConvoMessages((prevConvoMessages) =>
-        prevConvoMessages.concat(addedMessage)
-      );
-
-      generalSocketConnection.send(
-        JSON.stringify({
-          receiver_id: correspondantId,
-        })
-      );
-
-      setNewMessage("");
-    } catch (error) {
-      // Handle the error appropriately
-      console.error("Error submitting message:", error);
+      conn.onmessage = (e) => {
+        console.log("Setting lastMessageObject to:", JSON.parse(e.data));
+        setLatestMessageObject(JSON.parse(e.data));
+      };
     }
   };
+
+  conversations.sort((c1, c2) => {
+    return compareConvoDates(c1.date_last_message, c2.date_last_message);
+  });
+
+  {
+    convoMessages &&
+      convoMessages.sort((m1, m2) => {
+        return compareMessageDates(m1.sent_time - m2.sent_time);
+      });
+  }
+
+  console.log("Public connection:", generalSocketConnection);
+  console.log("Private connection:", socketConnection);
 
   return (
     <div className="h-screen flex flex-col gap-3">
@@ -234,7 +316,6 @@ const ChatApp = () => {
       )}
       <div className="flex flex-row h-5/6 gap-1">
         <ConversationsBar
-          sessionUserId={sessionUserId}
           connections={connections}
           conversations={conversations}
           potentialConvo={potentialConvo}

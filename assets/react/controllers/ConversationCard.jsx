@@ -1,15 +1,12 @@
 import React from "react";
 
 const ConversationCard = ({
-  sessionUserId,
   convo,
   connections,
   styles,
   handleConvoSideOpen,
   selectedConversationId,
 }) => {
-  console.log(connections);
-
   const connection = connections.find(
     (c) => c.id === convo.id_creator || c.id === convo.id_correspondant
   );

@@ -16,7 +16,7 @@ class LandingController extends BaseController
     /**
      * @Route("/", name="landing_home")
      */
-    public function home(Request $rq)
+    public function home(Request $rq): Response
     {
         $vars = [];
 

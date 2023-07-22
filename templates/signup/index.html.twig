@@ -1,11 +1,9 @@
-{% extends 'base-js.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}Signup{% endblock %}
 
 {% block body %}
-	<div class="bg-white">
-		<div class="mx-auto max-w-7xl py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
-			<div {{ react_component('SignupForm') }}></div>
-		</div>
+	<div class="d-flex flex-column py-5">
+		<div {{ react_component('SignupForm') }}></div>
 	</div>
 {% endblock %}

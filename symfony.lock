@@ -229,5 +229,8 @@
     },
     "twig/extra-bundle": {
         "version": "v3.5.1"
+    },
+    "web-token/jwt-framework": {
+        "version": "3.2.7"
     }
 }

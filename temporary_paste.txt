@@ -1,0 +1,89 @@
+{# barre latérale amovible #}
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel" style="text-align: center;">
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    
+    {% if user %}
+        {# Affichage des informations sur le profil connecté #}
+        <p style="margin-top: 15px">{{user.firstName}}
+            {{user.name}}</p>
+
+        <p>
+            <a class="btn btn-warning" href="/{{role|lower}}/profil">
+                Profil
+            </a>
+        </p>
+
+        <p>
+            <a class="btn btn-primary" href="/deconnect">
+                Déconnexion
+            </a>
+        </p>
+
+        {# Boutons d'accès aux autres espaces #}
+
+        <div style="margin: 10px; padding-top: 15px; text-align: center; border: 1px solid lightgrey">
+            <p style="color: grey">Espaces</p>
+
+            {# Affichage du lien vers l'espace public #}
+            <p>
+                <a class="btn btn-light" href="/" style="background-color: white; border: 1px solid black">
+                    Accéder à l'espace public
+                </a>
+            </p>
+
+
+            {% if role == "SuperAdmin" or role == "Admin" or role == "Pro" %}
+
+                <p>
+                    <a class="btn btn-success" href="/ado/home" style="background-color: rgb(48,180,167); border: none">
+                        Accéder à l'espace ado
+                    </a>
+                </p>
+
+                <p>
+                    <a class="btn btn-info" href="/parent/home" style="background-color: rgba(190,19,232,0.5); border: none">
+                        Accéder à l'espace parent
+                    </a>
+                </p>
+
+                <p>
+                    <a class="btn btn-warning" href="/pro/home" style="background-color: rgb(255,222,16); border: none">
+                        Accéder à l'espace pro
+                    </a>
+                </p>
+
+
+                {# Affichage du lien vers l'espace admin si profil admin ou super admin #}
+                {% if role == "SuperAdmin" or role == "Admin" %}
+                    <p>
+                        <a class="btn btn-dark" href="/admin/home">
+                            Accéder à l'espace administrateur
+                        </a>
+                    </p>
+                {% endif %}
+
+            {% endif %}
+        </div>
+
+
+    {% else %}
+        <div class="offcanvas-header"></div>
+        <div class="offcanvas-body">
+            <div>
+                <form method="POST" action="/">
+                    <input type=" text" name="email" placeholder="Email *" required>
+                    <p><input type="password" name="password" placeholder="Mot de passe *" required>
+                    </p>
+                    <p><input type="submit" value="Se connecter" class="btn btn-primary">
+                    </p>
+                </form>
+                <p>
+                    <a class="btn btn-primary" href="/signup">
+                        Créer un compte</a>
+                </p>
+            </div>
+        </div>
+
+    {% endif %} 
+    
+</div>

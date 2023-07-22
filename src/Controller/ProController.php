@@ -24,18 +24,22 @@ class ProController extends BaseController
      */
     public function home(Request $rq)
     {
-        if (ProController::authentify($this->session)) {
+        $vars = [];
 
-            $vars['user'] = $this->session->get('user');
-            $vars['role'] = $this->session->get('role');
+        // if (ProController::authentify($this->session)) {
 
-            $vars['date'] = ProController::datecomplete(new \DateTime());
+        //     $vars['user'] = $this->session->get('user');
+        //     $vars['role'] = $this->session->get('role');
 
-            return new Response($this->twig->render('pro/home.html.twig', $vars));
-        }
+        //     $vars['date'] = ProController::datecomplete(new \DateTime());
 
-        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
-        return new RedirectResponse('/');
+        //     return new Response($this->twig->render('pro/home.html.twig', $vars));
+        // }
+
+        // $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
+        // return new RedirectResponse('/');
+
+        return new Response($this->twig->render('pro/home.html.twig', $vars));
     }
 
     /**

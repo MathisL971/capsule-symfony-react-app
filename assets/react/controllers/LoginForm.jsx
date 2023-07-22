@@ -16,10 +16,23 @@ import { validationSchema, initialValues } from "../validations/login";
 const LoginForm = () => {
   const handleSubmit = (values, setSubmitting, resetForm) => {
     setTimeout(() => {
-      loginService.authenticate(values).then((id) => {
-        sessionStorage.setItem("sessionUserId", JSON.stringify(id));
-        window.location.href = "/message";
-      });
+      loginService
+        .authenticate(values)
+        .then((user) => {
+          sessionStorage.setItem("sessionUserId", JSON.stringify(user.id));
+          console.log(user.role);
+          switch (user.role) {
+            case "adolescent":
+              window.location.href = "/ado/home";
+            case "parent":
+              window.location.href = "/parent/home";
+            case "professionel":
+              window.location.href = "/pro/home";
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+        });
       resetForm();
       setSubmitting(false);
     }, 1000);

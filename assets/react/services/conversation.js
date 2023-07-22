@@ -21,5 +21,16 @@ const getConvo = async (id) => {
   return response.data;
 };
 
-const conversationService = { getAll, create, getConvo, getUserConvos };
+const modifyConvo = async (id, messageSentTime) => {
+  const response = await axios.put(`${baseUrl}/${id}`, messageSentTime);
+  return response.data;
+};
+
+const conversationService = {
+  getAll,
+  create,
+  getConvo,
+  getUserConvos,
+  modifyConvo,
+};
 export default conversationService;

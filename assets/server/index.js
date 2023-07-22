@@ -29,6 +29,7 @@ let users = [
     id: mathisId,
     username: "Thismadu971",
     password: "BrebeufMTL5174",
+    role: "parent",
     connections: [
       { id: generateRandomId(20), name: "Wade Cooper" },
       { id: generateRandomId(20), name: "Arlene Mccoy" },
@@ -40,6 +41,7 @@ let users = [
     id: maliaId,
     username: "Malia971",
     password: "BrebeufMTL5174",
+    role: "adolescent",
     connections: [
       { id: generateRandomId(20), name: "Arlene Mccoy" },
       { id: generateRandomId(20), name: "Devon Webb" },
@@ -61,7 +63,7 @@ app.post("/api/login", (request, response) => {
     (u) => u.username === username && u.password === password
   );
   if (user) {
-    response.status(200).json(user.id);
+    response.status(200).json(user);
   } else {
     response.status(401).send("Username or password does not exist");
   }
@@ -69,7 +71,7 @@ app.post("/api/login", (request, response) => {
 
 app.get("/api/users/:id", (request, response) => {
   const userId = request.params.id;
-  const user = users.filter((u) => userId === u.id);
+  const user = users.find((u) => userId === u.id);
   response.json(user);
 });
 
@@ -89,6 +91,15 @@ app.get("/api/conversations/:id", (request, response) => {
     (convo) => userId === convo.id_creator || userId === convo.id_correspondant
   );
   response.json(userConvos);
+});
+
+app.put("/api/conversations/:id", (request, response) => {
+  const convoId = request.params.id;
+  const { new_time } = request.body;
+  conversations = conversations.map((convo) =>
+    convoId === convo.id ? { ...convo, date_last_message: new_time } : convo
+  );
+  response.json(conversations);
 });
 
 app.get("/api/messages", (request, response) => {
