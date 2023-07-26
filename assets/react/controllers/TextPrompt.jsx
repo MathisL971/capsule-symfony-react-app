@@ -12,13 +12,14 @@ const TextPrompt = ({
         type="textarea"
         value={value}
         onChange={({ target }) => setNewMessage(target.value)}
+        placeholder="Tapez votre message ici..."
         className="flex flex-grow rounded-lg border-2 border-slate-400 p-2"
       ></input>
       {selectedConversationId ? (
         <button
           type="submit"
           className={
-            "rounded-lg bg-teal-950 py-2 px-4 text-teal-50 font-bold shadow-lg"
+            "rounded-lg bg-teal-500 py-2 px-4 text-teal-50 font-bold shadow-lg"
           }
         >
           {"Send"}
@@ -28,7 +29,7 @@ const TextPrompt = ({
           type="submit"
           disabled
           className={
-            "rounded-lg bg-teal-950 py-2 px-4 text-teal-50 font-bold shadow-lg disabled:bg-teal-100"
+            "rounded-lg bg-teal-500 py-2 px-4 text-teal-50 font-bold shadow-lg disabled:bg-teal-100"
           }
         >
           {"Send"}

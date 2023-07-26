@@ -1,15 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ConversationsBar from "./ConversationsBar";
 import MessageThread from "./MessageThread";
 import conversationService from "../services/conversation";
 import connectionService from "../services/connections";
 import messageService from "../services/message";
 import userService from "../services/user";
-import { add } from "@hotwired/stimulus";
 
 const GENERAL_SOCKET_CONNECTION_ID = "123456789";
 
-// Helpers
 function generateRandomId(length) {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -44,23 +42,24 @@ function compareMessageDates(date1, date2) {
 }
 
 const ChatApp = () => {
+  const [generalSocketConnection, setGeneralSocketConnection] = useState(null);
+
   const [sessionUserId, setSessionUserId] = useState(null);
   const [sessionUser, setSessionUser] = useState(null);
   const [connections, setConnections] = useState([]);
   const [conversations, setConversations] = useState([]);
-  const [generalSocketConnection, setGeneralSocketConnection] = useState(null);
 
   const [selectedConversationId, setSelectedConversationId] = useState(null);
   const [correspondantId, setCorrespondantId] = useState(null);
   const [convoMessages, setConvoMessages] = useState([]);
-  const [socketConnection, setSocketConnection] = useState(null);
 
   const [newMessage, setNewMessage] = useState("");
-  const [latestMessageObject, setLatestMessageObject] = useState(null);
-
   const [potentialConvo, setPotentialConvo] = useState(null);
-  const [messageToSend, setMessageToSend] = useState(null);
   const [broadcast, setBroadcast] = useState(null);
+
+  // const [socketConnection, setSocketConnection] = useState(null);
+  // const [latestMessageObject, setLatestMessageObject] = useState(null);
+  // const [messageToSend, setMessageToSend] = useState(null);
 
   // Initial data fetching
   useEffect(() => {
@@ -91,63 +90,94 @@ const ChatApp = () => {
   }, []);
 
   // Send messages in backlog
-  useEffect(() => {
-    if (messageToSend) {
-      socketConnection.send(JSON.stringify(messageToSend));
-      setMessageToSend(null);
-    }
-  }, [socketConnection]);
+  // useEffect(() => {
+  //   // When a new connection is established
+  //   // If there is a message to send and that it belongs to the active conversation
+  //   if (messageToSend && messageToSend.id_convo === selectedConversationId) {
+  //     // Send it over the connection
+  //     socketConnection.send(JSON.stringify(messageToSend));
+  //     setMessageToSend(null);
+  //   }
+  // }, [socketConnection]);
 
   // Rerending convo messages of receiver
+  // useEffect(() => {
+  //   if (
+  //     latestMessageObject &&
+  //     sessionUserId === latestMessageObject.id_receiver
+  //   ) {
+  //     setConversations(
+  //       conversations.map((convo) => {
+  //         return convo.id === latestMessageObject.id_convo
+  //           ? { ...convo, date_last_message: latestMessageObject.sent_time }
+  //           : convo;
+  //       })
+  //     );
+
+  //     if (selectedConversationId === latestMessageObject.id_convo) {
+  //       console.log("Rerendering convo messages...");
+  //       setConvoMessages(convoMessages.concat(latestMessageObject));
+  //     }
+  //   }
+  //   // setLatestMessageObject(null);
+  // }, [latestMessageObject]);
+
+  // Handle broadcasts
   useEffect(() => {
-    if (
-      latestMessageObject &&
-      sessionUserId === latestMessageObject.id_receiver
-    ) {
-      console.log("lastestMessageObject:", latestMessageObject);
-      console.log("sessionUserId:", sessionUserId);
+    if (broadcast) {
+      console.log("Broadcast exists...");
+      console.log("Broadcast object:", broadcast);
+      if (broadcast.id_receiver === sessionUserId) {
+        console.log("Broadcast is meant for me!");
 
-      const updatedConversations = conversations.map((convo) => {
-        return convo.id === latestMessageObject.id_convo
-          ? { ...convo, date_last_message: latestMessageObject.sent_time }
-          : convo;
-      });
+        // Fetch updated conversations of receiver
+        conversationService
+          .getUserConvos(broadcast.id_receiver)
+          .then((userConversations) => {
+            // Rerender conversations of receiver
+            console.log("Updated my conversations:", userConversations);
+            setConversations(userConversations);
 
-      console.log("Updated conversations:", updatedConversations);
+            // If receiver was about to send his first message to the sender
+            if (
+              potentialConvo &&
+              potentialConvo.id_correspondant === broadcast.id_sender
+            ) {
+              console.log(
+                "I was just about to start that same conversation..."
+              );
 
-      setConversations(updatedConversations);
+              // Get the newly created convo
+              const newConvo = userConversations.find(
+                (c) => c.id === broadcast.id_convo
+              );
 
-      if (selectedConversationId === latestMessageObject.id_convo) {
-        console.log("Selected conversation id:", selectedConversationId);
+              console.log("Opening convo from the side programatically");
+              // Scrap the potential convo and open the newly created conversation
+              handleConvoSideOpen(newConvo);
+            }
 
-        const updatedMessages = convoMessages.concat(latestMessageObject);
-        console.log("Updated messages:", updatedMessages);
-
-        setConvoMessages(updatedMessages);
+            // If that conversation existed and the receiver was already inside it
+            else if (selectedConversationId === broadcast.id_convo) {
+              console.log(
+                "I was already inside that conversation. Rerendering convo messages"
+              );
+              // Rerender the receiver conversation message
+              setConvoMessages(convoMessages.concat(broadcast));
+            }
+          })
+          .catch((e) => console.error(e));
       }
-    }
-    setLatestMessageObject(null);
-  }, [latestMessageObject]);
-
-  // Handle general broadcast
-  useEffect(() => {
-    if (broadcast && broadcast.receiver_id === sessionUserId) {
-      console.log("I am the receiver of that broadcast:", broadcast);
-
-      conversationService
-        .getUserConvos(broadcast.receiver_id)
-        .then((userConversations) => {
-          console.log("My conversations:", userConversations);
-          setConversations(userConversations);
-        })
-        .catch((e) => console.error(e));
+    } else {
     }
   }, [broadcast]);
 
   const handleConvoSearchOpen = async (correspondantId) => {
     try {
       const existingConvo = conversations.find(
-        (convo) => convo.id_correspondant === correspondantId
+        (convo) =>
+          convo.id_correspondant === correspondantId ||
+          convo.id_creator === correspondantId
       );
 
       if (existingConvo) {
@@ -164,7 +194,6 @@ const ChatApp = () => {
         setSelectedConversationId(newPotentialConvo.id);
         setCorrespondantId(newPotentialConvo.id_correspondant);
         setConvoMessages([]);
-
         setPotentialConvo(newPotentialConvo);
       }
     } catch (error) {
@@ -176,76 +205,102 @@ const ChatApp = () => {
   const onMessageSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      let addedMessage;
+    if (newMessage.length == 0) {
+      return -1;
+    } else {
+      try {
+        let addedMessage;
 
-      if (potentialConvo) {
-        const newConvo = await conversationService.create({
-          ...potentialConvo,
-          date_created: new Date().toISOString(),
-          date_last_message: new Date().toISOString(),
-        });
+        // If a potential conversation has been initiated
+        if (potentialConvo) {
+          // Create a new conversation
+          const newConvo = await conversationService.create({
+            ...potentialConvo,
+            date_created: new Date().toISOString(),
+            date_last_message: new Date().toISOString(),
+          });
 
-        openWebSocketConnection(newConvo.id);
+          // Reset potential conversation
+          setPotentialConvo(null);
 
-        setPotentialConvo(null);
+          // Rerender the conversations with the new created conversation
+          setConversations(conversations.concat(newConvo));
 
-        setConversations(conversations.concat(newConvo));
+          // Set new conversation to be the active conversation
+          setSelectedConversationId(newConvo.id);
 
-        setSelectedConversationId(newConvo.id);
+          // Create the first message
+          addedMessage = await messageService.create({
+            text: newMessage,
+            sent_time: newConvo.date_last_message,
+            seen_time: null,
+            id_sender: sessionUserId,
+            id_receiver: correspondantId,
+            id_convo: newConvo.id,
+          });
 
-        addedMessage = await messageService.create({
-          text: newMessage,
-          sent_time: newConvo.date_last_message,
-          seen_time: null,
-          id_sender: sessionUserId,
-          id_receiver: correspondantId,
-          id_convo: newConvo.id,
-        });
+          // Reset new message state
+          setNewMessage("");
 
-        setMessageToSend(addedMessage);
-      } else {
-        addedMessage = await messageService.create({
-          text: newMessage,
-          sent_time: new Date().toISOString(),
-          seen_time: null,
-          id_sender: sessionUserId,
-          id_receiver: correspondantId,
-          id_convo: selectedConversationId,
-        });
+          // Rerender the conversations messages of the sender with the new message
+          setConvoMessages(convoMessages.concat(addedMessage));
 
-        // Make request to modify date latest message for convo in db
-        conversationService
-          .modifyConvo(selectedConversationId, {
-            new_time: new Date().toISOString(),
-          })
-          .then((convos) => {
-            setConversations(convos);
-          })
-          .catch((e) => console.error(e));
+          // Open a private socket connection with the receiver
+          openWebSocketConnection(newConvo.id);
 
-        socketConnection.send(JSON.stringify(addedMessage));
+          // Store the first message so that it can be sent once the connection has been established
+          // setMessageToSend(addedMessage);
+
+          // Inform receiver that a new message was sent
+          generalSocketConnection.send(JSON.stringify(addedMessage));
+        } else {
+          // Create the new message
+          addedMessage = await messageService.create({
+            text: newMessage,
+            sent_time: new Date().toISOString(),
+            seen_time: null,
+            id_sender: sessionUserId,
+            id_receiver: correspondantId,
+            id_convo: selectedConversationId,
+          });
+
+          // Rerender the conversation messages of the sender
+          setConvoMessages(convoMessages.concat(addedMessage));
+
+          // Reset new message prompt
+          setNewMessage("");
+
+          // Update the date of the last message for the active conversation
+          // and rerender the conversations of the sender
+          conversationService
+            .modifyConvo(selectedConversationId, {
+              new_time: new Date().toISOString(),
+            })
+            .then((convos) => {
+              const userConvos = convos.filter(
+                (c) =>
+                  c.id_creator === addedMessage.id_sender ||
+                  c.id_correspondant === addedMessage.id_sender
+              );
+              setConversations(userConvos);
+            })
+            .catch((e) => console.error(e));
+
+          // Send the new message to the receiver over the private connection
+          generalSocketConnection.send(JSON.stringify(addedMessage));
+        }
+      } catch (error) {
+        // Handle the error appropriately
+        console.error("Error submitting message:", error);
       }
-
-      setConvoMessages((prevConvoMessages) =>
-        prevConvoMessages.concat(addedMessage)
-      );
-
-      generalSocketConnection.send(
-        JSON.stringify({
-          receiver_id: correspondantId,
-        })
-      );
-
-      setNewMessage("");
-    } catch (error) {
-      // Handle the error appropriately
-      console.error("Error submitting message:", error);
     }
   };
 
   const handleConvoSideOpen = async (convo) => {
-    setPotentialConvo(null);
+    if (potentialConvo) {
+      console.log("Setting potential convo to null");
+      setPotentialConvo(null);
+    }
 
     setSelectedConversationId(convo.id);
     setCorrespondantId(
@@ -257,58 +312,34 @@ const ChatApp = () => {
     // Fetch previous convo messages
     const messages = await messageService.getConvoMessages(convo.id);
     setConvoMessages(messages);
-
-    try {
-      // Open a socket connection and wait for it to establish
-      openWebSocketConnection(convo.id);
-    } catch (error) {
-      // Handle the error appropriately
-      console.error("Error opening conversation:", error);
-    }
   };
 
   const openWebSocketConnection = (convoId) => {
     const conn = new WebSocket(`ws://localhost:8080/${convoId}`);
 
-    if (convoId === GENERAL_SOCKET_CONNECTION_ID) {
-      conn.onopen = (e) => {
-        console.log("Public connection established!");
-        setGeneralSocketConnection(conn);
-      };
+    conn.onopen = (e) => {
+      console.log("Public connection established!");
+      setGeneralSocketConnection(conn);
+    };
 
-      conn.onmessage = (e) => {
-        console.log("Setting broadcast to:", JSON.parse(e.data));
-        setBroadcast(JSON.parse(e.data));
-      };
-    } else {
-      conn.onopen = (e) => {
-        console.log("Private connection established!");
-        setSocketConnection(conn);
-      };
-
-      conn.onmessage = (e) => {
-        console.log("Setting lastMessageObject to:", JSON.parse(e.data));
-        setLatestMessageObject(JSON.parse(e.data));
-      };
-    }
+    conn.onmessage = (e) => {
+      console.log("Setting broadcast:", e.data);
+      setBroadcast(JSON.parse(e.data));
+    };
   };
 
   conversations.sort((c1, c2) => {
     return compareConvoDates(c1.date_last_message, c2.date_last_message);
   });
 
-  {
-    convoMessages &&
-      convoMessages.sort((m1, m2) => {
-        return compareMessageDates(m1.sent_time - m2.sent_time);
-      });
+  if (convoMessages) {
+    convoMessages.sort((m1, m2) => {
+      return compareMessageDates(m1.sent_time - m2.sent_time);
+    });
   }
 
-  console.log("Public connection:", generalSocketConnection);
-  console.log("Private connection:", socketConnection);
-
   return (
-    <div className="h-screen flex flex-col gap-3">
+    <div className="h-screen flex flex-col gap-3 py-4">
       {sessionUser && (
         <div className="flex flex-row justify-center">
           <h1 className="text-2xl font-extrabold">{sessionUser.username}</h1>

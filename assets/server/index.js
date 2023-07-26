@@ -126,6 +126,6 @@ app.get("/api/connections/:id", (request, response) => {
   response.json(user.connections);
 });
 
-const PORT = 3001;
+const PORT = 3002;
 app.listen(PORT);
 console.log(`Server running on port ${PORT}`);

@@ -26,8 +26,8 @@ const ConversationsBar = ({
             selectedConversationId={selectedConversationId}
             styles={
               selectedConversationId === potentialConvo.id
-                ? "bg-slate-300 px-4 py-2 rounded-md"
-                : "bg-white px-4 py-2 rounded-md hover:bg-slate-300"
+                ? "bg-teal-700 px-4 py-3 rounded-md font-bold text-white"
+                : "bg-slate-100 px-4 py-3 rounded-md font-semibold hover:bg-slate-300"
             }
           />
         )}
@@ -41,8 +41,8 @@ const ConversationsBar = ({
               selectedConversationId={selectedConversationId}
               styles={
                 selectedConversationId === c.id
-                  ? "bg-slate-300 px-4 py-2 rounded-md"
-                  : "bg-white px-4 py-2 rounded-md hover:bg-slate-300"
+                  ? "bg-teal-700 px-4 py-3 rounded-md font-bold text-white"
+                  : "bg-slate-100 px-4 py-3 rounded-md font-semibold hover:bg-slate-300"
               }
             />
           );

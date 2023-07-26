@@ -22,10 +22,10 @@ export default function UserSearchBar({ handleConvoSearchOpen, connections }) {
         <div className="relative">
           <div>
             <Combobox.Input
-              className="border-2 border-teal-800 rounded-md w-full py-2 px-3 text-sm leading-5 text-gray-900 focus:ring-0"
+              className="border-2 border-slate-400 rounded-lg w-full py-2 px-2 text-base leading-5 text-gray-900 focus:ring-0"
               //   displayValue={(person) => person.name}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Rechercher une connection..."
+              placeholder="Recherchez une personne dans vos contacts..."
             />
           </div>
           <Transition
