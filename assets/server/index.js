@@ -80,7 +80,7 @@ app.get("/api/conversations", (request, response) => {
 });
 
 app.post("/api/conversations", (request, response) => {
-  const newConvo = { ...request.body, id: generateRandomId(20) };
+  const newConvo = request.body;
   conversations = conversations.concat(newConvo);
   response.status(200).json(newConvo);
 });
@@ -97,7 +97,9 @@ app.put("/api/conversations/:id", (request, response) => {
   const convoId = request.params.id;
   const { new_time } = request.body;
   conversations = conversations.map((convo) =>
-    convoId === convo.id ? { ...convo, date_last_message: new_time } : convo
+    convoId === convo.id_convo
+      ? { ...convo, date_last_message: new_time }
+      : convo
   );
   response.json(conversations);
 });
@@ -114,7 +116,9 @@ app.post("/api/messages", (request, response) => {
 
 app.get("/api/messages/conversation/:id", (request, response) => {
   const convoId = request.params.id;
-  const convoMessages = messages.filter((m) => m.id_convo === convoId);
+  const convoMessages = messages.filter((m) => {
+    return m.id_convo === convoId;
+  });
   response.json(convoMessages);
 });
 

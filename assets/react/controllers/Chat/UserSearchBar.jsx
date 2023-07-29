@@ -1,10 +1,58 @@
 import React from "react";
 import { Fragment, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
+import { useDispatch, useSelector } from "react-redux";
 
-export default function UserSearchBar({ handleConvoSearchOpen, connections }) {
+function generateRandomId(length) {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let id = "";
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    id += characters.charAt(randomIndex);
+  }
+
+  return id;
+}
+
+export default function UserSearchBar({ handleConvoSideOpen }) {
+  const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => state.user);
+  const { connections } = useSelector((state) => state.connections);
+  const { conversations } = useSelector((state) => state.conversations);
+
   const [selected, setSelected] = useState("");
   const [query, setQuery] = useState("");
+
+  const handleConvoSearchOpen = async (correspondantId) => {
+    try {
+      const existingConvo = conversations.find(
+        (convo) =>
+          convo.id_correspondant === correspondantId ||
+          convo.id_creator === correspondantId
+      );
+
+      if (existingConvo) {
+        handleConvoSideOpen(existingConvo);
+      } else {
+        dispatch({
+          type: "CREATE_POTENTIAL_CONVERSATION",
+          payload: {
+            id_convo: generateRandomId(20),
+            date_created: null,
+            date_last_message: null,
+            id_creator: user.id,
+            id_correspondant: correspondantId,
+          },
+        });
+      }
+    } catch (error) {
+      // Handle the error appropriately
+      console.error("Error opening conversation:", error);
+    }
+  };
 
   const filteredPeople =
     query === ""
@@ -23,7 +71,6 @@ export default function UserSearchBar({ handleConvoSearchOpen, connections }) {
           <div>
             <Combobox.Input
               className="border-2 border-slate-400 rounded-lg w-full py-2 px-2 text-base leading-5 text-gray-900 focus:ring-0"
-              //   displayValue={(person) => person.name}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Recherchez une personne dans vos contacts..."
             />
@@ -36,11 +83,12 @@ export default function UserSearchBar({ handleConvoSearchOpen, connections }) {
             afterLeave={() => setQuery("")}
           >
             <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-              {filteredPeople.length === 0 && query !== "" ? (
+              {filteredPeople && filteredPeople.length === 0 && query !== "" ? (
                 <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                   Nothing found.
                 </div>
               ) : (
+                filteredPeople &&
                 filteredPeople.map((person) => (
                   <Combobox.Option
                     key={person.id}

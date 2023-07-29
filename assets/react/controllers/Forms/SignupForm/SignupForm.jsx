@@ -2,19 +2,19 @@
 import React from "react";
 import { FieldArray, Form, Formik } from "formik";
 
-// Services
-import userService from "../services/user";
-
 // Components
-import FormField from "./FormField";
+import FormField from "../FormField";
 import EducationField from "./EducationField";
 import ExperienceField from "./ExperienceField";
 
-// Validations
-import { validationSchema, initialValues } from "../validations/signup";
+// Services
+import userService from "../../../services/user";
 
 // Fields
 import { topField, fields } from "../fields/signup";
+
+// Validations
+import { validationSchema, initialValues } from "../validations/signup";
 
 const SignUpForm = () => {
   const handleSubmit = (values, setSubmitting, resetForm) => {

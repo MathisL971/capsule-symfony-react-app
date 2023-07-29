@@ -2,10 +2,10 @@ import React from "react";
 import { Formik, Form } from "formik";
 
 // Components
-import FormField from "./FormField";
+import FormField from "../FormField";
 
 // Services
-import loginService from "../services/login";
+import loginService from "../../../services/login";
 
 // Fields
 import { fields } from "../fields/login";
@@ -19,8 +19,7 @@ const LoginForm = () => {
       loginService
         .authenticate(values)
         .then((user) => {
-          sessionStorage.setItem("sessionUserId", JSON.stringify(user.id));
-
+          sessionStorage.setItem("sessionUser", JSON.stringify(user));
           if (user.role === "adolescent") {
             window.location.href = "/ado/home";
           } else if (user.role === "parent") {

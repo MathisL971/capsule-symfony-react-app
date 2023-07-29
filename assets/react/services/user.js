@@ -1,4 +1,5 @@
 import axios from "axios";
+// const baseUrl = "https://127.0.0.1:8001/api/users";
 const baseUrl = "http://localhost:3002/api/users";
 
 const getAll = async () => {
