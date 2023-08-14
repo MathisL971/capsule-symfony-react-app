@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 import ConversationCard from "./ConversationCard";
 import UserSearchBar from "./UserSearchBar";
@@ -18,6 +18,8 @@ const ConversationsBar = ({ handleConvoSideOpen }) => {
   const { conversations, potentialConversation, activeConversation } =
     useSelector((state) => state.conversations);
 
+  const { user } = useSelector((state) => state.user);
+
   if (conversations) {
     conversations.sort((c1, c2) => {
       return compareConvoDates(c1.date_last_message, c2.date_last_message);
@@ -33,26 +35,34 @@ const ConversationsBar = ({ handleConvoSideOpen }) => {
           <ConversationCard
             conversation={potentialConversation}
             handleConvoSideOpen={handleConvoSideOpen}
-            styles={
-              activeConversation.id_convo === potentialConversation.id_convo
-                ? "bg-teal-700 px-4 py-3 rounded-md font-bold text-white"
-                : "bg-slate-100 px-4 py-3 rounded-md font-semibold hover:bg-slate-300"
-            }
+            styles={"bg-teal-500 px-4 py-3 rounded-md font-bold text-white"}
           />
         )}
         {conversations &&
           conversations.map((c) => {
+            let style;
+
+            if (
+              activeConversation &&
+              activeConversation.id_convo === c.id_convo
+            ) {
+              style = "bg-teal-500 px-4 py-3 rounded-md font-bold text-white";
+            } else if (
+              (c.id_creator === user.id && c.creatorHasNewMessage) ||
+              (c.id_correspondant === user.id && c.correspondantHasNewMessage)
+            ) {
+              style = "bg-red-900 px-4 py-3 rounded-md font-bold text-white";
+            } else {
+              style =
+                "bg-slate-100 px-4 py-3 rounded-md font-normal hover:bg-slate-300";
+            }
+
             return (
               <ConversationCard
                 key={c.id_convo}
                 conversation={c}
                 handleConvoSideOpen={handleConvoSideOpen}
-                styles={
-                  activeConversation &&
-                  activeConversation.id_convo === c.id_convo
-                    ? "bg-teal-700 px-4 py-3 rounded-md font-bold text-white"
-                    : "bg-slate-100 px-4 py-3 rounded-md font-semibold hover:bg-slate-300"
-                }
+                styles={style}
               />
             );
           })}

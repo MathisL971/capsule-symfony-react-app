@@ -50,15 +50,15 @@ const messages = [
 
 // Fetch all user with whom session user has had a conversation sorted from most recent to least recent interaction
 const correspondants = [
-  { id: 1, username: "mathisl971", firstName: "Mathis", lastName: "Lefranc" },
-  { id: 2, username: "maliasbh", firstName: "Malia", lastName: "Lefranc" },
+  { id: 1, username: "mathisl971", firstName: "Mathis", name: "Lefranc" },
+  { id: 2, username: "maliasbh", firstName: "Malia", name: "Lefranc" },
   {
     id: 3,
     username: "fanfan97133",
     firstName: "Fernande",
-    lastName: "Questel",
+    name: "Questel",
   },
-  { id: 4, username: "jmsbh971", firstName: "Jean-Marc", lastName: "Lefranc" },
+  { id: 4, username: "jmsbh971", firstName: "Jean-Marc", name: "Lefranc" },
 ];
 
 // Helper functions

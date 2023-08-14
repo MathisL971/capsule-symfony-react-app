@@ -18,11 +18,22 @@ import { validationSchema, initialValues } from "../validations/signup";
 
 const SignUpForm = () => {
   const handleSubmit = (values, setSubmitting, resetForm) => {
-    setTimeout(() => {
-      console.log(values);
+    const userObject = {
+      ...values,
+      status: "active",
+      activationKey: "",
+      socid: 0,
+      profilePic: "",
+      alias: "",
+    };
+    delete userObject["confirmPassword"];
+
+    setTimeout(async () => {
+      const createdUser = await userService.create(userObject);
+      window.location.href = "/";
       resetForm();
       setSubmitting(false);
-    }, 1000);
+    }, 2000);
   };
 
   return (
@@ -35,7 +46,7 @@ const SignUpForm = () => {
     >
       {({ values, isSubmitting }) => {
         return (
-          <Form className="flex flex-col w-1/2 h-min p-10 m-auto bg-teal-400 rounded-md gap-8 border-emerald-900 border-4">
+          <Form className="flex flex-col sm:w-10/12 md:w-8/12 lg:w-1/2 h-min p-10 m-auto bg-teal-400 rounded-md gap-8 border-emerald-900 border-4">
             <div className="flex flex-col gap-3">
               <h1 className="text-5xl text-teal-950 font-extrabold">
                 Bienvenue sur Capsule!

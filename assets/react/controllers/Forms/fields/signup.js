@@ -62,7 +62,7 @@ export const fields = [
     roles: ["parent", "adolescent", "professionel"],
   },
   {
-    name: "lastName",
+    name: "name",
     type: "text",
     label: "Entrez votre nom de famille",
     roles: ["parent", "adolescent", "professionel"],
@@ -113,7 +113,7 @@ export const fields = [
     roles: ["professionel"],
   },
   {
-    name: "postalCode",
+    name: "postcode",
     type: "text",
     label: "Entrez votre code postal",
     roles: ["professionel"],

@@ -3,6 +3,8 @@ import { Fragment, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
 
+import { conversationUpdateNewMessageStatusAction } from "../../reducers/conversations";
+
 function generateRandomId(length) {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -21,7 +23,9 @@ export default function UserSearchBar({ handleConvoSideOpen }) {
 
   const { user } = useSelector((state) => state.user);
   const { connections } = useSelector((state) => state.connections);
-  const { conversations } = useSelector((state) => state.conversations);
+  const { conversations, activeConversation } = useSelector(
+    (state) => state.conversations
+  );
 
   const [selected, setSelected] = useState("");
   const [query, setQuery] = useState("");
@@ -35,16 +39,31 @@ export default function UserSearchBar({ handleConvoSideOpen }) {
       );
 
       if (existingConvo) {
-        handleConvoSideOpen(existingConvo);
+        handleConvoSideOpen(existingConvo, user);
       } else {
+        if (activeConversation) {
+          const updatedConversation =
+            user.id === activeConversation.id_creator
+              ? { ...activeConversation, creatorHasNewMessage: false }
+              : { ...activeConversation, correspondantHasNewMessage: false };
+          dispatch(
+            conversationUpdateNewMessageStatusAction(updatedConversation)
+          );
+        }
+
         dispatch({
           type: "CREATE_POTENTIAL_CONVERSATION",
           payload: {
             id_convo: generateRandomId(20),
-            date_created: null,
+            date_created: new Date().toISOString(),
             date_last_message: null,
             id_creator: user.id,
             id_correspondant: correspondantId,
+            id_last_sender: user.id,
+            date_last_seen_creator: new Date().toISOString(),
+            date_last_seen_correspondant: null,
+            creatorHasNewMessage: false,
+            correspondantHasNewMessage: false,
           },
         });
       }

@@ -28,7 +28,7 @@ export const validationSchema = Yup.object({
   firstName: Yup.string()
     .max(15, "Must be 15 characters or less")
     .required("Required"),
-  lastName: Yup.string()
+  name: Yup.string()
     .max(20, "Must be 20 characters or less")
     .required("Required"),
   birthDate: Yup.date()
@@ -64,7 +64,7 @@ export const validationSchema = Yup.object({
     is: (role) => role === "professionel",
     then: () => Yup.string().required("Required"),
   }),
-  postalCode: Yup.string().when("role", {
+  postcode: Yup.string().when("role", {
     is: (role) => role === "professionel",
     then: () => Yup.string().required("Required"),
   }),
@@ -77,29 +77,33 @@ export const validationSchema = Yup.object({
     then: () => Yup.string().required("Required"),
   }),
   educations: Yup.array()
-    .of(
-      Yup.object().shape({
-        diploma: Yup.string().required("Required"),
-        institution: Yup.string().required("Required"),
-        dateCompleted: Yup.string().required("Required"),
-      })
-    )
+    .when("role", {
+      is: (role) => role === "professionel",
+      then: () =>
+        Yup.object().shape({
+          diploma: Yup.string().required("Required"),
+          institution: Yup.string().required("Required"),
+          dateCompleted: Yup.string().required("Required"),
+        }),
+    })
     .required("At least one education record is required"),
   experiences: Yup.array()
-    .of(
-      Yup.object().shape({
-        position: Yup.string().required("Required"),
-        employer: Yup.string().required("Required"),
-        dateStarted: Yup.string().required("Required"),
-        dateCompleted: Yup.string().required("Required"),
-      })
-    )
+    .when("role", {
+      is: (role) => role === "professionel",
+      then: () =>
+        Yup.object().shape({
+          position: Yup.string().required("Required"),
+          employer: Yup.string().required("Required"),
+          dateStarted: Yup.string().required("Required"),
+          dateCompleted: Yup.string().required("Required"),
+        }),
+    })
     .required("At least one experience record is required"),
 });
 
 export const initialValues = {
   firstName: "",
-  lastName: "",
+  name: "",
   email: "",
   password: "",
   confirmPassword: "",
@@ -114,7 +118,7 @@ export const initialValues = {
   phoneOffice: "",
   street1: "",
   street2: "",
-  postalCode: "",
+  postcode: "",
   city: "",
   country: "",
   educations: [{ diploma: "", institution: "", dateCompleted: "" }],

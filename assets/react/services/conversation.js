@@ -22,10 +22,8 @@ const getConvo = async (id) => {
   return response.data;
 };
 
-const modifyConvo = async (id, messageSentTime) => {
-  const response = await axios.put(`${baseUrl}/${id}`, {
-    new_time: messageSentTime,
-  });
+const modifyConvo = async (modifiedConvo) => {
+  const response = await axios.put(baseUrl, modifiedConvo);
   return response.data;
 };
 

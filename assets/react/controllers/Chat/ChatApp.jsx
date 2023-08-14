@@ -8,6 +8,7 @@ import MessageThread from "./MessageThread";
 import {
   conversationFetchAction,
   conversationOpenMessagesAction,
+  conversationUpdateNewMessageStatusAction,
 } from "../../reducers/conversations";
 
 import { connectionFetchAction } from "../../reducers/connections";
@@ -42,30 +43,43 @@ const ChatApp = () => {
 
   useEffect(() => {
     if (broadcast) {
-      const { message, conversation } = broadcast;
+      const { addedMessage, updatedConversation } = broadcast;
 
       // If listener is the correspondant
-      if (message.id_receiver === user.id) {
+      if (addedMessage.id_receiver === user.id) {
+        // Find out if the conversation already exists
         const existingConvo = conversations.find(
-          (c) => c.id_convo === conversation.id_convo
+          (c) => c.id_convo === updatedConversation.id_convo
         );
 
-        // If convo already existed
+        // If convo already exists
         if (existingConvo) {
           // Update receiver conversation order
           dispatch({
             type: "UPDATE_CONVERSATION_RECEIVER",
-            payload: message,
+            payload: updatedConversation,
           });
+
           // If convo was the active convo
           if (
             activeConversation &&
             activeConversation.id_convo === existingConvo.id_convo
           ) {
+            dispatch(
+              conversationUpdateNewMessageStatusAction(
+                updatedConversation.id_creator === user.id
+                  ? { ...updatedConversation, creatorHasNewMessage: false }
+                  : {
+                      ...updatedConversation,
+                      correspondantHasNewMessage: false,
+                    }
+              )
+            );
+
             // Update receiver message feed
             dispatch({
               type: "UPDATE_RECEIVER_MESSAGES",
-              payload: message,
+              payload: addedMessage,
             });
           }
         }
@@ -74,20 +88,20 @@ const ChatApp = () => {
           // Add new conversation to conversations
           dispatch({
             type: "ADD_CONVERSATION_RECEIVER",
-            payload: conversation,
+            payload: updatedConversation,
           });
 
           // If receiver was about to send his first message to the sender
           if (
             potentialConversation &&
-            potentialConversation.id_correspondant === message.id_sender
+            potentialConversation.id_correspondant === addedMessage.id_sender
           ) {
             // Scrap potential convo
             dispatch({
               type: "ABORT_POTENTIAL_CONVERSATION_AND_SWITCH",
               payload: {
-                newConversation: conversation,
-                newMessage: message,
+                newConversation: updatedConversation,
+                newMessage: addedMessage,
               },
             });
           }
@@ -102,27 +116,32 @@ const ChatApp = () => {
     );
 
     conn.onopen = (e) => {
-      console.log("Public connection established!");
       dispatch({ type: "SET", payload: e.target });
     };
 
     conn.onmessage = (e) => {
-      const { message, conversation } = JSON.parse(e.data);
+      const { addedMessage, updatedConversation } = JSON.parse(e.data);
       setBroadcast({
-        message,
-        conversation,
+        addedMessage,
+        updatedConversation,
       });
     };
   };
 
-  const handleConvoSideOpen = async (conversationToOpen) => {
+  const handleConvoSideOpen = async (conversationToOpen, userOpening) => {
+    // If potential conversation was about to be initialized
     if (potentialConversation) {
+      // Scrap it
       dispatch({
         type: "ABORT_POTENTIAL_CONVERSATION",
       });
     }
 
-    dispatch(conversationOpenMessagesAction(conversationToOpen));
+    // Turn inactive conversation card into active conversation card
+    dispatch({ type: "MAKE_CONVERSATION_ACTIVE", payload: conversationToOpen });
+
+    // Load conversation messages
+    dispatch(conversationOpenMessagesAction(conversationToOpen, userOpening));
   };
 
   return (

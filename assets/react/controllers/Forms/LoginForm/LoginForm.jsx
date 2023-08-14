@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form } from "formik";
 
 // Components
@@ -14,27 +14,35 @@ import { fields } from "../fields/login";
 import { validationSchema, initialValues } from "../validations/login";
 
 const LoginForm = () => {
+  const [errorMessage, setErrorMessage] = useState("");
+
   const handleSubmit = (values, setSubmitting, resetForm) => {
-    setTimeout(() => {
-      loginService
-        .authenticate(values)
-        .then((user) => {
-          sessionStorage.setItem("sessionUser", JSON.stringify(user));
-          if (user.role === "adolescent") {
-            window.location.href = "/ado/home";
-          } else if (user.role === "parent") {
-            window.location.href = "/parent/home";
-          } else if (user.role === "professionel") {
-            window.location.href = "/pro/home";
-          } else {
-            window.location.href = "/";
-          }
-        })
-        .catch((e) => {
-          console.error(e);
-        });
-      resetForm();
-      setSubmitting(false);
+    setTimeout(async () => {
+      try {
+        const user = await loginService.authenticate(values);
+        sessionStorage.setItem("sessionUser", JSON.stringify(user));
+        window.location.href = "/message";
+
+        // if (user.role === "adolescent") {
+        //   window.location.href = "/ado/home";
+        // } else if (user.role === "parent") {
+        //   window.location.href = "/parent/home";
+        // } else if (user.role === "professionel") {
+        //   window.location.href = "/pro/home";
+        // } else {
+        //   window.location.href = "/";
+        // }
+
+        resetForm();
+        setSubmitting(false);
+      } catch (e) {
+        setErrorMessage(e.response.data);
+        resetForm();
+        setSubmitting(false);
+        setTimeout(() => {
+          setErrorMessage("");
+        }, 5000);
+      }
     }, 1000);
   };
 
@@ -48,7 +56,7 @@ const LoginForm = () => {
     >
       {({ isSubmitting }) => {
         return (
-          <Form className="flex flex-col w-1/2 h-min p-10 m-auto bg-teal-400 rounded-md gap-8 border-emerald-900 border-4">
+          <Form className="flex flex-col sm:w-10/12 md:w-8/12 lg:w-1/2 h-min p-10 m-auto bg-teal-400 rounded-md gap-8 border-emerald-900 border-4">
             <div className="flex flex-col gap-3">
               <h1 className="text-5xl text-teal-950 font-extrabold">
                 Content de vous revoir!
@@ -62,6 +70,9 @@ const LoginForm = () => {
               {fields.map((field) => {
                 return <FormField key={field.name} {...field} />;
               })}
+              <div className="flex text-sm text-red-700 font-bold">
+                {errorMessage}
+              </div>
             </div>
 
             <button

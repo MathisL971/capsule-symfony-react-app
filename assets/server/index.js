@@ -93,15 +93,13 @@ app.get("/api/conversations/:id", (request, response) => {
   response.json(userConvos);
 });
 
-app.put("/api/conversations/:id", (request, response) => {
-  const convoId = request.params.id;
-  const { new_time } = request.body;
+app.put("/api/conversations", (request, response) => {
+  const updatedConvo = request.body;
+
   conversations = conversations.map((convo) =>
-    convoId === convo.id_convo
-      ? { ...convo, date_last_message: new_time }
-      : convo
+    updatedConvo.id_convo === convo.id_convo ? updatedConvo : convo
   );
-  response.json(conversations);
+  response.json(updatedConvo);
 });
 
 app.get("/api/messages", (request, response) => {

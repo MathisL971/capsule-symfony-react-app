@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   conversationAddMessageAction,
   conversationAddAction,
+  conversationUpdateAction,
 } from "../../reducers/conversations";
 
 // Helpers
@@ -48,23 +49,23 @@ const TextPrompt = () => {
             id: generateRandomId(20),
             text: newMessage,
             sent_time: new Date().toISOString(),
-            seen_time: null,
             id_sender: user.id,
             id_receiver: potentialConversation.id_correspondant,
             id_convo: potentialConversation.id_convo,
           };
+          dispatch(conversationAddMessageAction(addedMessage));
+
           const newConvo = {
             ...potentialConversation,
-            date_created: new Date().toISOString(),
             date_last_message: new Date().toISOString(),
+            correspondantHasNewMessage: true,
           };
-
-          dispatch(conversationAddAction(newConvo, addedMessage));
+          dispatch(conversationAddAction(newConvo));
 
           connection.send(
             JSON.stringify({
-              message: addedMessage,
-              conversation: newConvo,
+              addedMessage,
+              updatedConversation: newConvo,
             })
           );
         } else {
@@ -72,7 +73,6 @@ const TextPrompt = () => {
             id: generateRandomId(20),
             text: newMessage,
             sent_time: new Date().toISOString(),
-            seen_time: null,
             id_sender: user.id,
             id_receiver:
               user.id === activeConversation.id_correspondant
@@ -82,10 +82,24 @@ const TextPrompt = () => {
           };
           dispatch(conversationAddMessageAction(addedMessage));
 
+          let updatedConversation = {
+            ...activeConversation,
+            date_last_message: addedMessage.sent_time,
+            id_last_sender: addedMessage.id_sender,
+          };
+          updatedConversation =
+            user.id === updatedConversation.id_creator
+              ? { ...updatedConversation, correspondantHasNewMessage: true }
+              : {
+                  ...updatedConversation,
+                  creatorHasNewMessage: true,
+                };
+          dispatch(conversationUpdateAction(updatedConversation));
+
           connection.send(
             JSON.stringify({
-              message: addedMessage,
-              conversation: activeConversation,
+              addedMessage,
+              updatedConversation,
             })
           );
         }

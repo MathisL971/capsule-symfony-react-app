@@ -25,28 +25,19 @@ const conversationsReducer = (state = initialState, action) => {
         activeConversationMessages: [],
         error: null,
       };
-    case "CREATE_CONVERSATION_AND_FIRST_MESSAGE_SUCCESS":
+    case "CREATE_CONVERSATION_SUCCESS":
       return {
+        ...state,
         potentialConversation: null,
-        activeConversation: action.payload.newConversation,
-        activeConversationMessages: state.activeConversationMessages.concat(
-          action.payload.newMessage
-        ),
-        conversations: state.conversations.concat(
-          action.payload.newConversation
-        ),
+        activeConversation: action.payload,
+        conversations: state.conversations.concat(action.payload),
         error: null,
       };
     case "CREATE_NEW_MESSAGE_SUCCESS":
       return {
         ...state,
         activeConversationMessages: state.activeConversationMessages.concat(
-          action.payload.newMessage
-        ),
-        conversations: action.payload.updatedConversations.filter(
-          (c) =>
-            c.id_creator === action.payload.newMessage.id_sender ||
-            c.id_correspondant === action.payload.newMessage.id_sender
+          action.payload
         ),
         error: null,
       };
@@ -64,13 +55,19 @@ const conversationsReducer = (state = initialState, action) => {
         ...state,
         conversations: state.conversations.concat(action.payload),
       };
+    case "UPDATE_CONVERSATION_SUCCESS":
+      return {
+        ...state,
+        conversations: state.conversations.map((c) =>
+          c.id_convo === action.payload.id_convo ? action.payload : c
+        ),
+        error: null,
+      };
     case "UPDATE_CONVERSATION_RECEIVER":
       return {
         ...state,
         conversations: state.conversations.map((c) => {
-          return c.id_convo === action.payload.id_convo
-            ? { ...c, date_last_message: action.payload.sent_time }
-            : c;
+          return c.id_convo === action.payload.id_convo ? action.payload : c;
         }),
       };
     case "OPEN_CONVERSATION_MESSAGE_SUCCESS":
@@ -79,6 +76,11 @@ const conversationsReducer = (state = initialState, action) => {
         potentialConversation: null,
         activeConversation: action.payload.activeConversation,
         activeConversationMessages: action.payload.activeConversationMessages,
+        conversations: state.conversations.map((c) => {
+          return c.id_convo === action.payload.activeConversation.id_convo
+            ? action.payload.activeConversation
+            : c;
+        }),
         error: null,
       };
     case "UPDATE_RECEIVER_MESSAGES":
@@ -87,6 +89,19 @@ const conversationsReducer = (state = initialState, action) => {
         activeConversationMessages: state.activeConversationMessages.concat(
           action.payload
         ),
+      };
+    case "UPDATE_NEW_MESSAGE_STATUS_SUCCESS":
+      return {
+        ...state,
+        conversations: state.conversations.map((c) => {
+          return c.id_convo === action.payload.id_convo ? action.payload : c;
+        }),
+      };
+    case "MAKE_CONVERSATION_ACTIVE":
+      return {
+        ...state,
+        activeConversation: action.payload,
+        error: null,
       };
     case "FAILURE":
       return {
@@ -108,61 +123,95 @@ export const conversationFetchAction = (userId) => async (dispatch) => {
   }
 };
 
-export const conversationAddAction =
-  (newConversation, newMessage) => async (dispatch) => {
-    try {
-      const createdConversation = await conversationService.create(
-        newConversation
-      );
-      const firstMessage = await messageService.create(newMessage);
-      dispatch({
-        type: "CREATE_CONVERSATION_AND_FIRST_MESSAGE_SUCCESS",
-        payload: {
-          newConversation: createdConversation,
-          newMessage: firstMessage,
-        },
-      });
-    } catch (e) {
-      dispatch({ type: "FAILURE", payload: e.message });
-    }
-  };
-
-export const conversationAddMessageAction =
-  (newMessage) => async (dispatch) => {
-    try {
-      const addedMessage = await messageService.create(newMessage);
-      const updatedConversations = await conversationService.modifyConvo(
-        addedMessage.id_convo,
-        addedMessage.sent_time
-      );
-      console.log("Updated conversations:", updatedConversations);
-      dispatch({
-        type: "CREATE_NEW_MESSAGE_SUCCESS",
-        payload: {
-          newMessage: addedMessage,
-          updatedConversations: updatedConversations,
-        },
-      });
-    } catch (e) {
-      dispatch({ type: "FAILURE", payload: e.message });
-    }
-  };
-
-export const conversationOpenMessagesAction = (convo) => async (dispatch) => {
+export const conversationAddAction = (newConversation) => async (dispatch) => {
   try {
-    const conversationMessages = await messageService.getConvoMessages(
-      convo.id_convo
+    const createdConversation = await conversationService.create(
+      newConversation
     );
     dispatch({
-      type: "OPEN_CONVERSATION_MESSAGE_SUCCESS",
-      payload: {
-        activeConversation: convo,
-        activeConversationMessages: conversationMessages,
-      },
+      type: "CREATE_CONVERSATION_SUCCESS",
+      payload: createdConversation,
     });
   } catch (e) {
     dispatch({ type: "FAILURE", payload: e.message });
   }
 };
+
+export const conversationAddMessageAction =
+  (newMessage) => async (dispatch) => {
+    try {
+      const addedMessage = await messageService.create(newMessage);
+
+      dispatch({
+        type: "CREATE_NEW_MESSAGE_SUCCESS",
+        payload: addedMessage,
+      });
+    } catch (e) {
+      dispatch({ type: "FAILURE", payload: e.message });
+    }
+  };
+
+export const conversationUpdateAction =
+  (updatedConversation) => async (dispatch) => {
+    try {
+      const returnedConversation = await conversationService.modifyConvo(
+        updatedConversation
+      );
+
+      dispatch({
+        type: "UPDATE_CONVERSATION_SUCCESS",
+        payload: returnedConversation,
+      });
+    } catch (e) {
+      dispatch({ type: "FAILURE", payload: e.message });
+    }
+  };
+
+export const conversationOpenMessagesAction =
+  (convo, user) => async (dispatch) => {
+    try {
+      const conversationMessages = await messageService.getConvoMessages(
+        convo.id_convo
+      );
+
+      let updatedConversation;
+      if (user.id === convo.id_creator) {
+        updatedConversation = await conversationService.modifyConvo({
+          ...convo,
+          date_last_seen_creator: new Date().toISOString(),
+          creatorHasNewMessage: false,
+        });
+      } else {
+        updatedConversation = await conversationService.modifyConvo({
+          ...convo,
+          date_last_seen_correspondant: new Date().toISOString(),
+          correspondantHasNewMessage: false,
+        });
+      }
+
+      dispatch({
+        type: "OPEN_CONVERSATION_MESSAGE_SUCCESS",
+        payload: {
+          activeConversation: updatedConversation,
+          activeConversationMessages: conversationMessages,
+        },
+      });
+    } catch (e) {
+      dispatch({ type: "FAILURE", payload: e.message });
+    }
+  };
+
+export const conversationUpdateNewMessageStatusAction =
+  (updatedConvo) => async (dispatch) => {
+    try {
+      const returnedConvo = await conversationService.modifyConvo(updatedConvo);
+      dispatch({
+        type: "UPDATE_NEW_MESSAGE_STATUS_SUCCESS",
+        payload: returnedConvo,
+      });
+    } catch (e) {
+      dispatch({ type: "FAILURE", payload: e.message });
+    }
+  };
 
 export default conversationsReducer;

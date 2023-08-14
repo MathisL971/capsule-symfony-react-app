@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 const ConversationCard = ({ conversation, styles, handleConvoSideOpen }) => {
   const { connections } = useSelector((state) => state.connections);
   const { activeConversation } = useSelector((state) => state.conversations);
+  const { user } = useSelector((state) => state.user);
 
   const connection = connections.find(
     (c) =>
@@ -19,7 +20,7 @@ const ConversationCard = ({ conversation, styles, handleConvoSideOpen }) => {
           (activeConversation &&
             activeConversation.id_convo !== conversation.id_convo)
         ) {
-          handleConvoSideOpen(conversation);
+          handleConvoSideOpen(conversation, user);
         }
       }}
     >
