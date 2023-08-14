@@ -35,7 +35,9 @@ const ConversationsBar = ({ handleConvoSideOpen }) => {
           <ConversationCard
             conversation={potentialConversation}
             handleConvoSideOpen={handleConvoSideOpen}
-            styles={"bg-teal-500 px-4 py-3 rounded-md font-bold text-white"}
+            styles={
+              "bg-teal-500 px-4 py-3 rounded-md font-bold text-white border-2 border-teal-900"
+            }
           />
         )}
         {conversations &&
@@ -46,12 +48,13 @@ const ConversationsBar = ({ handleConvoSideOpen }) => {
               activeConversation &&
               activeConversation.id_convo === c.id_convo
             ) {
-              style = "bg-teal-500 px-4 py-3 rounded-md font-bold text-white";
+              style =
+                "bg-teal-500 px-4 py-3 rounded-md font-bold text-white border-2 border-teal-900";
             } else if (
               (c.id_creator === user.id && c.creatorHasNewMessage) ||
               (c.id_correspondant === user.id && c.correspondantHasNewMessage)
             ) {
-              style = "bg-red-900 px-4 py-3 rounded-md font-bold text-white";
+              style = "bg-slate-300 px-4 py-3 rounded-md font-bold";
             } else {
               style =
                 "bg-slate-100 px-4 py-3 rounded-md font-normal hover:bg-slate-300";
