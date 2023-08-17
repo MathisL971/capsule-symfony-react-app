@@ -69,6 +69,19 @@ app.post("/api/login", (request, response) => {
   }
 });
 
+app.post("/api/users", (request, response) => {
+  const { username, password, role } = request.body;
+  const newUser = {
+    username,
+    password,
+    role,
+    id: generateRandomId(20),
+    connections: users[0].connections,
+  };
+  users = users.concat(newUser);
+  response.json(users.find((u) => u.id === newUser.id));
+});
+
 app.get("/api/users/:id", (request, response) => {
   const userId = request.params.id;
   const user = users.find((u) => userId === u.id);

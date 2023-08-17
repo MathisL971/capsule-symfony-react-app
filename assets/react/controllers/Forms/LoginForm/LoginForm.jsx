@@ -21,7 +21,7 @@ const LoginForm = () => {
       try {
         const user = await loginService.authenticate(values);
         sessionStorage.setItem("sessionUser", JSON.stringify(user));
-        window.location.href = "/message";
+        window.location.href = "/";
 
         // if (user.role === "adolescent") {
         //   window.location.href = "/ado/home";

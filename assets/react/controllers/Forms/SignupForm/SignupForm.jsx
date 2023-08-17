@@ -18,21 +18,31 @@ import { validationSchema, initialValues } from "../validations/signup";
 
 const SignUpForm = () => {
   const handleSubmit = (values, setSubmitting, resetForm) => {
-    const userObject = {
-      ...values,
-      status: "active",
-      activationKey: "",
-      socid: 0,
-      profilePic: "",
-      alias: "",
-    };
-    delete userObject["confirmPassword"];
-
     setTimeout(async () => {
-      const createdUser = await userService.create(userObject);
-      window.location.href = "/";
-      resetForm();
-      setSubmitting(false);
+      try {
+        const userObject = {
+          ...values,
+          status: "active",
+          activationKey: "",
+          socid: 0,
+          profilePic: "",
+          alias: "",
+        };
+        delete userObject["confirmPassword"];
+
+        const createdUser = await userService.create(userObject);
+        sessionStorage.setItem("sessionUser", JSON.stringify(createdUser));
+        window.location.href = "/";
+        resetForm();
+        setSubmitting(false);
+      } catch (e) {
+        setErrorMessage(e.response.data);
+        resetForm();
+        setSubmitting(false);
+        setTimeout(() => {
+          setErrorMessage("");
+        }, 5000);
+      }
     }, 2000);
   };
 
