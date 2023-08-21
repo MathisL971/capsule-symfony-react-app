@@ -22,6 +22,17 @@ Cypress.Commands.add("login", ({ username, password }) => {
   });
 });
 
+Cypress.Commands.add("checkNavBar", () => {
+  cy.get("nav")
+    .should("be.visible")
+    .within(() => {
+      cy.contains("Capsule").should("be.visible");
+      cy.contains("Home").should("be.visible");
+      cy.contains("Se Connecter").should("be.visible");
+      cy.contains("S'inscrire").should("be.visible");
+    });
+});
+
 // -- This is a child command --
 // Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
 //
