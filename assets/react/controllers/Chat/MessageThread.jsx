@@ -35,7 +35,7 @@ const MessageThread = () => {
 
   if (activeConversationMessages) {
     activeConversationMessages.sort((m1, m2) => {
-      return compareMessageDates(m1.sent_time - m2.sent_time);
+      return compareMessageDates(m1.date_sent - m2.date_sent);
     });
   }
 

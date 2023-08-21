@@ -59,7 +59,7 @@ const conversationsReducer = (state = initialState, action) => {
       return {
         ...state,
         conversations: state.conversations.map((c) =>
-          c.id_convo === action.payload.id_convo ? action.payload : c
+          c.id === action.payload.id ? action.payload : c
         ),
         error: null,
       };
@@ -67,7 +67,7 @@ const conversationsReducer = (state = initialState, action) => {
       return {
         ...state,
         conversations: state.conversations.map((c) => {
-          return c.id_convo === action.payload.id_convo ? action.payload : c;
+          return c.id === action.payload.id ? action.payload : c;
         }),
       };
     case "OPEN_CONVERSATION_MESSAGE_SUCCESS":
@@ -77,7 +77,7 @@ const conversationsReducer = (state = initialState, action) => {
         activeConversation: action.payload.activeConversation,
         activeConversationMessages: action.payload.activeConversationMessages,
         conversations: state.conversations.map((c) => {
-          return c.id_convo === action.payload.activeConversation.id_convo
+          return c.id === action.payload.activeConversation.id
             ? action.payload.activeConversation
             : c;
         }),
@@ -94,7 +94,7 @@ const conversationsReducer = (state = initialState, action) => {
       return {
         ...state,
         conversations: state.conversations.map((c) => {
-          return c.id_convo === action.payload.id_convo ? action.payload : c;
+          return c.id === action.payload.id ? action.payload : c;
         }),
       };
     case "MAKE_CONVERSATION_ACTIVE":
@@ -171,21 +171,19 @@ export const conversationOpenMessagesAction =
   (convo, user) => async (dispatch) => {
     try {
       const conversationMessages = await messageService.getConvoMessages(
-        convo.id_convo
+        convo.id
       );
 
       let updatedConversation;
       if (user.id === convo.id_creator) {
         updatedConversation = await conversationService.modifyConvo({
           ...convo,
-          date_last_seen_creator: new Date().toISOString(),
-          creatorHasNewMessage: false,
+          creator_has_new_message: false,
         });
       } else {
         updatedConversation = await conversationService.modifyConvo({
           ...convo,
-          date_last_seen_correspondant: new Date().toISOString(),
-          correspondantHasNewMessage: false,
+          correspondant_has_new_message: false,
         });
       }
 

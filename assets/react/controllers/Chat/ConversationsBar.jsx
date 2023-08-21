@@ -44,15 +44,13 @@ const ConversationsBar = ({ handleConvoSideOpen }) => {
           conversations.map((c) => {
             let style;
 
-            if (
-              activeConversation &&
-              activeConversation.id_convo === c.id_convo
-            ) {
+            if (activeConversation && activeConversation.id === c.id) {
               style =
                 "bg-teal-500 px-4 py-3 rounded-md font-bold text-white border-2 border-teal-900";
             } else if (
-              (c.id_creator === user.id && c.creatorHasNewMessage) ||
-              (c.id_correspondant === user.id && c.correspondantHasNewMessage)
+              (c.id_creator === user.id && c.creator_has_new_message) ||
+              (c.id_correspondant === user.id &&
+                c.correspondant_has_new_message)
             ) {
               style = "bg-slate-300 px-4 py-3 rounded-md font-bold";
             } else {
@@ -62,7 +60,7 @@ const ConversationsBar = ({ handleConvoSideOpen }) => {
 
             return (
               <ConversationCard
-                key={c.id_convo}
+                key={c.id}
                 conversation={c}
                 handleConvoSideOpen={handleConvoSideOpen}
                 styles={style}

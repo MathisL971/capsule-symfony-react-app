@@ -17,8 +17,7 @@ const ConversationCard = ({ conversation, styles, handleConvoSideOpen }) => {
       onClick={() => {
         if (
           !activeConversation ||
-          (activeConversation &&
-            activeConversation.id_convo !== conversation.id_convo)
+          (activeConversation && activeConversation.id !== conversation.id)
         ) {
           handleConvoSideOpen(conversation, user);
         }

@@ -110,7 +110,7 @@ app.put("/api/conversations", (request, response) => {
   const updatedConvo = request.body;
 
   conversations = conversations.map((convo) =>
-    updatedConvo.id_convo === convo.id_convo ? updatedConvo : convo
+    updatedConvo.id === convo.id ? updatedConvo : convo
   );
   response.json(updatedConvo);
 });

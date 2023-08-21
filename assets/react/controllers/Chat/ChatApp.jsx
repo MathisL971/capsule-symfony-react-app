@@ -49,7 +49,7 @@ const ChatApp = () => {
       if (addedMessage.id_receiver === user.id) {
         // Find out if the conversation already exists
         const existingConvo = conversations.find(
-          (c) => c.id_convo === updatedConversation.id_convo
+          (c) => c.id === updatedConversation.id
         );
 
         // If convo already exists
@@ -63,15 +63,15 @@ const ChatApp = () => {
           // If convo was the active convo
           if (
             activeConversation &&
-            activeConversation.id_convo === existingConvo.id_convo
+            activeConversation.id === existingConvo.id
           ) {
             dispatch(
               conversationUpdateNewMessageStatusAction(
                 updatedConversation.id_creator === user.id
-                  ? { ...updatedConversation, creatorHasNewMessage: false }
+                  ? { ...updatedConversation, creator_has_new_message: false }
                   : {
                       ...updatedConversation,
-                      correspondantHasNewMessage: false,
+                      correspondant_has_new_message: false,
                     }
               )
             );

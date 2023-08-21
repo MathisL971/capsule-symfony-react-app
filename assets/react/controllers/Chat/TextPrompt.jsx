@@ -48,17 +48,17 @@ const TextPrompt = () => {
           addedMessage = {
             id: generateRandomId(20),
             text: newMessage,
-            sent_time: new Date().toISOString(),
+            date_sent: new Date().toISOString(),
             id_sender: user.id,
             id_receiver: potentialConversation.id_correspondant,
-            id_convo: potentialConversation.id_convo,
+            id_convo: potentialConversation.id,
           };
           dispatch(conversationAddMessageAction(addedMessage));
 
           const newConvo = {
             ...potentialConversation,
             date_last_message: new Date().toISOString(),
-            correspondantHasNewMessage: true,
+            correspondant_has_new_message: true,
           };
           dispatch(conversationAddAction(newConvo));
 
@@ -72,27 +72,27 @@ const TextPrompt = () => {
           addedMessage = {
             id: generateRandomId(20),
             text: newMessage,
-            sent_time: new Date().toISOString(),
+            date_sent: new Date().toISOString(),
             id_sender: user.id,
             id_receiver:
               user.id === activeConversation.id_correspondant
                 ? activeConversation.id_creator
                 : activeConversation.id_correspondant,
-            id_convo: activeConversation.id_convo,
+            id_convo: activeConversation.id,
           };
           dispatch(conversationAddMessageAction(addedMessage));
 
           let updatedConversation = {
             ...activeConversation,
-            date_last_message: addedMessage.sent_time,
+            date_last_message: addedMessage.date_sent,
             id_last_sender: addedMessage.id_sender,
           };
           updatedConversation =
             user.id === updatedConversation.id_creator
-              ? { ...updatedConversation, correspondantHasNewMessage: true }
+              ? { ...updatedConversation, correspondant_has_new_message: true }
               : {
                   ...updatedConversation,
-                  creatorHasNewMessage: true,
+                  creator_has_new_message: true,
                 };
           dispatch(conversationUpdateAction(updatedConversation));
 

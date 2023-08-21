@@ -30,40 +30,35 @@ export default function UserSearchBar({ handleConvoSideOpen }) {
   const [selected, setSelected] = useState("");
   const [query, setQuery] = useState("");
 
-  const handleConvoSearchOpen = async (correspondantId) => {
+  const handleConvoSearchOpen = async (connection) => {
     try {
       const existingConvo = conversations.find(
-        (convo) =>
-          convo.id_correspondant === correspondantId ||
-          convo.id_creator === correspondantId
+        (convo) => convo.id_connection === connection.id
       );
-
       if (existingConvo) {
         handleConvoSideOpen(existingConvo, user);
       } else {
         if (activeConversation) {
           const updatedConversation =
             user.id === activeConversation.id_creator
-              ? { ...activeConversation, creatorHasNewMessage: false }
-              : { ...activeConversation, correspondantHasNewMessage: false };
+              ? { ...activeConversation, creator_has_new_message: false }
+              : { ...activeConversation, correspondant_has_new_message: false };
           dispatch(
             conversationUpdateNewMessageStatusAction(updatedConversation)
           );
         }
-
         dispatch({
           type: "CREATE_POTENTIAL_CONVERSATION",
           payload: {
-            id_convo: generateRandomId(20),
+            id: generateRandomId(20),
+            id_connection: connection.id,
             date_created: new Date().toISOString(),
             date_last_message: null,
             id_creator: user.id,
-            id_correspondant: correspondantId,
+            id_correspondant: connection.id,
             id_last_sender: user.id,
-            date_last_seen_creator: new Date().toISOString(),
-            date_last_seen_correspondant: null,
-            creatorHasNewMessage: false,
-            correspondantHasNewMessage: false,
+            creator_has_new_message: false,
+            correspondant_has_new_message: false,
           },
         });
       }
@@ -73,11 +68,11 @@ export default function UserSearchBar({ handleConvoSideOpen }) {
     }
   };
 
-  const filteredPeople =
+  const filteredConnections =
     query === ""
       ? connections
-      : connections.filter((person) =>
-          person.name
+      : connections.filter((connection) =>
+          connection.name
             .toLowerCase()
             .replace(/\s+/g, "")
             .includes(query.toLowerCase().replace(/\s+/g, ""))
@@ -85,7 +80,7 @@ export default function UserSearchBar({ handleConvoSideOpen }) {
 
   return (
     <div>
-      <Combobox value={selected} onChange={setSelected}>
+      <Combobox value={query} onChange={setQuery}>
         <div className="relative">
           <div>
             <Combobox.Input
@@ -102,23 +97,25 @@ export default function UserSearchBar({ handleConvoSideOpen }) {
             afterLeave={() => setQuery("")}
           >
             <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-              {filteredPeople && filteredPeople.length === 0 && query !== "" ? (
+              {filteredConnections &&
+              filteredConnections.length === 0 &&
+              query !== "" ? (
                 <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                   Nothing found.
                 </div>
               ) : (
-                filteredPeople &&
-                filteredPeople.map((person) => (
+                filteredConnections &&
+                filteredConnections.map((connection) => (
                   <Combobox.Option
-                    key={person.id}
+                    key={connection.id}
                     className={({ active }) =>
                       `relative cursor-default select-none py-2 pl-10 pr-4 ${
                         active ? "bg-teal-600 text-white" : "text-gray-900"
                       }`
                     }
-                    value={person}
+                    value={connection.name}
                     onClick={() => {
-                      handleConvoSearchOpen(person.id);
+                      handleConvoSearchOpen(connection);
                     }}
                   >
                     {({ selected, active }) => (
@@ -128,7 +125,7 @@ export default function UserSearchBar({ handleConvoSideOpen }) {
                             selected ? "font-medium" : "font-normal"
                           }`}
                         >
-                          {person.name}
+                          {connection.name}
                         </span>
                         {selected ? (
                           <span
