@@ -18,7 +18,6 @@ class LoginController extends AbstractController
      */
     public function show_login_form(Request $rq): Response
     {
-
         $data = ['controller_name' => 'LoginController', 'message' => 'Returning from login...'];
         return $this->render('login/index.html.twig', $data);
     }

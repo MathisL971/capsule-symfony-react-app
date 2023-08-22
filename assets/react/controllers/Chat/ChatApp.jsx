@@ -27,18 +27,17 @@ const ChatApp = () => {
 
   // Initial data fetching
   useEffect(() => {
-    const loggedInUser = JSON.parse(sessionStorage.getItem("sessionUser"));
+    const user = sessionStorage.getItem("sessionUser");
 
-    if (!loggedInUser) {
+    if (!user) {
       window.location.href = "/login";
     } else {
+      const loggedInUser = JSON.parse(user);
       dispatch({ type: "LOGIN", payload: loggedInUser });
+      dispatch(conversationFetchAction(loggedInUser.id));
+      dispatch(connectionFetchAction(loggedInUser.id));
+      openWebSocketConnection();
     }
-
-    dispatch(conversationFetchAction(loggedInUser.id));
-    dispatch(connectionFetchAction(loggedInUser.id));
-
-    openWebSocketConnection();
   }, []);
 
   useEffect(() => {

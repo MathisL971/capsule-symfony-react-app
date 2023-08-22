@@ -25,7 +25,7 @@ class ParentController extends BaseController
         //     return new Response($this->twig->render('parent/home.html.twig', $vars));
         // }
 
-        return new Response($this->twig->render('parent/home.html.twig', $vars));
+        return new Response($this->twig->render('parent/index.html.twig', $vars));
 
 
         // $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');

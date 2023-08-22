@@ -10,36 +10,18 @@
 		<link rel="stylesheet" href="/css/capsule.css">
 		<script src="/scripts/popper.js"></script>
 		<script src="/scripts/bootstrap.js"></script>
-
+		
         {% block stylesheets %}{{ encore_entry_link_tags('app') }}{% endblock %}
         {% block javascripts %}{{ encore_entry_script_tags('app') }}{% endblock %}
+
+		{# {% block favicon %}<link rel="shortcut icon" href="/images/logo.png" sizes="16x16" type="image/x-icon">{% endblock %} #}
     </head>
     <body style="width: 100%;">
        {# {% if flash %}<div class="alert alert-warning text-center">{{flash|raw}}</div>{% endif %} #}
 
-		<nav class="navbar navbar-expand-lg navbar-light bg-light d-flex p-2 justify-content-between px-4">
-			<a class="navbar-brand" href="/">Capsule</a>
+		<div {{ react_component('NavBar') }} style="display: flex; flex-direction: column"></div>
 
-			<div>
-				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				
-				<div class="collapse navbar-collapse" id="navbarSupportedContent">
-					<div class="d-flex gap-2">
-						<ul class="navbar-nav mr-auto d-flex gap-1">
-							<li class="nav-item active">
-								<a class="nav-link" href="/">Home</a>
-							</li>
-						</ul>
-						<button class="btn btn-outline-success my-2 my-sm-0" type="button" id="loginButton">Se Connecter</button>
-						<button class="btn btn-outline-success my-2 my-sm-0" type="button" id="signupButton">S'inscrire</button>
-					</div>
-				</div>
-			</div>
-		</nav>
-
-		<div class="container">{% block body %}{% endblock %}</div>
+		<div>{% block body %}{% endblock %}</div>
 
 		<footer class="d-flex flex-column gap-3 py-4">
 			<div class="d-flex flex-row justify-content-center gap-2">
@@ -63,15 +45,5 @@
 		</footer>
 
 		{# {% if role == 'SuperAdmin' %}{% block admin %}{% endblock %}{% endif %} #}
-
-		<script>
-			document.getElementById('loginButton').addEventListener('click', function() {
-				window.location.href = '/login';
-			});
-
-			document.getElementById('signupButton').addEventListener('click', function() {
-				window.location.href = '/signup';
-			});
-		</script>
     </body>
 </html>

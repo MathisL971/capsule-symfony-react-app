@@ -37,7 +37,7 @@ class AdminController extends BaseController
             $vars['user'] = $session->get('user');
             $vars['role'] = $session->get('role');
 
-            $page = $this->twig->render('admin/home.html.twig', $vars);
+            $page = $this->twig->render('admin/index.html.twig', $vars);
 
             return new Response($page);
         }

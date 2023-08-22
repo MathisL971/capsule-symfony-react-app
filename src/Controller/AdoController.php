@@ -21,7 +21,7 @@ class AdoController extends BaseController
         // $vars['user'] = $this->session->get('user');
         // $vars['role'] = $this->session->get('role');
 
-        return new Response($this->twig->render('ado/home.html.twig', $vars));
+        return new Response($this->twig->render('ado/index.html.twig', $vars));
     }
 
     /**
