@@ -22,7 +22,7 @@ const NavBar = () => {
     const userObj = JSON.parse(user);
 
     return (
-      <nav className="bg-gradient-to-b from-black/60 to-white/0">
+      <nav className="bg-gradient-to-b from-black/60 to-white/0 max-h-16">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto py-2.5 px-4">
           <a href="/" className="flex items-center h-full">
             <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
@@ -45,7 +45,7 @@ const NavBar = () => {
             <button
               data-collapse-toggle="navbar-user"
               type="button"
-              className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-white rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-600"
               aria-controls="navbar-user"
               aria-expanded="false"
               onClick={() => setCollapsed(!collapsed)}
@@ -63,13 +63,14 @@ const NavBar = () => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
+                  color="white"
                   d="M1 1h15M1 7h15M1 13h15"
                 />
               </svg>
             </button>
             <button
               type="button"
-              className="hidden md:flex text-white bg-teal-900 border-2 border-teal-900 hover:bg-teal-950 focus:ring-4 focus:outline-none focus:ring-teal-300 rounded-lg text-sm font-bold px-4 py-2.5 text-center dark:bg-teal-900 dark:hover:bg-teal-700 dark:focus:ring-teal-900"
+              className="hidden md:flex text-white bg-teal-900 border-2 border-teal-900 hover:bg-teal-950 focus:ring-2 focus:outline-none focus:ring-teal-300 rounded-lg text-sm font-bold px-4 py-2.5 text-center dark:bg-teal-900 dark:hover:bg-teal-700 dark:focus:ring-teal-900"
               onClick={handleLogout}
             >
               Se Déconnecter
@@ -77,24 +78,19 @@ const NavBar = () => {
           </div>
         </div>
         <div
-          className={`z-50 ${
+          className={`${
             collapsed ? "hidden" : "flex"
-          } py-4 m-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600`}
+          } relative flex-col gap-1 inset-0 mx-4 m-2 p-2 text-base list-none md:hidden bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600`}
           id="user-dropdown"
         >
-          <div className="px-4 py-3">
-            <span className="block text-sm text-gray-900 dark:text-white">
-              {}
-            </span>
-            <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
-              {}
-            </span>
-          </div>
-          <ul className="py-2" aria-labelledby="user-menu-button">
+          <ul
+            className="w-full text-center flex flex-col gap-1"
+            aria-labelledby="user-menu-button"
+          >
             <li>
               <a
                 href="#"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                className="block rounded-lg px-4 py-2 text-sm text-black hover:bg-gray-100 dark:hover:bg-gray-200 dark:text-gray-200 dark:hover:text-white"
               >
                 Dashboard
               </a>
@@ -102,36 +98,27 @@ const NavBar = () => {
             <li>
               <a
                 href="#"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                className="block rounded-lg px-4 py-2 text-sm text-black hover:bg-gray-100 dark:hover:bg-gray-200 dark:text-gray-200 dark:hover:text-white"
               >
                 Settings
               </a>
             </li>
-            <li>
-              <a
-                href="#"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-              >
-                Earnings
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-              >
-                Se Déconnecter
-              </a>
-            </li>
           </ul>
+          <button
+            type="button"
+            className="text-white bg-teal-900 border-teal-900 hover:bg-teal-950 focus:ring-2 focus:outline-none focus:ring-teal-300 rounded-lg text-sm font-bold px-4 py-2.5 text-center dark:bg-teal-900 dark:hover:bg-teal-700 dark:focus:ring-teal-900"
+            onClick={handleLogout}
+          >
+            Se Déconnecter
+          </button>
         </div>
       </nav>
     );
   }
 
   return (
-    <nav className="bg-gradient-to-b from-black/60 to-white/0">
-      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto py-2.5 px-4">
+    <nav className="bg-gradient-to-b from-black/60 to-white/0 max-h-16">
+      <div className="flex flex-wrap items-center justify-between mx-auto py-2.5 px-4">
         <a href="/" className="flex items-center h-full">
           <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
             Capsule
@@ -141,7 +128,7 @@ const NavBar = () => {
           <button
             data-collapse-toggle="navbar-user"
             type="button"
-            className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+            className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-white rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-600"
             aria-controls="navbar-user"
             aria-expanded="false"
             onClick={() => setCollapsed(!collapsed)}
@@ -159,6 +146,7 @@ const NavBar = () => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="2"
+                color="white"
                 d="M1 1h15M1 7h15M1 13h15"
               />
             </svg>
@@ -180,53 +168,38 @@ const NavBar = () => {
         </div>
       </div>
       <div
-        className={`z-50 ${
+        className={`${
           collapsed ? "hidden" : "flex"
-        } my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600`}
+        } relative flex-col gap-1 inset-0 mx-4 m-2 p-2 text-base list-none md:hidden bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600`}
         id="user-dropdown"
       >
-        <div className="px-4 py-3">
-          <span className="block text-sm text-gray-900 dark:text-white">
-            {}
-          </span>
-          <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
-            {}
-          </span>
-        </div>
-        <ul className="py-2" aria-labelledby="user-menu-button">
+        <ul
+          className="w-full text-center flex flex-col gap-1"
+          aria-labelledby="user-menu-button"
+        >
           <li>
             <a
-              href="#"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+              href="/"
+              className="block rounded-lg px-4 py-2 text-sm text-black hover:bg-gray-100 dark:hover:bg-gray-200 dark:text-gray-200 dark:hover:text-white"
             >
-              Dashboard
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-            >
-              Settings
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-            >
-              Earnings
-            </a>
-          </li>
-          <li>
-            <a
-              href="#"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-            >
-              Se Déconnecter
+              Home
             </a>
           </li>
         </ul>
+        <button
+          type="button"
+          className="text-white bg-teal-900 border-teal-900 hover:bg-teal-950 focus:ring-2 focus:outline-none focus:ring-teal-300 rounded-lg text-sm font-bold px-4 py-2.5 text-center dark:bg-teal-900 dark:hover:bg-teal-700 dark:focus:ring-teal-900"
+          onClick={() => (window.location.href = "/login")}
+        >
+          Se Connecter
+        </button>
+        <button
+          type="button"
+          className="text-white bg-teal-900 border-teal-900 hover:bg-teal-950 focus:ring-2 focus:outline-none focus:ring-teal-300 rounded-lg text-sm font-bold px-4 py-2.5 text-center dark:bg-teal-900 dark:hover:bg-teal-700 dark:focus:ring-teal-900"
+          onClick={() => (window.location.href = "/signup")}
+        >
+          S'inscrire
+        </button>
       </div>
     </nav>
   );

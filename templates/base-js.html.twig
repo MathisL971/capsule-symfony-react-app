@@ -19,7 +19,7 @@
     <body style="width: 100%;">
        {# {% if flash %}<div class="alert alert-warning text-center">{{flash|raw}}</div>{% endif %} #}
 
-		<div {{ react_component('NavBar') }} style="display: flex; flex-direction: column"></div>
+		<div {{ react_component('NavBar') }} id="navbar-div"></div>
 
 		<div>{% block body %}{% endblock %}</div>
 

@@ -27,7 +27,6 @@ Cypress.Commands.add("checkNavBar", () => {
     .should("be.visible")
     .within(() => {
       cy.contains("Capsule").should("be.visible");
-      cy.contains("Home").should("be.visible");
       cy.contains("Se Connecter").should("be.visible");
       cy.contains("S'inscrire").should("be.visible");
     });
