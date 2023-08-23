@@ -62,8 +62,8 @@ const NavBar = () => {
   const settings = ["compte", "paramètres"];
 
   return (
-    <nav className="bg-gradient-to-b from-black/50 to-white/0 max-h-16">
-      <div className="flex flex-wrap items-center justify-between mx-auto py-2.5 px-4">
+    <nav className="bg-gradient-to-b from-black/50 to-white/ h-16">
+      <div className="flex flex-wrap items-center justify-between mx-auto py-2.5 px-4 h-full">
         {/* Logo */}
         <a href="/" className="flex items-center h-full">
           <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
@@ -81,7 +81,7 @@ const NavBar = () => {
                   <a
                     key={page}
                     href={`/${role}/${page}`}
-                    className="block rounded-lg px-4 py-2 text-sm font-medium text-white hover:bg-teal-900 dark:hover:bg-teal-900 dark:text-gray-200 dark:hover:text-white"
+                    className="block rounded-lg px-4 py-2 my-auto text-sm font-medium text-white hover:bg-teal-900 dark:hover:bg-teal-900 dark:text-gray-200 dark:hover:text-white"
                   >
                     {page.charAt(0).toUpperCase() + page.slice(1)}
                   </a>
@@ -146,14 +146,6 @@ const NavBar = () => {
                   />
                 </svg>
               </button>
-              {/* Logout Button */}
-              <button
-                type="button"
-                className="hidden lg:flex text-white bg-teal-900 border-2 border-teal-900 hover:bg-teal-950 focus:ring-2 focus:outline-none focus:ring-teal-300 rounded-lg text-sm font-bold px-4 py-2.5 text-center dark:bg-teal-900 dark:hover:bg-teal-700 dark:focus:ring-teal-900"
-                onClick={handleLogout}
-              >
-                Se Déconnecter
-              </button>
             </div>
           </div>
         ) : (
@@ -205,12 +197,12 @@ const NavBar = () => {
 
       {/* Mobile view menu */}
       {user ? (
-        <div>
+        <div className="flex flex-row justify-end">
           {/* Mobile Page Menu */}
           <ul
             className={`${
               navCollapsed ? "hidden" : "flex"
-            } relative flex-col gap-1 inset-0 mx-4 m-2 p-2 text-base lg:hidden bg-white rounded-lg shadow list-none`}
+            } relative flex-col grow gap-1 inset-0 mx-4 m-2 p-2 text-base lg:hidden bg-white rounded-lg shadow list-none`}
             id="user-dropdown"
           >
             {pages.map((page) => {
@@ -230,7 +222,7 @@ const NavBar = () => {
           <div
             className={`${
               accCollapsed ? "hidden" : "flex"
-            } relative flex-col gap-1 inset-0 mx-4 m-2 p-2 text-base lg:hidden bg-white rounded-lg shadow`}
+            } relative flex-col gap-1 inset-0 mx-4 m-2 p-2 text-base bg-white rounded-lg shadow`}
             id="user-dropdown"
           >
             <div className="px-4 pt-3">
