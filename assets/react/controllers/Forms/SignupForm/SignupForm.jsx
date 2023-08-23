@@ -75,7 +75,7 @@ const SignUpForm = () => {
                 }
               })}
 
-              {values.role === "professionel" && (
+              {values.role === "pro" && (
                 <FieldArray
                   name="educations"
                   render={(arrayHelpers) => (
@@ -114,7 +114,7 @@ const SignUpForm = () => {
                 />
               )}
 
-              {values.role === "professionel" && (
+              {values.role === "pro" && (
                 <FieldArray
                   name="experiences"
                   render={(arrayHelpers) => (

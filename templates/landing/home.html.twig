@@ -1,12 +1,11 @@
-{% extends "base.html.twig" %}
+{% extends "base-js.html.twig" %}
 
 {% block title %}Capsule{% endblock %}
 
 {% block body %}
-
 	{# Image accueil #}
 	<div class="container-fluid text-center" style="padding: 0; background-image: url('images/landing_first.png'); background-size: cover;">
-		<div class="row align-items-center justify-content-center" style="margin-top: -70px; height: 45vw; min-height: 250px ;margin-left: 0px; margin-right: 0px;">
+		<div class="row align-items-center justify-content-center" style="margin-top: -70px; height: 50vw; min-height: 250px ;margin-left: 0px; margin-right: 0px;">
 			<h1 class="landing">L'appli qui parle aux jeunes<br>et à leurs parents</h1>
 		</div>
 	</div>
@@ -88,27 +87,6 @@
 		<h1>Nos praticiens</h1>
 
 		<div class="row row-cols-1 row-cols-md-3 mb-3" style="padding: 5px; margin-top: 150px">
-			{% for pro in pros %}
-				<div class="col">
-					<div class="card" style="padding: 10px; margin-bottom: 150px">
-						{% if pro.profilePic %}
-							<img src={{pro.profilePic}} class="" alt="Portrait 1" style="border-radius: 50%; border: 15px solid white; height: 200px; width:200px; margin: -100px auto 10px auto">
-						{% else %}
-							<div style="background: white; padding-top: 50px; border-radius: 50%; border: 15px solid white; height: 200px; width:200px; margin: -100px auto 10px auto">
-								<h1>{{pro.firstName|slice(0, 1)}}{{pro.name|slice(0, 1)}}</h1>
-							</div>
-						{% endif %}
-
-
-						<div class="card-body">
-							<h5 class="card-title">{{pro.firstName}}
-								{{pro.name}}</h5>
-							<p class="card-text">{{pro.specialty}}</p>
-							<a href="fiche_pro/{{pro.id}}" class="btn btn-primary">En savoir plus</a>
-						</div>
-					</div>
-				</div>
-			{% endfor %}
 		</div>
 	</div>
 

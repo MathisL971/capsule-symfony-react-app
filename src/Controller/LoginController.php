@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
@@ -10,16 +9,17 @@ use DateInterval;
 use DateTime;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use App\Controller\BaseController;
 
-class LoginController extends AbstractController
+class LoginController extends BaseController
 {
     /**
      * @Route("/login", name="app_login")
      */
     public function show_login_form(Request $rq): Response
     {
-        $data = ['controller_name' => 'LoginController', 'message' => 'Returning from login...'];
-        return $this->render('login/index.html.twig', $data);
+        $data = [];
+        return $this->render('login/home.html.twig', $data);
     }
 
     /**

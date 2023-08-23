@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Controller\BaseController;
 use App\Entity\User;
 use DateInterval;
 use DateTime;
@@ -11,7 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class LandingController extends AbstractController
+
+class LandingController extends BaseController
 {
 
     /**
@@ -19,10 +20,12 @@ class LandingController extends AbstractController
      */
     public function home(Request $rq): Response
     {
-        $data = ['controller_name' => 'LandingController', 'message' => 'Returning from landing...'];
-        return $this->render('landing/index.html.twig', $data);
+        $data = [];
+        return $this->render('landing/home.html.twig', $data);
 
         // $vars = [];
+        // return new Response($this->twig->render('landing/home.html.twig', $vars));
+
 
         // if (!empty($_POST)) {
         //     $repo = $this->em->getRepository(User::class);
@@ -104,7 +107,7 @@ class LandingController extends AbstractController
         // $vars['user'] = $this->session->get('user');
         // $vars['role'] = $this->session->get('role');
 
-        // return new Response($this->twig->render('landing/index.html.twig', $vars));
+        // return new Response($this->twig->render('landing/home.html.twig', $vars));
     }
 
     /**
@@ -430,7 +433,7 @@ class LandingController extends AbstractController
 
             $vars['flash'] = "Un email a été envoyé à l'adresse " . $rq->request->get('email') . ".";
 
-            return new Response($this->twig->render('landing/index.html.twig', $vars));
+            return new Response($this->twig->render('landing/home.html.twig', $vars));
         }
 
         return new Response($this->twig->render('landing/reset.html.twig', $vars));

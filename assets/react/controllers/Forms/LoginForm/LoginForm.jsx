@@ -21,17 +21,25 @@ const LoginForm = () => {
       try {
         const user = await loginService.authenticate(values);
         sessionStorage.setItem("sessionUser", JSON.stringify(user));
-        window.location.href = "/";
 
-        // if (user.role === "adolescent") {
-        //   window.location.href = "/ado/home";
-        // } else if (user.role === "parent") {
-        //   window.location.href = "/parent/home";
-        // } else if (user.role === "professionel") {
-        //   window.location.href = "/pro/home";
-        // } else {
-        //   window.location.href = "/";
-        // }
+        const { role } = user;
+
+        switch (role) {
+          case "ado":
+            window.location.href = "/ado/home";
+            break;
+          case "parent":
+            window.location.href = "/parent/home";
+            break;
+          case "pro":
+            window.location.href = "/pro/home";
+            break;
+          case "admin":
+            window.location.href = "/admin/home";
+            break;
+          default:
+            console.log("Invalid role");
+        }
 
         resetForm();
         setSubmitting(false);

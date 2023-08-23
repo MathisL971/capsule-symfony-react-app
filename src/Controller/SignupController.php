@@ -2,19 +2,18 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Controller\BaseController;
 
-class SignupController extends AbstractController
+class SignupController extends BaseController
 {
     /**
      * @Route("/signup", name="app_signup")
      */
     public function index(): Response
     {
-        return $this->render('signup/index.html.twig', [
-            'controller_name' => 'SignupController',
-        ]);
+        $data = [];
+        return $this->render('signup/home.html.twig', $data);
     }
 }

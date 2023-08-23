@@ -8,20 +8,25 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class AdoController extends BaseController
+
+class AdoController extends AbstractController
 {
     /**
      * @Route("/ado/home", name="ado_home")
      */
     public function home(Request $rq)
     {
-        $vars = [];
+        // $vars = [];
 
         // $vars['user'] = $this->session->get('user');
         // $vars['role'] = $this->session->get('role');
 
-        return new Response($this->twig->render('ado/index.html.twig', $vars));
+        // return new Response($this->twig->render('ado/home.html.twig', $vars));
+
+        $data = ['controller_name' => 'ParentController', 'message' => 'Returning from parent...'];
+        return $this->render('ado/home.html.twig', $data);
     }
 
     /**

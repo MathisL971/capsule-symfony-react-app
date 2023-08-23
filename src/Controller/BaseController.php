@@ -9,8 +9,9 @@ use Twig\Extension\DebugExtension;
 use Twig\Extra\Intl\IntlExtension;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class BaseController
+class BaseController extends AbstractController
 {
     protected $twig;
     protected $em;

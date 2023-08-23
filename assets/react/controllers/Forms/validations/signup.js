@@ -35,50 +35,50 @@ export const validationSchema = Yup.object({
     .max(new Date(), "Birth date must be in the past")
     .required("Required"),
   title: Yup.string().when("role", {
-    is: (role) => role === "professionel",
+    is: (role) => role === "pro",
     then: () => Yup.string().required("Required"),
   }),
   profession: Yup.string().when("role", {
-    is: (role) => role === "professionel",
+    is: (role) => role === "pro",
     then: () => Yup.string().required("Required"),
   }),
   phoneMobile: Yup.string().when("role", {
-    is: (role) => role === "professionel",
+    is: (role) => role === "pro",
     then: () =>
       Yup.string()
         .required("Required")
         .matches(/^\d{10}$/, "Phone number must contain 10 digits"),
   }),
   phoneOffice: Yup.string().when("role", {
-    is: (role) => role === "professionel",
+    is: (role) => role === "pro",
     then: () =>
       Yup.string()
         .required("Required")
         .matches(/^\d{10}$/, "Phone number must contain 10 digits"),
   }),
   street1: Yup.string().when("role", {
-    is: (role) => role === "professionel",
+    is: (role) => role === "pro",
     then: () => Yup.string().required("Required"),
   }),
   street2: Yup.string().when("role", {
-    is: (role) => role === "professionel",
+    is: (role) => role === "pro",
     then: () => Yup.string().required("Required"),
   }),
   postcode: Yup.string().when("role", {
-    is: (role) => role === "professionel",
+    is: (role) => role === "pro",
     then: () => Yup.string().required("Required"),
   }),
   city: Yup.string().when("role", {
-    is: (role) => role === "professionel",
+    is: (role) => role === "pro",
     then: () => Yup.string().required("Required"),
   }),
   country: Yup.string().when("role", {
-    is: (role) => role === "professionel",
+    is: (role) => role === "pro",
     then: () => Yup.string().required("Required"),
   }),
   educations: Yup.array()
     .when("role", {
-      is: (role) => role === "professionel",
+      is: (role) => role === "pro",
       then: () =>
         Yup.object().shape({
           diploma: Yup.string().required("Required"),
@@ -89,7 +89,7 @@ export const validationSchema = Yup.object({
     .required("At least one education record is required"),
   experiences: Yup.array()
     .when("role", {
-      is: (role) => role === "professionel",
+      is: (role) => role === "pro",
       then: () =>
         Yup.object().shape({
           position: Yup.string().required("Required"),

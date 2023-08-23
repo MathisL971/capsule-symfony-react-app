@@ -23,38 +23,51 @@ function generateRandomId(length) {
 // Data
 const maliaId = "1";
 const mathisId = "2";
+const chrisId = "3";
+const gaelleId = "4";
+
+const connections = [
+  { id: generateRandomId(20), name: "Wade Cooper" },
+  { id: generateRandomId(20), name: "Arlene Mccoy" },
+  { id: generateRandomId(20), name: "Devon Webb" },
+];
 
 let users = [
   {
     id: mathisId,
-    username: "Thismadu971",
+    username: "Mathis",
     password: "BrebeufMTL5174",
     role: "parent",
-    connections: [
-      { id: generateRandomId(20), name: "Wade Cooper" },
-      { id: generateRandomId(20), name: "Arlene Mccoy" },
-      { id: generateRandomId(20), name: "Devon Webb" },
-      { id: maliaId, name: "Malia Lefranc" },
-    ],
+    connections: connections.concat({ id: maliaId, name: "Malia Lefranc" }),
   },
   {
     id: maliaId,
-    username: "Malia971",
+    username: "Malia",
     password: "BrebeufMTL5174",
-    role: "adolescent",
-    connections: [
-      { id: generateRandomId(20), name: "Arlene Mccoy" },
-      { id: generateRandomId(20), name: "Devon Webb" },
-      { id: generateRandomId(20), name: "Tom Cook" },
-      { id: generateRandomId(20), name: "Tanya Fox" },
-      { id: mathisId, name: "Mathis Lefranc" },
-    ],
+    role: "ado",
+    connections: connections.concat({ id: mathisId, name: "Mathis Lefranc" }),
+  },
+  {
+    id: chrisId,
+    username: "Chris",
+    password: "BrebeufMTL5174",
+    role: "pro",
+    connections: connections.concat({ id: mathisId, name: "Mathis Lefranc" }),
+  },
+  {
+    id: gaelleId,
+    username: "Gaelle",
+    password: "BrebeufMTL5174",
+    role: "admin",
+    connections: connections.concat({ id: mathisId, name: "Mathis Lefranc" }),
   },
 ];
 
 let conversations = [];
 
 let messages = [];
+
+let loggedInUser;
 
 // APIs
 app.post("/api/login", (request, response) => {
@@ -63,10 +76,15 @@ app.post("/api/login", (request, response) => {
     (u) => u.username === username && u.password === password
   );
   if (user) {
-    response.status(200).json(user);
+    loggedInUser = user;
+    response.status(200).send(user);
   } else {
     response.status(401).send("Username or password does not exist");
   }
+});
+
+app.post("/api/logout", (request, response) => {
+  loggedInUser = null;
 });
 
 app.post("/api/users", (request, response) => {

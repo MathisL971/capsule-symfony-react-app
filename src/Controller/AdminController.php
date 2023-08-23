@@ -21,8 +21,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Firebase\JWT\JWT;
 use SessionIdInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class AdminController extends BaseController
+
+class AdminController extends AbstractController
 {
 
     /**
@@ -30,19 +32,26 @@ class AdminController extends BaseController
      */
     public function home(Request $rq, SessionInterface $session)
     {
-        if (AdminController::authentify($session)) {
+        // if (AdminController::authentify($session)) {
 
-            $vars = [];
+        //     $vars = [];
 
-            $vars['user'] = $session->get('user');
-            $vars['role'] = $session->get('role');
+        //     $vars['user'] = $session->get('user');
+        //     $vars['role'] = $session->get('role');
 
-            $page = $this->twig->render('admin/index.html.twig', $vars);
+        //     $page = $this->twig->render('admin/home.html.twig', $vars);
 
-            return new Response($page);
-        }
+        //     return new Response($page);
+        // }
 
-        return new RedirectResponse('/');
+        // return new RedirectResponse('/');
+
+        $data = ['controller_name' => 'ParentController', 'message' => 'Returning from parent...'];
+
+        // $page = $this->twig->render('admin/home.html.twig', $data);
+        // return new Response($page);
+
+        return $this->render('admin/home.html.twig', $data);
     }
 
     /**

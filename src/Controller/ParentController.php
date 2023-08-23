@@ -7,16 +7,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
-class ParentController extends BaseController
+
+class ParentController extends AbstractController
 {
     /**
      * @Route("/parent/home", name="parent_home")
      */
     public function home(Request $rq)
     {
-        $vars = [];
+        //$vars = [];
 
         // if (ParentController::authentify($this->session)) {
         //     $vars['user'] = $this->session->get('user');
@@ -25,11 +27,13 @@ class ParentController extends BaseController
         //     return new Response($this->twig->render('parent/home.html.twig', $vars));
         // }
 
-        return new Response($this->twig->render('parent/index.html.twig', $vars));
-
+        // return new Response($this->twig->render('parent/home.html.twig', $vars));
 
         // $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
         // return new RedirectResponse('/');
+
+        $data = ['controller_name' => 'ParentController', 'message' => 'Returning from parent...'];
+        return $this->render('parent/home.html.twig', $data);
     }
 
     /**
