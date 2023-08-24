@@ -70,6 +70,7 @@ let messages = [];
 let loggedInUser;
 
 // APIs
+
 app.post("/api/login", (request, response) => {
   const { username, password } = request.body;
   const user = users.find(
@@ -85,6 +86,10 @@ app.post("/api/login", (request, response) => {
 
 app.post("/api/logout", (request, response) => {
   loggedInUser = null;
+});
+
+app.get("/api/users", (request, response) => {
+  response.json(users);
 });
 
 app.post("/api/users", (request, response) => {

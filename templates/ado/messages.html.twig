@@ -1,13 +1,11 @@
-{% extends "ado/navbar.html.twig" %}
+{% extends "base-js.html.twig" %}
 
 {% block title %}
 	Capsule - Messages
 {% endblock %}
 
 {% block body %}
-	{# <h1>Tes messages</h1> #}
-	{# <div class="col" style="margin: 100px"><a href="/ado/home" role="button" class="btn btn-dark">Retour à l'accueil</a></div> #}
-	<div class="bg-white">
-		<div {{ react_component('SignupForm') }}></div>
+	<div class="mx-auto py-8 px-10">
+		<div {{ react_component('App') }}></div>
 	</div>
 {% endblock %}

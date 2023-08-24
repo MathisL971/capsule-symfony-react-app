@@ -40,7 +40,7 @@ const MessageThread = () => {
   }
 
   return (
-    <div className="flex flex-col gap-2 w-2/3 border-2 border-slate-400 rounded-lg p-2">
+    <div className="flex flex-col gap-2 w-2/3 border-2 border-teal-950 bg-teal-800 rounded-lg p-2">
       <div
         className="flex flex-col gap-1 flex-grow overflow-y-scroll"
         ref={scrollableContainerRef}

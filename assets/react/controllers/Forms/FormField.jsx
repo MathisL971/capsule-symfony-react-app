@@ -20,7 +20,6 @@ const FormField = ({ label, ...fieldProp }) => {
       <Field
         {...fieldProp}
         className={
-          // fieldProp.name in errors && fieldProp.name in touched
           meta.error && meta.touched
             ? "rounded-md py-1 px-1 border-2 border-red-700 "
             : "rounded-md py-1 px-1 border-2 border-teal-900"

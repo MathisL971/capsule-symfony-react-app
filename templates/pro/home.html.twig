@@ -1,14 +1,14 @@
-{% extends "pro/navbar.html.twig" %}
+{% extends "base-js.html.twig" %}
 
-{% block content %}
+{% block body %}
 	<div class="container text-center" style="margin-top: 2vh;">
 		<div class="row align-items-center" style="margin-bottom: 20px">
 			<div class="col-3" style="max-width: 296.75px">
-				<img src="{{user.profilePic}}" alt="Image de profil" style="width: 100%; max-width: 200px; height: auto">
+				{# <img src="{{user.profilePic}}" alt="Image de profil" style="width: 100%; max-width: 200px; height: auto"> #}
 			</div>
 			<div class="col">
 				<h1>Bonjour
-					{{ user.firstName}}</h1>
+					{# {{ user.firstName}}</h1> #}
 				<p style="font-size: large">Bienvenue dans votre espace privé Capsule ! Comment allez-vous aujourd'hui ?</p>
 			</div>
 		</div>
@@ -23,8 +23,8 @@
 					</div>
 					<img src="/images/pro_geometric_id.png" class="" alt="Image déco" style="border-radius: 50%; border: 5px solid white; height: 100px; width:100px; margin: -120px auto 0 auto">
 					<div class="card-body">
-						<h4 class="card-title" style="padding: 25px 0; font-weight: bold">{{user.firstName}}
-							{{user.name}}</h5>
+						<h4 class="card-title" style="padding: 25px 0; font-weight: bold"> {# {{user.firstName}} #}
+							{# {{user.name}}</h5> #}
 					</div>
 				</div>
 
@@ -98,6 +98,4 @@
 		</div>
 		{# {{ dump(user)}} #}
 	</div>
-
-
 {% endblock %}

@@ -33,7 +33,9 @@ export default function UserSearchBar({ handleConvoSideOpen }) {
   const handleConvoSearchOpen = async (connection) => {
     try {
       const existingConvo = conversations.find(
-        (convo) => convo.id_connection === connection.id
+        (convo) =>
+          convo.id_creator === connection.id ||
+          convo.id_correspondant === connection.id
       );
       if (existingConvo) {
         handleConvoSideOpen(existingConvo, user);
@@ -84,7 +86,7 @@ export default function UserSearchBar({ handleConvoSideOpen }) {
         <div className="relative">
           <div>
             <Combobox.Input
-              className="border-2 border-slate-400 rounded-lg w-full py-2 px-2 text-base leading-5 text-gray-900 focus:ring-0"
+              className="border-2 border-teal-950 rounded-lg w-full py-2 px-2 text-base leading-5 text-gray-900 focus:ring-0"
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Recherchez une personne dans vos contacts..."
             />

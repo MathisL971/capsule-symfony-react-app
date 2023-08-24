@@ -144,13 +144,15 @@ const ChatApp = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col gap-3 py-4">
+    <div className="flex flex-col gap-3 py-4 h-screen">
       {user && (
         <div className="flex flex-row justify-center">
-          <h1 className="text-2xl font-extrabold">{user.username}</h1>
+          <h1 className="text-2xl font-extrabold">
+            Messages de {user.username}
+          </h1>
         </div>
       )}
-      <div className="flex flex-row h-5/6 gap-1">
+      <div className="flex flex-row gap-1 grow">
         <ConversationsBar handleConvoSideOpen={handleConvoSideOpen} />
         <MessageThread />
       </div>

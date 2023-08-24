@@ -17,7 +17,7 @@ const NavBar = () => {
       try {
         sessionStorage.setItem("sessionUser", "");
         setUser("");
-        window.location.href = "/";
+        window.location.href = "/login";
         // const result = await logoutService.logOut();
       } catch (e) {
         console.error(e);
@@ -36,10 +36,48 @@ const NavBar = () => {
   let pages = [];
   switch (role) {
     case "ado":
-      pages = ["journal", "ressources", "messagerie", "nouvelles"];
+      pages = [
+        { name: "home", developed: true },
+        { name: "journal", developed: false },
+        {
+          name: "ressources",
+          developed: false,
+          subnames: [
+            { name: "videos", developed: false },
+            { name: "podcasts", developed: false },
+            { name: "audiobooks", developed: false },
+          ],
+        },
+        { name: "messages", developed: true },
+        { name: "family", developed: false },
+        { name: "news", developed: false },
+        { name: "notes", developed: false },
+        { name: "community", developed: false },
+        { name: "timing", developed: false },
+        { name: "visio", developed: false },
+      ];
       break;
     case "parent":
-      pages = ["journal", "ressources", "messagerie", "nouvelles"];
+      pages = [
+        { name: "home", developed: true },
+        { name: "journal", developed: true },
+        {
+          name: "ressources",
+          developed: false,
+          subnames: [
+            { name: "videos", developed: false },
+            { name: "podcasts", developed: false },
+            { name: "audiobooks", developed: false },
+          ],
+        },
+        { name: "messages", developed: true },
+        { name: "family", developed: false },
+        { name: "news", developed: true },
+        { name: "notes", developed: true },
+        { name: "community", developed: false },
+        { name: "timing", developed: false },
+        { name: "visio", developed: false },
+      ];
       break;
     case "pro":
       pages = ["journal", "messagerie", "patients", "notes", "capsule tv"];
@@ -59,31 +97,29 @@ const NavBar = () => {
     default:
   }
 
-  const settings = ["compte", "paramètres"];
+  const settings = [
+    { name: "profil", developed: false },
+    { name: "paramètres", developed: false },
+  ];
 
   return (
     <nav className="bg-gradient-to-b from-black/50 to-white/ h-16">
       <div className="flex flex-wrap items-center justify-between mx-auto py-2.5 px-4 h-full">
-        {/* Logo */}
-        <a href="/" className="flex items-center h-full">
-          <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-            Capsule
-          </span>
-        </a>
-
         {user ? (
           // Right section of nav bar when logged in
-          <div className="flex items-center md:order-2 h-full gap-3">
+          <div className="flex items-center md:order-2 h-full gap-3 grow justify-end">
             {/* Page Menu */}
             <div className="hidden lg:flex flex-row h-full">
-              {pages.map((page) => {
+              {pages.map(({ name, developed }) => {
                 return (
                   <a
-                    key={page}
-                    href={`/${role}/${page}`}
-                    className="block rounded-lg px-4 py-2 my-auto text-sm font-medium text-white hover:bg-teal-900 dark:hover:bg-teal-900 dark:text-gray-200 dark:hover:text-white"
+                    key={name}
+                    href={`/${role}/${name}`}
+                    className={`${
+                      developed ? "block" : "hidden"
+                    } rounded-lg px-4 py-2 my-auto text-sm font-medium text-white hover:bg-teal-900 dark:hover:bg-teal-900 dark:text-gray-200 dark:hover:text-white`}
                   >
-                    {page.charAt(0).toUpperCase() + page.slice(1)}
+                    {name.charAt(0).toUpperCase() + name.slice(1)}
                   </a>
                 );
               })}
@@ -149,48 +185,56 @@ const NavBar = () => {
             </div>
           </div>
         ) : (
-          // Right section of nav bar when logged out
-          <div className="flex items-center md:order-2 h-full gap-3">
-            <button
-              data-collapse-toggle="navbar-user"
-              type="button"
-              className="inline-flex lg:hidden items-center p-2 w-10 h-10 justify-center text-sm text-white rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-              aria-controls="navbar-user"
-              aria-expanded="false"
-              onClick={() => setNavCollapsed(!navCollapsed)}
-            >
-              <span className="sr-only">Open main menu</span>
-              <svg
-                className="w-5 h-5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 17 14"
+          <div>
+            {/* Logo */}
+            <a href="/" className="flex items-center h-full">
+              <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+                Capsule
+              </span>
+            </a>
+            // Right section of nav bar when logged out
+            <div className="flex items-center md:order-2 h-full gap-3">
+              <button
+                data-collapse-toggle="navbar-user"
+                type="button"
+                className="inline-flex lg:hidden items-center p-2 w-10 h-10 justify-center text-sm text-white rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                aria-controls="navbar-user"
+                aria-expanded="false"
+                onClick={() => setNavCollapsed(!navCollapsed)}
               >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  color="white"
-                  d="M1 1h15M1 7h15M1 13h15"
-                />
-              </svg>
-            </button>
-            <button
-              type="button"
-              className="hidden lg:flex text-white border-2 border-white hover:bg-teal-800 focus:ring-2 focus:outline-none focus:ring-teal-300 font-bold rounded-lg text-sm px-4 py-2.5 text-center dark:hover:bg-teal-700 dark:focus:ring-white"
-              onClick={() => (window.location.href = "/login")}
-            >
-              Se Connecter
-            </button>
-            <button
-              type="button"
-              className="hidden lg:flex text-white bg-teal-900 border-2 border-teal-900 hover:bg-teal-950 focus:ring-2 focus:outline-none focus:ring-teal-300 rounded-lg text-sm font-bold px-4 py-2.5 text-center dark:bg-teal-900 dark:hover:bg-teal-700 dark:focus:ring-teal-900"
-              onClick={() => (window.location.href = "/signup")}
-            >
-              S'inscrire
-            </button>
+                <span className="sr-only">Open main menu</span>
+                <svg
+                  className="w-5 h-5"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 17 14"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    color="white"
+                    d="M1 1h15M1 7h15M1 13h15"
+                  />
+                </svg>
+              </button>
+              <button
+                type="button"
+                className="hidden lg:flex text-white border-2 border-white hover:bg-teal-800 focus:ring-2 focus:outline-none focus:ring-teal-300 font-bold rounded-lg text-sm px-4 py-2.5 text-center dark:hover:bg-teal-700 dark:focus:ring-white"
+                onClick={() => (window.location.href = "/login")}
+              >
+                Se Connecter
+              </button>
+              <button
+                type="button"
+                className="hidden lg:flex text-white bg-teal-900 border-2 border-teal-900 hover:bg-teal-950 focus:ring-2 focus:outline-none focus:ring-teal-300 rounded-lg text-sm font-bold px-4 py-2.5 text-center dark:bg-teal-900 dark:hover:bg-teal-700 dark:focus:ring-teal-900"
+                onClick={() => (window.location.href = "/signup")}
+              >
+                S'inscrire
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -205,14 +249,30 @@ const NavBar = () => {
             } relative flex-col grow gap-1 inset-0 mx-4 m-2 p-2 text-base lg:hidden bg-white rounded-lg shadow list-none`}
             id="user-dropdown"
           >
-            {pages.map((page) => {
+            {pages.map(({ name, developed }) => {
+              if (name === "messages") {
+                return (
+                  <li key={name}>
+                    <a
+                      href={`/${name}`}
+                      className={`${
+                        developed ? "block" : "hidden"
+                      } px-4 py-2 rounded-lg text-sm text-black hover:bg-slate-200`}
+                    >
+                      {name.charAt(0).toUpperCase() + name.slice(1)}
+                    </a>
+                  </li>
+                );
+              }
               return (
-                <li key={page}>
+                <li key={name}>
                   <a
-                    href={`/${role}/${page}`}
-                    className="block px-4 py-2 rounded-lg text-sm text-black hover:bg-slate-200"
+                    href={`/${role}/${name}`}
+                    className={`${
+                      developed ? "block" : "hidden"
+                    } px-4 py-2 rounded-lg text-sm text-black hover:bg-slate-200`}
                   >
-                    {page.charAt(0).toUpperCase() + page.slice(1)}
+                    {name.charAt(0).toUpperCase() + name.slice(1)}
                   </a>
                 </li>
               );
@@ -231,14 +291,16 @@ const NavBar = () => {
               </span>
             </div>
             <ul className="py-2 list-none" aria-labelledby="user-menu-button">
-              {settings.map((setting) => {
+              {settings.map(({ name, developed }) => {
                 return (
-                  <li key={setting}>
+                  <li key={name}>
                     <a
-                      href={`/${role}/${setting}`}
-                      className="block px-4 py-2 rounded-lg text-sm text-black hover:bg-slate-200"
+                      href={`/${role}/${name}`}
+                      className={`${
+                        developed ? "block" : "hidden"
+                      } px-4 py-2 rounded-lg text-sm text-black hover:bg-slate-200`}
                     >
-                      {setting.charAt(0).toUpperCase() + setting.slice(1)}
+                      {name.charAt(0).toUpperCase() + name.slice(1)}
                     </a>
                   </li>
                 );

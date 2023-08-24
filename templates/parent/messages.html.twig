@@ -1,5 +1,7 @@
-{% extends "parent/navbar.html.twig" %}
+{% extends "base-js.html.twig" %}
 
 {% block body %}
-	<h1>Messages</h1>
+	<div class="mx-auto py-8 px-10">
+		<div {{ react_component('App') }}></div>
+	</div>
 {% endblock %}

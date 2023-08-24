@@ -120,7 +120,7 @@ const TextPrompt = () => {
         value={newMessage}
         onChange={({ target }) => setNewMessage(target.value)}
         placeholder="Tapez votre message ici..."
-        className="flex flex-grow rounded-lg border-2 border-slate-400 p-2"
+        className="flex flex-grow rounded-lg border-2 border-teal-950 p-2"
       ></input>
       {activeConversation ? (
         <button

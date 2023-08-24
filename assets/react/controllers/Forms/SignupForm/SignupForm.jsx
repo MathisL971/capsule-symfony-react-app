@@ -1,6 +1,7 @@
 // Utility imports
-import React from "react";
+import React, { useState } from "react";
 import { FieldArray, Form, Formik } from "formik";
+import { ErrorMessage } from "formik";
 
 // Components
 import FormField from "../FormField";
@@ -17,6 +18,8 @@ import { topField, fields } from "../fields/signup";
 import { validationSchema, initialValues } from "../validations/signup";
 
 const SignUpForm = () => {
+  const [errorMessage, setErrorMessage] = useState("");
+
   const handleSubmit = (values, setSubmitting, resetForm) => {
     setTimeout(async () => {
       try {
@@ -29,6 +32,8 @@ const SignUpForm = () => {
           alias: "",
         };
         delete userObject["confirmPassword"];
+
+        console.log(userObject);
 
         const createdUser = await userService.create(userObject);
         sessionStorage.setItem("sessionUser", JSON.stringify(createdUser));

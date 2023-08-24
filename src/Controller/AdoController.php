@@ -9,9 +9,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Controller\BaseController;
 
-
-class AdoController extends AbstractController
+class AdoController extends BaseController
 {
     /**
      * @Route("/ado/home", name="ado_home")
@@ -25,7 +25,7 @@ class AdoController extends AbstractController
 
         // return new Response($this->twig->render('ado/home.html.twig', $vars));
 
-        $data = ['controller_name' => 'ParentController', 'message' => 'Returning from parent...'];
+        $data = [];
         return $this->render('ado/home.html.twig', $data);
     }
 
@@ -36,8 +36,8 @@ class AdoController extends AbstractController
     {
         $vars = [];
 
-        $vars['user'] = $this->session->get('user');
-        $vars['role'] = $this->session->get('role');
+        // $vars['user'] = $this->session->get('user');
+        // $vars['role'] = $this->session->get('role');
 
         $page = $this->twig->render('ado/journal.html.twig', $vars);
 
@@ -94,12 +94,15 @@ class AdoController extends AbstractController
      */
     public function messages(Request $rq)
     {
-        $vars = [];
+        // $vars = [];
 
-        $vars['user'] = $this->session->get('user');
-        $vars['role'] = $this->session->get('role');
+        // $vars['user'] = $this->session->get('user');
+        // $vars['role'] = $this->session->get('role');
 
-        return new Response($this->twig->render('ado/messages.html.twig', $vars));
+        // return new Response($this->twig->render('message/home.html.twig', $vars));
+
+        $data = [];
+        return $this->render('ado/messages.html.twig', $data);
     }
 
     /**

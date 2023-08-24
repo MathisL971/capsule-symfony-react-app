@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-
+use App\Controller\BaseController;
 
 class ProController extends BaseController
 {
@@ -24,7 +24,7 @@ class ProController extends BaseController
      */
     public function home(Request $rq)
     {
-        $vars = [];
+        //$vars = [];
 
         // if (ProController::authentify($this->session)) {
 
@@ -39,7 +39,10 @@ class ProController extends BaseController
         // $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
         // return new RedirectResponse('/');
 
-        return new Response($this->twig->render('pro/home.html.twig', $vars));
+        // return new Response($this->twig->render('pro/home.html.twig', $vars));
+
+        $data = [];
+        return $this->render('pro/home.html.twig', $data);
     }
 
     /**

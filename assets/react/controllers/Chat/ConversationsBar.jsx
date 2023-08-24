@@ -27,7 +27,7 @@ const ConversationsBar = ({ handleConvoSideOpen }) => {
   }
 
   return (
-    <div className="flex flex-col w-1/3 gap-2 border-2 border-slate-400 rounded-lg p-2">
+    <div className="flex flex-col w-1/3 gap-2 border-2 border-teal-950 bg-teal-800 rounded-lg p-2">
       <UserSearchBar handleConvoSideOpen={handleConvoSideOpen} />
 
       <div className="flex flex-col gap-1 flex-grow">
@@ -35,9 +35,7 @@ const ConversationsBar = ({ handleConvoSideOpen }) => {
           <ConversationCard
             conversation={potentialConversation}
             handleConvoSideOpen={handleConvoSideOpen}
-            styles={
-              "bg-teal-500 px-4 py-3 rounded-md font-bold text-white border-2 border-teal-900"
-            }
+            styles={"active"}
           />
         )}
         {conversations &&
@@ -45,17 +43,15 @@ const ConversationsBar = ({ handleConvoSideOpen }) => {
             let style;
 
             if (activeConversation && activeConversation.id === c.id) {
-              style =
-                "bg-teal-500 px-4 py-3 rounded-md font-bold text-white border-2 border-teal-900";
+              style = "active";
             } else if (
               (c.id_creator === user.id && c.creator_has_new_message) ||
               (c.id_correspondant === user.id &&
                 c.correspondant_has_new_message)
             ) {
-              style = "bg-slate-300 px-4 py-3 rounded-md font-bold";
+              style = "new_message";
             } else {
-              style =
-                "bg-slate-100 px-4 py-3 rounded-md font-normal hover:bg-slate-300";
+              style = "inactive";
             }
 
             return (

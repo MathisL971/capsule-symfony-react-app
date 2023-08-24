@@ -1,20 +1,23 @@
 import * as Yup from "yup";
+import userService from "../../../services/user";
 
 export const validationSchema = Yup.object({
   role: Yup.string().required("Required"),
   timezone: Yup.string().required("Required"),
   username: Yup.string()
     .max(15, "Username must be 15 characters or less")
-    .required("Required"),
-  // .test("username-unique", "Username already exists", async (value) => {
-  //   const users = await userService.getAll();
-  //   return users.every((user) => user.username !== value);
-  // })
-  email: Yup.string().email("Invalid email address").required("Required"),
-  // .test("email-unique", "Email is already taken", async (value) => {
-  //   const users = await userService.getAll();
-  //   return users.every((user) => user.email !== value);
-  // })
+    .required("Required")
+    .test("username-unique", "Username already exists", async (value) => {
+      const users = await userService.getAll();
+      return users.every((user) => user.username !== value);
+    }),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Required")
+    .test("email-unique", "Email is already taken", async (value) => {
+      const users = await userService.getAll();
+      return users.every((user) => user.email !== value);
+    }),
   password: Yup.string()
     .min(8, "Password must be at least 8 characters")
     .matches(
@@ -60,10 +63,6 @@ export const validationSchema = Yup.object({
     is: (role) => role === "pro",
     then: () => Yup.string().required("Required"),
   }),
-  street2: Yup.string().when("role", {
-    is: (role) => role === "pro",
-    then: () => Yup.string().required("Required"),
-  }),
   postcode: Yup.string().when("role", {
     is: (role) => role === "pro",
     then: () => Yup.string().required("Required"),
@@ -76,29 +75,31 @@ export const validationSchema = Yup.object({
     is: (role) => role === "pro",
     then: () => Yup.string().required("Required"),
   }),
-  educations: Yup.array()
-    .when("role", {
-      is: (role) => role === "pro",
-      then: () =>
+  educations: Yup.array().when("role", {
+    is: (role) => role === "pro",
+    then: () =>
+      Yup.array().of(
         Yup.object().shape({
           diploma: Yup.string().required("Required"),
           institution: Yup.string().required("Required"),
           dateCompleted: Yup.string().required("Required"),
-        }),
-    })
-    .required("At least one education record is required"),
-  experiences: Yup.array()
-    .when("role", {
-      is: (role) => role === "pro",
-      then: () =>
+        })
+      ),
+    // otherwise: Yup.array(),
+  }),
+  experiences: Yup.array().when("role", {
+    is: (role) => role === "pro",
+    then: () =>
+      Yup.array().of(
         Yup.object().shape({
           position: Yup.string().required("Required"),
           employer: Yup.string().required("Required"),
           dateStarted: Yup.string().required("Required"),
           dateCompleted: Yup.string().required("Required"),
-        }),
-    })
-    .required("At least one experience record is required"),
+        })
+      ),
+    // otherwise: Yup.array(),
+  }),
 });
 
 export const initialValues = {

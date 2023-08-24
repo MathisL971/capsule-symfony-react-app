@@ -7,11 +7,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Controller\BaseController;
 
-
-
-class ParentController extends AbstractController
+class ParentController extends BaseController
 {
     /**
      * @Route("/parent/home", name="parent_home")
@@ -32,7 +30,7 @@ class ParentController extends AbstractController
         // $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
         // return new RedirectResponse('/');
 
-        $data = ['controller_name' => 'ParentController', 'message' => 'Returning from parent...'];
+        $data = [];
         return $this->render('parent/home.html.twig', $data);
     }
 
@@ -117,18 +115,21 @@ class ParentController extends AbstractController
      */
     public function messages(Request $rq)
     {
-        $vars = [];
+        // $vars = [];
 
-        if (ParentController::authentify($this->session)) {
-            $vars['user'] = $this->session->get('user');
-            $vars['role'] = $this->session->get('role');
-            $vars['menu2'] = true;
+        // if (ParentController::authentify($this->session)) {
+        //     $vars['user'] = $this->session->get('user');
+        //     $vars['role'] = $this->session->get('role');
+        //     $vars['menu2'] = true;
 
-            return new Response($this->twig->render('parent/messages.html.twig', $vars));
-        }
+        //     return new Response($this->twig->render('parent/messages.html.twig', $vars));
+        // }
 
-        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
-        return new RedirectResponse('/');
+        // $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
+        // return new RedirectResponse('/');
+
+        $data = [];
+        return $this->render('parent/messages.html.twig', $data);
     }
 
     /**

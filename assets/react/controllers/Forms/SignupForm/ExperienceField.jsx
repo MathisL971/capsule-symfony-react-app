@@ -3,6 +3,8 @@ import { Field, useFormikContext } from "formik";
 
 const ExperienceField = ({ name, index, handleDelete }) => {
   const { errors, touched } = useFormikContext();
+  const experienceErrors = errors.experiences && errors.experiences[index];
+  const experienceTouched = touched.experiences && touched.experiences[index];
 
   return (
     <div className="flex flex-col gap-1 justify-between w-full bg-teal-600 p-2 border-2 border-emerald-900 rounded-md">
@@ -11,12 +13,7 @@ const ExperienceField = ({ name, index, handleDelete }) => {
         name={`${name}.position`}
         placeholder="Poste"
         className={
-          errors.experiences &&
-          errors.experiences[index] &&
-          touched.experiences &&
-          touched.experiences[index] &&
-          errors.experiences[index].includes("position") &&
-          touched.experiences[index].includes("position")
+          experienceErrors?.position && experienceTouched?.position
             ? "flex flex-grow rounded-md p-1.5 border-2 border-red-700 h-full"
             : "flex flex-grow rounded-md p-1.5 border-2 border-teal-900 h-full"
         }
@@ -26,12 +23,7 @@ const ExperienceField = ({ name, index, handleDelete }) => {
         name={`${name}.employer`}
         placeholder="Employeur"
         className={
-          errors.experiences &&
-          errors.experiences[index] &&
-          touched.experiences &&
-          touched.experiences[index] &&
-          errors.experiences[index].includes("employer") &&
-          touched.experiences[index].includes("employer")
+          experienceErrors?.employer && experienceTouched?.employer
             ? "flex flex-grow rounded-md p-1.5 border-2 border-red-700 h-full"
             : "flex flex-grow rounded-md p-1.5 border-2 border-teal-900 h-full"
         }
@@ -42,12 +34,7 @@ const ExperienceField = ({ name, index, handleDelete }) => {
           type="date"
           name={`${name}.dateStarted`}
           className={
-            errors.experiences &&
-            errors.experiences[index] &&
-            touched.experiences &&
-            touched.experiences[index] &&
-            errors.experiences[index].includes("dateStarted") &&
-            touched.experiences[index].includes("dateStarted")
+            experienceErrors?.dateStarted && experienceTouched?.dateStarted
               ? "px-1.5 py-1 w-1/2 rounded-md border-2 border-red-700 h-auto"
               : "px-1.5 py-1 w-1/2 rounded-md border-2 border-teal-900 h-auto"
           }
@@ -56,24 +43,21 @@ const ExperienceField = ({ name, index, handleDelete }) => {
           type="date"
           name={`${name}.dateCompleted`}
           className={
-            errors.experiences &&
-            errors.experiences[index] &&
-            touched.experiences &&
-            touched.experiences[index] &&
-            errors.experiences[index].includes("dateCompleted") &&
-            touched.experiences[index].includes("dateCompleted")
+            experienceErrors?.dateCompleted && experienceTouched?.dateCompleted
               ? "px-1.5 py-1 w-1/2 rounded-md border-2 border-red-700 h-auto"
               : "px-1.5 py-1 w-1/2 rounded-md border-2 border-teal-900 h-auto"
           }
         />
       </div>
-      <button
-        type="button"
-        onClick={() => handleDelete(index)}
-        className="bg-red-500 hover:bg-red-700 text-white text-sm font-bold py-2 px-4 rounded-md"
-      >
-        Supprimer
-      </button>
+      {index !== 0 && (
+        <button
+          type="button"
+          onClick={() => handleDelete(index)}
+          className="bg-red-500 hover:bg-red-700 text-white text-sm font-bold py-2 px-4 rounded-md"
+        >
+          Supprimer
+        </button>
+      )}
     </div>
   );
 };

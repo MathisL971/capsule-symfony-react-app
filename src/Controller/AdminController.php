@@ -21,10 +21,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Firebase\JWT\JWT;
 use SessionIdInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-
-class AdminController extends AbstractController
+class AdminController extends BaseController
 {
 
     /**

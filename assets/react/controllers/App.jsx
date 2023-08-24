@@ -15,7 +15,10 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<LoginForm />} />
           <Route path="/signup" element={<SignupForm />} />
-          <Route path="/message" element={<ChatApp />} />
+          <Route path="/ado/messages" element={<ChatApp />} />
+          <Route path="/parent/messages" element={<ChatApp />} />
+          <Route path="/pro/messages" element={<ChatApp />} />
+          <Route path="/admin/messages" element={<ChatApp />} />
         </Routes>
       </Router>
     </Provider>
