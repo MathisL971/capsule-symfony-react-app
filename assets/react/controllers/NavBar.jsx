@@ -106,7 +106,6 @@ const NavBar = () => {
     <nav className="bg-gradient-to-b from-black/50 to-white/ h-16">
       <div className="flex flex-wrap items-center justify-between mx-auto py-2.5 px-4 h-full">
         {user ? (
-          // Right section of nav bar when logged in
           <div className="flex items-center md:order-2 h-full gap-3 grow justify-end">
             {/* Page Menu */}
             <div className="hidden lg:flex flex-row h-full">
@@ -185,14 +184,14 @@ const NavBar = () => {
             </div>
           </div>
         ) : (
-          <div>
+          <div className="flex flex-row justify-between grow align-middle h-fit">
             {/* Logo */}
-            <a href="/" className="flex items-center h-full">
-              <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+            <a href="/" className="flex items-center">
+              <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white h-full">
                 Capsule
               </span>
             </a>
-            // Right section of nav bar when logged out
+            {/* Right section of nav bar when logged out */}
             <div className="flex items-center md:order-2 h-full gap-3">
               <button
                 data-collapse-toggle="navbar-user"
@@ -250,20 +249,6 @@ const NavBar = () => {
             id="user-dropdown"
           >
             {pages.map(({ name, developed }) => {
-              if (name === "messages") {
-                return (
-                  <li key={name}>
-                    <a
-                      href={`/${name}`}
-                      className={`${
-                        developed ? "block" : "hidden"
-                      } px-4 py-2 rounded-lg text-sm text-black hover:bg-slate-200`}
-                    >
-                      {name.charAt(0).toUpperCase() + name.slice(1)}
-                    </a>
-                  </li>
-                );
-              }
               return (
                 <li key={name}>
                   <a

@@ -103,6 +103,14 @@ const conversationsReducer = (state = initialState, action) => {
         activeConversation: action.payload,
         error: null,
       };
+    case "MAKE_CONVERSATION_INACTIVE":
+      return {
+        ...state,
+        potentialConversation: null,
+        activeConversation: null,
+        activeConversationMessages: [],
+        error: null,
+      };
     case "FAILURE":
       return {
         ...state,

@@ -24,6 +24,7 @@ const ChatApp = () => {
   const { user } = useSelector((state) => state.user);
 
   const [broadcast, setBroadcast] = useState(null);
+  // const [inConversation, setInConversation] = useState(false);
 
   // Initial data fetching
   useEffect(() => {
@@ -152,9 +153,10 @@ const ChatApp = () => {
           </h1>
         </div>
       )}
-      <div className="flex flex-row gap-1 grow">
+      <div className="flex flex-row grow sm:gap-1">
         <ConversationsBar handleConvoSideOpen={handleConvoSideOpen} />
         <MessageThread />
+        {/* <MessageThread /> */}
       </div>
     </div>
   );

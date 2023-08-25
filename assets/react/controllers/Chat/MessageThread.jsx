@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import TextPrompt from "./TextPrompt";
 import ChatBubble from "./ChatBubble";
+import MessagesHeader from "./MessagesHeader";
 
 import { useSelector } from "react-redux";
 
@@ -15,7 +16,7 @@ function compareMessageDates(date1, date2) {
 }
 
 const MessageThread = () => {
-  const { activeConversationMessages } = useSelector(
+  const { activeConversationMessages, activeConversation } = useSelector(
     (state) => state.conversations
   );
   const { user } = useSelector((state) => state.user);
@@ -39,8 +40,18 @@ const MessageThread = () => {
     });
   }
 
+  let style;
+  if (activeConversation) {
+    style =
+      "flex flex-col w-full sm:w-2/3 gap-2 border-2 border-teal-950 bg-teal-800 rounded-lg p-2";
+  } else {
+    style =
+      "hidden sm:flex flex-col w-2/3 gap-2 border-2 border-teal-950 bg-teal-800 rounded-lg p-2";
+  }
+
   return (
-    <div className="flex flex-col gap-2 w-2/3 border-2 border-teal-950 bg-teal-800 rounded-lg p-2">
+    <div className={style}>
+      <MessagesHeader />
       <div
         className="flex flex-col gap-1 flex-grow overflow-y-scroll"
         ref={scrollableContainerRef}

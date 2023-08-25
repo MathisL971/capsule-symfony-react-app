@@ -10,8 +10,8 @@ const ChatBubble = ({ message }) => {
     <div
       className={
         id_sender === user.id
-          ? "flex flex-row w-fit bg-teal-500 rounded-lg font-normal text-white px-3 py-2"
-          : "flex flex-row w-fit bg-white rounded-lg font-normal text-black px-3 py-2"
+          ? "flex flex-row w-fit bg-teal-950 rounded-2xl font-normal text-white px-3 py-2"
+          : "flex flex-row w-fit bg-white rounded-2xl font-normal text-black px-3 py-2"
       }
     >
       <p>{text}</p>

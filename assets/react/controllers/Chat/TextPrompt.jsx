@@ -114,7 +114,10 @@ const TextPrompt = () => {
   };
 
   return (
-    <form onSubmit={onMessageSubmit} className="flex flex-row gap-1">
+    <form
+      onSubmit={onMessageSubmit}
+      className="flex flex-col gap-1 w-full sm:flex-row"
+    >
       <input
         type="textarea"
         value={newMessage}

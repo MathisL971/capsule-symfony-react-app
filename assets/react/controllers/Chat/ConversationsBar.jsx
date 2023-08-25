@@ -27,9 +27,12 @@ const ConversationsBar = ({ handleConvoSideOpen }) => {
   }
 
   return (
-    <div className="flex flex-col w-1/3 gap-2 border-2 border-teal-950 bg-teal-800 rounded-lg p-2">
+    <div
+      className={`${
+        activeConversation ? "hidden sm:flex" : "flex"
+      } flex-col w-full sm:w-1/3 gap-1 border-2 border-teal-950 bg-teal-800 rounded-lg p-2`}
+    >
       <UserSearchBar handleConvoSideOpen={handleConvoSideOpen} />
-
       <div className="flex flex-col gap-1 flex-grow">
         {potentialConversation && (
           <ConversationCard
