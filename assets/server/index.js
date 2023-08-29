@@ -67,8 +67,6 @@ let conversations = [];
 
 let messages = [];
 
-let loggedInUser;
-
 // APIs
 
 app.post("/api/login", (request, response) => {

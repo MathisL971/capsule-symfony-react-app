@@ -1,4 +1,4 @@
-{% extends "landing/navbar.html.twig" %}
+{% extends "base-js.html.twig" %}
 {% block title %}
 	Capsule
 {% endblock %}
@@ -11,7 +11,7 @@
 		<p><input type="text" name="firstName" placeholder="Prénom*" required></p>
 		<p><input type="text" name="alias" placeholder="Pseudo*" required></p>
 		<p>
-			<input list="timezones" name="timezone" id="infos " {{ (user.timezone) ? 'value=' ~ user.timezone ~ '' }} placeholder="Fuseau horaire*" required>
+			<input list="timezones" name="timezone" id="infos " {{ user and (user.timezone) ? 'value=' ~ user.timezone ~ '' }} placeholder="Fuseau horaire*" required>
 			<datalist id="timezones">
 				<option value="Africa/Abidjan"></option>
 				<option value="Africa/Accra"></option>

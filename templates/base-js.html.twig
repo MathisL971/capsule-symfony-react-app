@@ -8,18 +8,21 @@
 
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 		<link rel="stylesheet" href="/css/capsule.css">
-		<script src="/scripts/popper.js"></script>
-		<script src="/scripts/bootstrap.js"></script>
+		
+		{# <script src="/scripts/popper.js"></script> #}
+		{# <script src="/scripts/bootstrap.js"></script> #}
 		
         {% block stylesheets %}{{ encore_entry_link_tags('app') }}{% endblock %}
         {% block javascripts %}{{ encore_entry_script_tags('app') }}{% endblock %}
 
-		{# {% block favicon %}<link rel="shortcut icon" href="/images/logo.png" sizes="16x16" type="image/x-icon">{% endblock %} #}
+		{% block favicon %}<link rel="shortcut icon" href="/images/logo.png" sizes="16x16" type="image/x-icon">{% endblock %}
     </head>
     <body style="width: 100%; background-color: rgb(204 251 241)">
-       {# {% if flash %}<div class="alert alert-warning text-center">{{flash|raw}}</div>{% endif %} #}
 
-		<div {{ react_component('NavBar') }} id="navbar-div" style="container-type: inline-size"></div>
+        {# {% if flash %}<div class="alert alert-warning text-center">{{flash|raw}}</div>{% endif %} #}
+
+		<div {{ react_component('NavBar', { userObj: user, userRole: role }) }} id="navbar-div" style="container-type: inline-size"></div>
+		
 		<div class="">
 			{% block body %}{% endblock %}
 		</div>
@@ -44,6 +47,6 @@
 			</div>
 		</footer>
 
-		{# {% if role == 'SuperAdmin' %}{% block admin %}{% endblock %}{% endif %} #}
+		{% if role == 'SuperAdmin' %}{% block admin %}{% endblock %}{% endif %}
     </body>
 </html>

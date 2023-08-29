@@ -1,11 +1,11 @@
-{% extends "/landing/navbar.html.twig" %}
+{% extends "base-js.html.twig" %}
 {% block title %}
 	Capsule -
 	{{profile.firstName}}
 	{{profile.name}}
 {% endblock %}
-{% block body %}
 
+{% block body %}
 	<div class="container text-align">
 		<div class="row row-cols-1 row-cols-md-2 g-4">
 			<div class="col">
@@ -78,9 +78,9 @@
 			</div>
 		</p>
 	</div>
-</div>
-{% if user.role == 'SuperAdmin' %}
-	{{dump(dates)}}
-	<p>{{dump(profile)}}
-	{% endif %}
+
+	{% block admin %}
+		{{ dump(dates) }}
+		<p>{{ dump(profile) }}</p>
+	{% endblock %}
 {% endblock %}

@@ -21,6 +21,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Firebase\JWT\JWT;
 use SessionIdInterface;
+use Symfony\Component\VarDumper\VarDumper;
+
 
 class AdminController extends BaseController
 {
@@ -203,22 +205,24 @@ class AdminController extends BaseController
      */
     public function users()
     {
+        VarDumper::dump($this->session->get('role'));
+
         if (AdminController::authentify($this->session)) {
 
-            $vars = [];
+            // $vars = [];
 
-            $vars['user'] = $this->session->get('user');
-            $vars['role'] = $this->session->get('role');
+            // $vars['user'] = $this->session->get('user');
+            // $vars['role'] = $this->session->get('role');
 
-            $repo = $this->em->getRepository(User::class);
-            $users = $repo->findAll();
+            // $repo = $this->em->getRepository(User::class);
+            // $users = $repo->findAll();
 
-            $vars['users'] = $users;
+            // $vars['users'] = $users;
 
             return new Response($this->twig->render('admin/users.html.twig', $vars));
         }
 
-        return new RedirectResponse('/');
+        return new RedirectResponse('/admin/home');
     }
 
     /**
@@ -832,9 +836,10 @@ class AdminController extends BaseController
      */
     static function authentify(SessionInterface $session)
     {
-        if ($session->get('role') == 'Admin' || $session->get('role') == 'SuperAdmin') {
+        $role = $session->get('role');
+        if ($role == 'Admin' || $role == 'SuperAdmin') {
             return true;
-        } elseif ($session->get('role') == 'Ado' || $session->get('role') == 'Jeune' || $session->get('role') == 'Parent' || $session->get('role') == 'Pro') {
+        } elseif ($role == 'Ado' || $role == 'Jeune' || $role == 'Parent' || $role == 'Pro') {
             $session->set('flash', 'Tu n\'as pas les droits pour accéder à cette page');
             return false;
         } else {

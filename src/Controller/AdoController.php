@@ -18,15 +18,13 @@ class AdoController extends BaseController
      */
     public function home(Request $rq)
     {
-        // $vars = [];
+        $vars = [];
 
-        // $vars['user'] = $this->session->get('user');
-        // $vars['role'] = $this->session->get('role');
+        $vars['user'] = $this->session->get('user');
+        $vars['role'] = $this->session->get('role');
 
         // return new Response($this->twig->render('ado/home.html.twig', $vars));
-
-        $data = [];
-        return $this->render('ado/home.html.twig', $data);
+        return $this->render('ado/home.html.twig', $vars);
     }
 
     /**
@@ -36,12 +34,10 @@ class AdoController extends BaseController
     {
         $vars = [];
 
-        // $vars['user'] = $this->session->get('user');
-        // $vars['role'] = $this->session->get('role');
+        $vars['user'] = $this->session->get('user');
+        $vars['role'] = $this->session->get('role');
 
-        $page = $this->twig->render('ado/journal.html.twig', $vars);
-
-        return new Response($page);
+        return $this->render('ado/journal.html.twig', $vars);
     }
 
     /**
@@ -94,15 +90,13 @@ class AdoController extends BaseController
      */
     public function messages(Request $rq)
     {
-        // $vars = [];
+        $vars = [];
 
-        // $vars['user'] = $this->session->get('user');
-        // $vars['role'] = $this->session->get('role');
+        $vars['user'] = $this->session->get('user');
+        $vars['role'] = $this->session->get('role');
 
-        // return new Response($this->twig->render('message/home.html.twig', $vars));
-
-        $data = [];
-        return $this->render('ado/messages.html.twig', $data);
+        // return new Response($this->twig->render('ado/messages.html.twig', $vars));
+        return $this->render('ado/messages.html.twig', $vars);
     }
 
     /**
@@ -226,9 +220,10 @@ class AdoController extends BaseController
                 $vars['user'] = $profile;
             }
 
-            return new Response($this->twig->render('ado/profil.html.twig', $vars));
+            return $this->render('ado/profil.html.twig', $vars);
+            // return new Response($this->twig->render('ado/profil.html.twig', $vars));
         }
-        return new RedirectResponse('/');
+        return new RedirectResponse('/ado/home');
     }
 
     /**

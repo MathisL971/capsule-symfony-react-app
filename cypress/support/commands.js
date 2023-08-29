@@ -18,7 +18,25 @@ Cypress.Commands.add("login", ({ username, password }) => {
     password,
   }).then(({ body }) => {
     sessionStorage.setItem("sessionUser", JSON.stringify(body));
-    cy.visit("");
+
+    const { role } = body;
+
+    switch (role) {
+      case "ado":
+        window.location.href = "/ado/home";
+        break;
+      case "parent":
+        window.location.href = "/parent/home";
+        break;
+      case "pro":
+        window.location.href = "/pro/home";
+        break;
+      case "admin":
+        window.location.href = "/admin/home";
+        break;
+      default:
+        console.log("Invalid role");
+    }
   });
 });
 
@@ -27,8 +45,26 @@ Cypress.Commands.add("checkNavBar", () => {
     .should("be.visible")
     .within(() => {
       cy.contains("Capsule").should("be.visible");
-      cy.contains("Se Connecter").should("be.visible");
-      cy.contains("S'inscrire").should("be.visible");
+      cy.get("#hamburger-button").should("be.visible");
+    });
+});
+
+Cypress.Commands.add("checkDropDown", () => {
+  cy.get("#dropdown-menu")
+    .should("be.visible")
+    .within(() => {
+      cy.get("#login-nav-button").should("be.visible").contains("Se Connecter");
+      cy.get("#signup-nav-button").should("be.visible").contains("S'inscrire");
+    });
+});
+
+Cypress.Commands.add("checkUserMenu", () => {
+  cy.get("#user-menu")
+    .should("be.visible")
+    .within(() => {
+      cy.get("#user-menu-logout-button")
+        .should("be.visible")
+        .contains("Se Déconnecter");
     });
 });
 

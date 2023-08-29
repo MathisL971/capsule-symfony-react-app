@@ -19,32 +19,40 @@ const LoginForm = () => {
   const handleSubmit = (values, setSubmitting, resetForm) => {
     setTimeout(async () => {
       try {
-        const user = await loginService.authenticate(values);
-        sessionStorage.setItem("sessionUser", JSON.stringify(user));
+        const response = await loginService.authenticate(values);
 
-        const { role } = user;
+        if ("error" in response) {
+          setErrorMessage(response.error);
+          setTimeout(() => {
+            setErrorMessage("");
+          }, 5000);
+        } else {
+          sessionStorage.setItem("sessionUser", JSON.stringify(response));
 
-        switch (role) {
-          case "ado":
-            window.location.href = "/ado/home";
-            break;
-          case "parent":
-            window.location.href = "/parent/home";
-            break;
-          case "pro":
-            window.location.href = "/pro/home";
-            break;
-          case "admin":
-            window.location.href = "/admin/home";
-            break;
-          default:
-            console.log("Invalid role");
+          const { role } = response;
+
+          switch (role) {
+            case "ado":
+              window.location.href = "/ado/home";
+              break;
+            case "parent":
+              window.location.href = "/parent/home";
+              break;
+            case "pro":
+              window.location.href = "/pro/home";
+              break;
+            case "admin":
+              window.location.href = "/admin/home";
+              break;
+            default:
+              console.log("Invalid role");
+          }
         }
 
         resetForm();
         setSubmitting(false);
       } catch (e) {
-        setErrorMessage(e.response.data);
+        setErrorMessage(e.response);
         resetForm();
         setSubmitting(false);
         setTimeout(() => {

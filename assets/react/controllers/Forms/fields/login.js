@@ -1,8 +1,8 @@
 export const fields = [
   {
-    name: "username",
+    name: "email",
     type: "text",
-    label: "Entrez votre nom d'utilisateur",
+    label: "Entrez votre adresse email",
   },
   {
     name: "password",

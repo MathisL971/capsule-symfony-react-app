@@ -9,7 +9,7 @@ import EducationField from "./EducationField";
 import ExperienceField from "./ExperienceField";
 
 // Services
-import userService from "../../../services/user";
+import signupService from "../../../services/signup";
 
 // Fields
 import { topField, fields } from "../fields/signup";
@@ -23,21 +23,28 @@ const SignUpForm = () => {
   const handleSubmit = (values, setSubmitting, resetForm) => {
     setTimeout(async () => {
       try {
-        const userObject = {
-          ...values,
-          status: "active",
-          activationKey: "",
-          socid: 0,
-          profilePic: "",
-          alias: "",
-        };
-        delete userObject["confirmPassword"];
+        delete values["confirmPassword"];
+        const response = await signupService.signup(values);
+        sessionStorage.setItem("sessionUser", JSON.stringify(response));
+        const { role } = response;
 
-        console.log(userObject);
+        switch (role) {
+          case "ado":
+            window.location.href = "/ado/home";
+            break;
+          case "parent":
+            window.location.href = "/parent/home";
+            break;
+          case "pro":
+            window.location.href = "/pro/home";
+            break;
+          case "admin":
+            window.location.href = "/admin/home";
+            break;
+          default:
+            console.log("Invalid role");
+        }
 
-        const createdUser = await userService.create(userObject);
-        sessionStorage.setItem("sessionUser", JSON.stringify(createdUser));
-        window.location.href = "/";
         resetForm();
         setSubmitting(false);
       } catch (e) {

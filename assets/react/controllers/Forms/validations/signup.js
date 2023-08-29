@@ -8,15 +8,27 @@ export const validationSchema = Yup.object({
     .max(15, "Username must be 15 characters or less")
     .required("Required")
     .test("username-unique", "Username already exists", async (value) => {
-      const users = await userService.getAll();
-      return users.every((user) => user.username !== value);
+      try {
+        const response = await userService.getAll(); // Fetch all users from the API
+        const users = response["hydra:member"];
+        return !users.some((user) => user.username === value);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        return false; // Return false to indicate validation failure
+      }
     }),
   email: Yup.string()
     .email("Invalid email address")
     .required("Required")
     .test("email-unique", "Email is already taken", async (value) => {
-      const users = await userService.getAll();
-      return users.every((user) => user.email !== value);
+      try {
+        const response = await userService.getAll(); // Fetch all users from the API
+        const users = response["hydra:member"];
+        return !users.some((user) => user.email === value);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        return false; // Return false to indicate validation failure
+      }
     }),
   password: Yup.string()
     .min(8, "Password must be at least 8 characters")

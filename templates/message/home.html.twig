@@ -4,6 +4,6 @@
 
 {% block body %}
     <div class="mx-auto py-4 md:py-10 lg:py-14 px-10">
-        <div {{ react_component('App') }}></div>
+        <div {{ react_component('App', { userObj: user, userRole: role }) }}></div>
     </div>
 {% endblock %}

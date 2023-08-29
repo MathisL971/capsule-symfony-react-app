@@ -8,7 +8,7 @@ import ChatApp from "./Chat/ChatApp";
 import LoginForm from "./Forms/LoginForm/LoginForm";
 import SignupForm from "./Forms/SignupForm/SignupForm";
 
-const App = () => {
+const App = ({ userObj, userRole }) => {
   return (
     <Provider store={store}>
       <Router>

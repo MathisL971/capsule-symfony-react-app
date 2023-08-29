@@ -19,6 +19,7 @@ class BaseController extends AbstractController
 
     public function __construct(EntityManagerInterface $em, SessionInterface $session)
     {
+
         $loader = new FilesystemLoader('../templates');
         $this->twig = new Environment($loader, ['debug' => true]);
         $this->twig->addExtension(new DebugExtension());
