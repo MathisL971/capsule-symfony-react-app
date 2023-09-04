@@ -1,0 +1,11 @@
+{% extends "base-js.html.twig" %}
+
+{% block title %}
+	Capsule - Messages
+{% endblock %}
+
+{% block body %}
+	<div class="mx-auto py-8 px-10">
+		<div {{ react_component('App', { userObj: userJson, userRole: role }) }}></div>
+	</div>
+{% endblock %}

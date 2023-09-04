@@ -16,22 +16,13 @@ class ParentController extends BaseController
      */
     public function home(Request $rq)
     {
-        //$vars = [];
+        $vars = [];
 
-        // if (ParentController::authentify($this->session)) {
-        //     $vars['user'] = $this->session->get('user');
-        //     $vars['role'] = $this->session->get('role');
+        $vars['user'] = $this->session->get('user');
+        $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-        //     return new Response($this->twig->render('parent/home.html.twig', $vars));
-        // }
-
-        // return new Response($this->twig->render('parent/home.html.twig', $vars));
-
-        // $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
-        // return new RedirectResponse('/');
-
-        $data = [];
-        return $this->render('parent/home.html.twig', $data);
+        return $this->render('parent/home.html.twig', $vars);
     }
 
     /**
@@ -44,6 +35,7 @@ class ParentController extends BaseController
         if (ParentController::authentify($this->session)) {
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
             $vars['menu2'] = true;
 
             return new Response($this->twig->render('parent/journal.html.twig', $vars));
@@ -63,6 +55,7 @@ class ParentController extends BaseController
         if (ParentController::authentify($this->session)) {
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
             $vars['menu2'] = true;
 
             return new Response($this->twig->render('parent/videos.html.twig', $vars));
@@ -82,6 +75,7 @@ class ParentController extends BaseController
         if (ParentController::authentify($this->session)) {
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
             $vars['menu2'] = true;
 
             return new Response($this->twig->render('parent/podcasts.html.twig', $vars));
@@ -101,6 +95,7 @@ class ParentController extends BaseController
         if (ParentController::authentify($this->session)) {
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
             $vars['menu2'] = true;
 
             return new Response($this->twig->render('parent/audiobooks.html.twig', $vars));
@@ -128,8 +123,14 @@ class ParentController extends BaseController
         // $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
         // return new RedirectResponse('/');
 
-        $data = [];
-        return $this->render('parent/messages.html.twig', $data);
+        $vars = [];
+
+        $vars['user'] = $this->session->get('user');
+        $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+
+        // return new Response($this->twig->render('ado/messages.html.twig', $vars));
+        return $this->render('parent/messages.html.twig', $vars);
     }
 
     /**
@@ -234,7 +235,7 @@ class ParentController extends BaseController
      */
     static function authentify(SessionInterface $session)
     {
-        if ($session->get('role') == 'Parent' || $session->get('role') == 'Admin' || $session->get('role') == 'SuperAdmin') {
+        if ($session->get('role') == 'parent' || $session->get('role') == 'admin' || $session->get('role') == 'superadmin') {
             return true;
         } else {
             return false;

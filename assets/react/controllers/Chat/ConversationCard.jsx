@@ -26,7 +26,9 @@ const ConversationCard = ({ conversation, styles, handleConvoSideOpen }) => {
 
   const connection = connections.find(
     (c) =>
-      c.id === conversation.id_creator || c.id === conversation.id_correspondant
+      (c.id === conversation.idCreator ||
+        c.id === conversation.idCorrespondant) &&
+      c.id !== user.id
   );
 
   return (
@@ -42,7 +44,7 @@ const ConversationCard = ({ conversation, styles, handleConvoSideOpen }) => {
       }}
     >
       <span className="bg-gray-300 rounded-full w-20 h-20"></span>
-      {connection && <h2>{connection.name}</h2>}
+      {connection && <h2>{connection.username}</h2>}
     </div>
   );
 };

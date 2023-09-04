@@ -69,6 +69,7 @@ class SignupController extends BaseController
             $vars = [];
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
             // Return the rendered template for GET request
             return $this->render('signup/home.html.twig', $vars);
         }
@@ -90,7 +91,7 @@ class SignupController extends BaseController
     //         $userExistant = $repo->findOneBy(['email' => $rq->request->get('email')]);
 
     //         if (!$userExistant) {
-    //             if ($rq->request->get('role') == 'Pro') {
+    //             if ($rq->request->get('role') == 'pro') {
     //                 $path = '/pro/subscription?email=' . $rq->request->get('email');
     //                 return new RedirectResponse($path);
     //             }

@@ -7,20 +7,6 @@ import {
   conversationUpdateAction,
 } from "../../reducers/conversations";
 
-// Helpers
-function generateRandomId(length) {
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let id = "";
-
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    id += characters.charAt(randomIndex);
-  }
-
-  return id;
-}
-
 const TextPrompt = () => {
   const dispatch = useDispatch();
 
@@ -45,54 +31,57 @@ const TextPrompt = () => {
 
         // If a potential conversation has been initiated
         if (potentialConversation) {
-          addedMessage = {
-            id: generateRandomId(20),
-            text: newMessage,
-            date_sent: new Date().toISOString(),
-            id_sender: user.id,
-            id_receiver: potentialConversation.id_correspondant,
-            id_convo: potentialConversation.id,
-          };
-          dispatch(conversationAddMessageAction(addedMessage));
-
           const newConvo = {
             ...potentialConversation,
-            date_last_message: new Date().toISOString(),
-            correspondant_has_new_message: true,
+            dateLastMessage: new Date().toISOString(),
+            correspondantHasNewMessage: true,
           };
-          dispatch(conversationAddAction(newConvo));
+          delete newConvo.id;
 
-          connection.send(
-            JSON.stringify({
-              addedMessage,
-              updatedConversation: newConvo,
-            })
-          );
+          dispatch(conversationAddAction(newConvo)).then((returnedConvo) => {
+            addedMessage = {
+              text: newMessage,
+              dateSent: new Date().toISOString(),
+              idSender: user.id,
+              idReceiver: potentialConversation.idCorrespondant,
+              idConversation: returnedConvo.id,
+            };
+            console.log(addedMessage);
+            dispatch(conversationAddMessageAction(addedMessage));
+
+            connection.send(
+              JSON.stringify({
+                addedMessage,
+                updatedConversation: returnedConvo,
+              })
+            );
+          });
         } else {
+          console.log("new message for existing convo");
+
           addedMessage = {
-            id: generateRandomId(20),
             text: newMessage,
-            date_sent: new Date().toISOString(),
-            id_sender: user.id,
-            id_receiver:
-              user.id === activeConversation.id_correspondant
-                ? activeConversation.id_creator
-                : activeConversation.id_correspondant,
-            id_convo: activeConversation.id,
+            dateSent: new Date().toISOString(),
+            idSender: user.id,
+            idReceiver:
+              user.id === activeConversation.idCorrespondant
+                ? activeConversation.idCreator
+                : activeConversation.idCorrespondant,
+            idConversation: activeConversation.id,
           };
           dispatch(conversationAddMessageAction(addedMessage));
 
           let updatedConversation = {
             ...activeConversation,
-            date_last_message: addedMessage.date_sent,
-            id_last_sender: addedMessage.id_sender,
+            dateLastMessage: addedMessage.dateSent,
+            idLastSender: addedMessage.idSender,
           };
           updatedConversation =
-            user.id === updatedConversation.id_creator
-              ? { ...updatedConversation, correspondant_has_new_message: true }
+            user.id === updatedConversation.idCreator
+              ? { ...updatedConversation, correspondantHasNewMessage: true }
               : {
                   ...updatedConversation,
-                  creator_has_new_message: true,
+                  creatorHasNewMessage: true,
                 };
           dispatch(conversationUpdateAction(updatedConversation));
 
@@ -125,7 +114,7 @@ const TextPrompt = () => {
         placeholder="Tapez votre message ici..."
         className="flex flex-grow rounded-lg border-2 border-teal-950 p-2"
       ></input>
-      {activeConversation ? (
+      {activeConversation || potentialConversation ? (
         <button
           type="submit"
           className={

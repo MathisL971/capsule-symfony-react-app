@@ -21,7 +21,7 @@ const conversationsReducer = (state = initialState, action) => {
       return {
         ...state,
         potentialConversation: action.payload,
-        activeConversation: action.payload,
+        activeConversation: null,
         activeConversationMessages: [],
         error: null,
       };
@@ -41,14 +41,10 @@ const conversationsReducer = (state = initialState, action) => {
         ),
         error: null,
       };
-    case "ABORT_POTENTIAL_CONVERSATION_AND_SWITCH":
+    case "ABORT_POTENTIAL_CONVERSATION":
       return {
         ...state,
         potentialConversation: null,
-        activeConversation: action.payload.newConversation,
-        activeConversationMessages: state.activeConversationMessages.concat(
-          action.payload.newMessage
-        ),
       };
     case "ADD_CONVERSATION_RECEIVER":
       return {
@@ -73,8 +69,6 @@ const conversationsReducer = (state = initialState, action) => {
     case "OPEN_CONVERSATION_MESSAGE_SUCCESS":
       return {
         ...state,
-        potentialConversation: null,
-        activeConversation: action.payload.activeConversation,
         activeConversationMessages: action.payload.activeConversationMessages,
         conversations: state.conversations.map((c) => {
           return c.id === action.payload.activeConversation.id
@@ -124,8 +118,14 @@ const conversationsReducer = (state = initialState, action) => {
 
 export const conversationFetchAction = (userId) => async (dispatch) => {
   try {
-    const conversations = await conversationService.getUserConvos(userId);
-    dispatch({ type: "FETCH_CONVERSATIONS_SUCCESS", payload: conversations });
+    const conversations = await conversationService.getAll();
+    const userConversations = conversations["hydra:member"].filter((convo) => {
+      return convo.idCreator === userId || convo.idCorrespondant === userId;
+    });
+    dispatch({
+      type: "FETCH_CONVERSATIONS_SUCCESS",
+      payload: userConversations,
+    });
   } catch (e) {
     dispatch({ type: "FAILURE", payload: e.message });
   }
@@ -140,6 +140,7 @@ export const conversationAddAction = (newConversation) => async (dispatch) => {
       type: "CREATE_CONVERSATION_SUCCESS",
       payload: createdConversation,
     });
+    return createdConversation;
   } catch (e) {
     dispatch({ type: "FAILURE", payload: e.message });
   }
@@ -149,6 +150,8 @@ export const conversationAddMessageAction =
   (newMessage) => async (dispatch) => {
     try {
       const addedMessage = await messageService.create(newMessage);
+
+      console.log("New message:", addedMessage);
 
       dispatch({
         type: "CREATE_NEW_MESSAGE_SUCCESS",
@@ -178,22 +181,21 @@ export const conversationUpdateAction =
 export const conversationOpenMessagesAction =
   (convo, user) => async (dispatch) => {
     try {
-      const conversationMessages = await messageService.getConvoMessages(
-        convo.id
-      );
+      const messages = await messageService.getAll();
+      const conversationMessages = messages["hydra:member"].filter((m) => {
+        return m.idConversation === convo.id;
+      });
 
-      let updatedConversation;
-      if (user.id === convo.id_creator) {
-        updatedConversation = await conversationService.modifyConvo({
-          ...convo,
-          creator_has_new_message: false,
-        });
-      } else {
-        updatedConversation = await conversationService.modifyConvo({
-          ...convo,
-          correspondant_has_new_message: false,
-        });
-      }
+      const updatedConversation =
+        user.id === convo.idCreator
+          ? await conversationService.modifyConvo({
+              ...convo,
+              creatorHasNewMessage: false,
+            })
+          : await conversationService.modifyConvo({
+              ...convo,
+              correspondantHasNewMessage: false,
+            });
 
       dispatch({
         type: "OPEN_CONVERSATION_MESSAGE_SUCCESS",

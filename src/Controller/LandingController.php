@@ -44,6 +44,7 @@ class LandingController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
         return $this->render('landing/home.html.twig', $vars);
     }
@@ -57,6 +58,7 @@ class LandingController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
         $repo = $this->em->getRepository(User::class);
         $pros = $repo->findBy(['role' => 'pro']);
@@ -91,6 +93,7 @@ class LandingController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
         return $this->render('landing/parent.html.twig', $vars);
     }
@@ -104,6 +107,7 @@ class LandingController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
         return $this->render('landing/pro.html.twig', $vars);
     }
@@ -117,6 +121,7 @@ class LandingController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
         // return new Response($this->twig->render('landing/liste_pros.html.twig', $vars));
         return $this->render('landing/liste_pros.html.twig', $vars);
@@ -133,6 +138,7 @@ class LandingController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
         $repo = $this->em->getRepository(USer::class);
         $vars['profile'] = $repo->find($id);
@@ -163,6 +169,7 @@ class LandingController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
         // return new Response($this->twig->render('landing/ressources.html.twig', $vars));
         return $this->render('landing/ressources.html.twig', $vars);
@@ -177,6 +184,7 @@ class LandingController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
         // return new Response($this->twig->render('landing/revue_presse.html.twig', $vars));
         return $this->render('landing/revue_presse.html.twig', $vars);
@@ -191,6 +199,7 @@ class LandingController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
         // return new Response($this->twig->render('landing/mentions.html.twig', $vars));
         return $this->render('landing/mentions.html.twig', $vars);
@@ -205,6 +214,7 @@ class LandingController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
         // return new Response($this->twig->render('landing/rgpd.html.twig', $vars));
         return $this->render('landing/rgpd.html.twig', $vars);
@@ -219,6 +229,7 @@ class LandingController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
         // return new Response($this->twig->render('landing/cgs.html.twig', $vars));
         return $this->render('landing/cgs.html.twig', $vars);
@@ -233,6 +244,7 @@ class LandingController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
         // return new Response($this->twig->render('landing/faq.html.twig', $vars));
         return $this->render('landing/faq.html.twig', $vars);

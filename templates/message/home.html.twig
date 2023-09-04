@@ -1,9 +1,0 @@
-{% extends 'base-js.html.twig' %}
-
-{% block title %}Hello MessageController!{% endblock %}
-
-{% block body %}
-    <div class="mx-auto py-4 md:py-10 lg:py-14 px-10">
-        <div {{ react_component('App', { userObj: user, userRole: role }) }}></div>
-    </div>
-{% endblock %}

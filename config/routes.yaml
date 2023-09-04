@@ -1,3 +1,13 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+# login_get:
+#   path: /login
+#   controller: App\Controller\LoginController::showLoginForm
+#   methods: GET
+
+# login_post:
+#   path: /login
+#   controller: App\Controller\LoginController::login
+#   methods: POST

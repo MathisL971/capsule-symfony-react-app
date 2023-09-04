@@ -1,4 +1,5 @@
 import connectionService from "../services/connections";
+import userService from "../services/user";
 
 const initialState = {
   connections: [],
@@ -26,8 +27,11 @@ const connectionsReducer = (state = initialState, action) => {
 
 export const connectionFetchAction = (userId) => async (dispatch) => {
   try {
-    const connections = await connectionService.getUserConnections(userId);
-    dispatch({ type: "FETCH_SUCCESS", payload: connections });
+    const users = await userService.getAll();
+    const actualUsers = users["hydra:member"].filter((u) => {
+      return u.id !== userId;
+    });
+    dispatch({ type: "FETCH_SUCCESS", payload: actualUsers });
   } catch (e) {
     dispatch({ type: "FAILURE", payload: e.message });
   }

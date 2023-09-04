@@ -11,139 +11,243 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\BaseController;
 use Symfony\Component\VarDumper\VarDumper;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 
 class LoginController extends BaseController
 {
     /**
-     * @Route("/login", name="login")
+     * @Route("/login", name="login_post", methods={"POST"})
      */
     public function login(Request $rq)
     {
-        // $vars = [];
+        $vars = [];
 
-        // if (!empty($_POST)) {
-        //     $repo = $this->em->getRepository(User::class);
-        //     $user = $repo->findOneBy(['email' => $rq->request->get('email')]);
+        $requestData = json_decode($rq->getContent(), true);
+        $email = $requestData['email'];
+        $password = $requestData['password'];
 
-        //     $vars['flash'] = ('L\'authentification a échouée <p> <a href="/reset">Réinitialiser le mot de passe ?</a>');
-        //     //echo nl2br("L'authentification a échouée <br> Réinitialiser le mot de passe ?");
+        $user = $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
 
-        //     if (!$user) {
-        //         // return new Response($this->twig->render('landing/home.html.twig', $vars));
-        //         return $this->render('landing/home.html.twig', $vars);
-        //     }
+        // dump($user);
 
-        //     if ($user->getActivationKey()) {
-        //         $vars['flash'] = 'Ce compte n\'a pas été activé. Un email avec un lien d\'activation a été renvoyé.';
+        // $user = $this->em->getRepository(User::class)->findOneBy(['email' => $rq->request->get('email')]);
 
-        //         // Envoi d'un mail de confirmation
-        //         ini_set("SMTP", "SSL0.OVH.NET");
+        // $vars['flash'] = ('L\'authentification a échouée <p> <a href="/reset">Réinitialiser le mot de passe ?</a>');
+        //echo nl2br("L'authentification a échouée <br> Réinitialiser le mot de passe ?");
 
-        //         $entete  = 'MIME-Version: 1.0' . "\r\n";
-        //         $entete .= 'Content-type: text/html; charset=utf-8' . "\r\n";
-        //         $entete .= 'From: postmaster@klungstene.fr' . "\r\n";
+        if (!$user) {
+            // Invalid credentials
+            throw new AuthenticationException('Credentials are not valid (email)');
+        }
 
-        //         $message = 'Bonjour ' . $user->getFirstName() . ',<br>' . "\r\n";
-        //         $message .= "<p>Merci d'avoir créé ton compte chez Capsule. Active-le dès maintenant : <a href=\"https://capsule.klungstene.xyz/activate/" . $user->getActivationKey() . "\">Activer mon compte" . '</a>.<br>' . "\r\n";
-        //         $message .= "<p> Ton identifiant : " . $user->getEmail() . '.<br></p>' . "\r\n";
-        //         $message .= "<p>A bientôt dans ton espace Capsule.";
+        if ($user->getActivationKey()) {
+            // $vars['flash'] = 'Ce compte n\'a pas été activé. Un email avec un lien d\'activation a été renvoyé.';
 
-        //         mail($user->getEmail(), 'Active ton compte Capsule', $message, $entete);
+            // Envoi d'un mail de confirmation
+            // sendVerificationEmail($user);
 
-        //         // return new Response($this->twig->render('landing/home.html.twig', $vars));
-        //         return $this->render('landing/home.html.twig', $vars);
-        //     }
+            return new AuthenticationException('Account has not been verified yet');
+            // return new Response(json_encode([ "message" => "account has not been verified yet"]), 200, ['Content-Type' => 'application/json']);
+        }
 
-        //     if (password_verify($rq->request->get('password'), $user->getPassword())) {
-        //         $this->session->set('user', $user);
-        //         $this->session->set('role', $user->getRole());
+        if ($user->getPassword() === $password) {
 
-        //         $vars['flash'] = "Bienvenue " . $user->getName();
+            $this->session->set('user', $user);
+            $this->session->set('role', $user->getRole());
 
-        //         if ($user->getStatus() == 'suspended') {
-        //             // return new Response('landing/suspended.html.twig');
-        //             return $this->render('landing/suspended.html.twig', $vars);
-        //         } elseif ($user->getStatus() == 'pending') {
-        //             // return new Response('landing/pending.html.twig');
-        //             return $this->render('landing/pending.html.twig', $vars);
-        //         } else {
-        //             if ($user->getRole() == 'SuperAdmin') {
-        //                 // return new RedirectResponse('/admin/home');
-        //                 return $this->render('admin/home.html.twig', $vars);
-        //             } else {
-        //                 // return new RedirectResponse('/' . strtolower($user->getRole()) . '/home');
-        //                 return $this->render('/' . strtolower($user->getRole()) . '/home.html.twig', $vars);
-        //             }
-        //         }
-        //     }
-        // }
-
-        // if ($this->session->has('flash')) {
-        //     $vars['flash'] = $this->session->get('flash');
-        //     $this->session->remove('flash');
-        // }
-
-        // $user = $this->session->get('user');
-        // $role = $this->session->get('role');
-
-        // $vars['user'] = $user;
-        // $vars['role'] = $role;
-
-        // // If user already logged in
-        // if ($user) {
-        //     // Redirect to dashboard
-        //     return $this->render('$role/home.html.twig', $vars);
-        // }
-        // else {
-        //     // Redirect to login form
-        //     return $this->render('login/home.html.twig', $vars);
-        // }
-
-        // If POST request (user trying to log in)
-        if ($rq->isMethod('POST')) {
-
-            $jsonContent = $rq->getContent();
-            $requestData = json_decode($jsonContent, true);
-
-            if ($requestData) {
-                $email = $requestData['email'];
-                $password = $requestData['password'];
-
-                $repo = $this->em->getRepository(User::class);
-                $user = $repo->findOneBy(['email' => $email]);
-
-                if ($user && $user->getPassword() === $password) {
-                    $this->session->set('user', $user);
-                    $this->session->set('role', $user->getRole());
-
-                    $userData = [
-                        'id' => $user->getId(),
-                        'username' => $user->getUsername(),
-                        'role' => $user->getRole(),
-                    ];
-                    return new Response(json_encode($userData), 200, ['Content-Type' => 'application/json']);
-                }
-
-                return new Response(json_encode(['error' => 'Email or password is not valid']), 200, ['Content-Type' => 'application/json']);
-
-            } else {
-                // Handle invalid or missing data
-                return new Response(json_encode(['error' => 'Missing body data']), 400, ['Content-Type' => 'application/json']);
-            }
-
-        // Else if GET request (rendering login form)
-        } elseif ($rq->isMethod('GET')) {
-            $vars = [];
+            $vars['flash'] = "Bienvenue " . $user->getName();
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-            // Return the rendered template for GET request
-            return $this->render('login/home.html.twig', $vars);
+            if ($user->getStatus() == 'suspended') {
+                return new Response('landing/suspended.html.twig');
+                // return $this->render('landing/suspended.html.twig', $vars);
+            }
+            
+            if ($user->getStatus() == 'pending') {
+                return new Response('landing/pending.html.twig');
+                // return $this->render('landing/pending.html.twig', $vars);
+            } 
+
+            // return $this->render('/' . strtolower($user->getRole()) . '/home.html.twig', $vars);
+
+            // return new Response(json_encode($vars), 200, ['Content-Type' => 'application/json']);
+
+            // if ($user->getRole() == 'superadmin') {
+            //     return new Response(json_encode($userData), 200, ['Content-Type' => 'application/json']);
+            //     return new RedirectResponse('/admin/home');
+            //     return $this->render('admin/home.html.twig', $vars);
+            // } 
+
+            return new Response('/' . strtolower($user->getRole()) . '/home');
+            // return new Response(json_encode($userData), 200, ['Content-Type' => 'application/json']);
         }
-    
-        // If the request method is neither GET nor POST
-        return new Response('Invalid request method');
+
+        throw new AuthenticationException('Credentials are not valid (password)');
+    }
+
+
+    // /**
+    //  * @Route("/login", name="login_post", methods={"POST"})
+    //  */
+    // public function login(Request $rq)
+    // {
+        // $requestData = json_decode($rq->getContent(), true);
+        // $email = $requestData['email'];
+        // $password = $requestData['password'];
+
+        // $user = $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
+
+    //     if ($user && $user->getPassword() === $password) {
+    //         $this->session->set('user', $user);
+    //         $this->session->set('role', $user->getRole());
+
+    //         $userData = [
+    //             'username' => $user->getUsername(),
+    //             'role' => $user->getRole(),
+    //         ];
+
+    //         $vars = [];
+    //         $vars['user'] = $this->session->get('user');
+    //         $vars['role'] = $this->session->get('role');  
+
+    //         // return $this->render(strtolower($user->getRole()) . '/home.html.twig', $vars);
+
+    //         return new Response(json_encode($userData), 200, ['Content-Type' => 'application/json']);
+    //     }
+
+    //     // Invalid credentials
+    //     throw new AuthenticationException('Email or password is not valid');
+    // }
+
+    // /**
+    //  * @Route("/login", name="login_post", methods={"POST"})
+    //  */
+    // public function login(Request $rq)
+    // {
+    //     $vars = [];
+
+    //     if (!empty($_POST)) {
+    //         $repo = $this->em->getRepository(User::class);
+    //         $user = $repo->findOneBy(['email' => $rq->request->get('email')]);
+
+    //         $vars['flash'] = ('L\'authentification a échouée <p> <a href="/reset">Réinitialiser le mot de passe ?</a>');
+    //         //echo nl2br("L'authentification a échouée <br> Réinitialiser le mot de passe ?");
+
+    //         if (!$user) {
+    //             return new Response($this->render('landing/home.html.twig', $vars));
+    //         }
+
+    //         if ($user->getActivationKey()) {
+    //             $vars['flash'] = 'Ce compte n\'a pas été activé. Un email avec un lien d\'activation a été renvoyé.';
+
+    //             // Envoi d'un mail de confirmation
+    //             ini_set("SMTP", "SSL0.OVH.NET");
+
+    //             $entete  = 'MIME-Version: 1.0' . "\r\n";
+    //             $entete .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+    //             $entete .= 'From: postmaster@klungstene.fr' . "\r\n";
+
+    //             $message = 'Bonjour ' . $user->getFirstName() . ',<br>' . "\r\n";
+    //             $message .= "<p>Merci d'avoir créé ton compte chez Capsule. Active-le dès maintenant : <a href=\"https://capsule.klungstene.xyz/activate/" . $user->getActivationKey() . "\">Activer mon compte" . '</a>.<br>' . "\r\n";
+    //             $message .= "<p> Ton identifiant : " . $user->getEmail() . '.<br></p>' . "\r\n";
+    //             $message .= "<p>A bientôt dans ton espace Capsule.";
+
+    //             mail($user->getEmail(), 'Active ton compte Capsule', $message, $entete);
+
+    //             return new Response($this->render('landing/home.html.twig', $vars));
+    //         }
+
+    //         if (password_verify($rq->request->get('password'), $user->getPassword())) {
+    //             $this->session->set('user', $user);
+    //             $this->session->set('role', $user->getRole());
+
+    //             $vars['flash'] = "Bienvenue " . $user->getName();
+
+    //             if ($user->getStatus() == 'suspended') {
+    //                 return new Response('landing/suspended.html.twig');
+    //             } elseif ($user->getStatus() == 'pending') {
+    //                 return new Response('landing/pending.html.twig');
+    //             } else {
+    //                 if ($user->getRole() == 'superadmin') {
+    //                     return new RedirectResponse('/admin/home');
+    //                 } else {
+    //                     return new RedirectResponse('/' . strtolower($user->getRole()) . '/home');
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     if ($this->session->has('flash')) {
+    //         $vars['flash'] = $this->session->get('flash');
+    //         $this->session->remove('flash');
+    //     }
+
+    //     $repo = $this->em->getRepository(User::class);
+    //     $pros = $repo->findBy(['role' => 'pro']);
+
+    //     $liste = [];
+    //     $vars['pros'] = [];
+
+    //     if (count($pros) < 3) {
+    //         $limit = count($pros);
+    //     } else {
+    //         $limit = 3;
+    //     }
+    //     while (count($liste) < $limit) {
+
+    //         $row = rand(0, count($pros) - 1);
+
+    //         if (!in_array($row, $liste)) {
+    //             $liste[] = $row;
+    //             $vars['pros'][] = $pros[$row];
+    //         }
+    //     }
+
+    //     $vars['user'] = $this->session->get('user');
+    //     $vars['role'] = $this->session->get('role');
+
+    //     return new Response($this->render('landing/home.html.twig', $vars));
+    // }
+
+    /**
+     * @Route("/login", name="login_get", methods={"GET"})
+     */
+    public function showLoginForm()
+    {
+        $vars = [];
+
+        $vars['user'] = $this->session->get('user');
+        $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+
+        // if ($vars['user']) {
+        //     return $this->render(strtolower($vars['role']) . '/home.html.twig', $vars);
+        // }
+
+        return $this->render('login/home.html.twig', $vars);
+    }
+
+    /**
+     * @Route("/logout", name="logout")
+     */
+    public function logout()
+    {        
+        $this->session->set('user', null);
+        $this->session->set('role', null);
+        $this->session->set('userJson', null);
+
+        return new Response(json_encode("User successfully logged out"), 200, ['Content-Type' => 'application/json']);
+
+        // dump($this->session->get('user'));
+        // dump($this->session->get('role'));
+
+        // return new Response(json_encode($vars), 200, ['Content-Type' => 'application/json']);
+
+        // return $this->render('/login/home.html.twig', $vars);
+
     }
     
     /**
@@ -154,6 +258,7 @@ class LoginController extends BaseController
         $vars = [];
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
         if (count($rq->request)) {
             $user = $this->em->getRepository(User::class)->findOneBy(['email' => $rq->request->get('email')]);
@@ -257,10 +362,20 @@ class LoginController extends BaseController
         return new RedirectResponse('/' . strtolower($vars['role']) . '/home');
     }
 
-    /**
-     * @Route("/deconnect", name="landing_deconnect")
-     */
-    public function deconnect()
+    private function sendVerificationEmail($user)
     {
+        ini_set("SMTP", "SSL0.OVH.NET");
+
+        $entete  = 'MIME-Version: 1.0' . "\r\n";
+        $entete .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+        $entete .= 'From: postmaster@klungstene.fr' . "\r\n";
+
+        $message = 'Bonjour ' . $user->getFirstName() . ',<br>' . "\r\n";
+        $message .= "<p>Merci d'avoir créé ton compte chez Capsule. Active-le dès maintenant : <a href=\"https://capsule.klungstene.xyz/activate/" . $user->getActivationKey() . "\">Activer mon compte" . '</a>.<br>' . "\r\n";
+        $message .= "<p> Ton identifiant : " . $user->getEmail() . '.<br></p>' . "\r\n";
+        $message .= "<p>A bientôt dans ton espace Capsule.";
+
+        mail($user->getEmail(), 'Active ton compte Capsule', $message, $entete);
     }
 }
+

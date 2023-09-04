@@ -22,7 +22,7 @@ const ConversationsBar = ({ handleConvoSideOpen }) => {
 
   if (conversations) {
     conversations.sort((c1, c2) => {
-      return compareConvoDates(c1.date_last_message, c2.date_last_message);
+      return compareConvoDates(c1.dateLastMessage, c2.dateLastMessage);
     });
   }
 
@@ -48,9 +48,8 @@ const ConversationsBar = ({ handleConvoSideOpen }) => {
             if (activeConversation && activeConversation.id === c.id) {
               style = "active";
             } else if (
-              (c.id_creator === user.id && c.creator_has_new_message) ||
-              (c.id_correspondant === user.id &&
-                c.correspondant_has_new_message)
+              (c.idCreator === user.id && c.creatorHasNewMessage) ||
+              (c.idCorrespondant === user.id && c.correspondantHasNewMessage)
             ) {
               style = "new_message";
             } else {

@@ -6,20 +6,6 @@ const app = express();
 app.use(cors());
 app.use(express.json()); // Add this line before your route handlers
 
-// Helpers
-function generateRandomId(length) {
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let id = "";
-
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    id += characters.charAt(randomIndex);
-  }
-
-  return id;
-}
-
 // Data
 const maliaId = "1";
 const mathisId = "2";

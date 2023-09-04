@@ -5,19 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { conversationUpdateNewMessageStatusAction } from "../../reducers/conversations";
 
-function generateRandomId(length) {
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let id = "";
-
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    id += characters.charAt(randomIndex);
-  }
-
-  return id;
-}
-
 export default function UserSearchBar({ handleConvoSideOpen, enterConvo }) {
   const dispatch = useDispatch();
 
@@ -35,34 +22,40 @@ export default function UserSearchBar({ handleConvoSideOpen, enterConvo }) {
     try {
       const existingConvo = conversations.find(
         (convo) =>
-          convo.id_creator === connection.id ||
-          convo.id_correspondant === connection.id
+          convo.idCreator === connection.id ||
+          convo.idCorrespondant === connection.id
       );
       if (existingConvo) {
         handleConvoSideOpen(existingConvo, user);
       } else {
+        console.log("active convo:", activeConversation);
         if (activeConversation) {
           const updatedConversation =
-            user.id === activeConversation.id_creator
-              ? { ...activeConversation, creator_has_new_message: false }
-              : { ...activeConversation, correspondant_has_new_message: false };
+            user.id === activeConversation.idCreator
+              ? { ...activeConversation, creatorHasNewMessage: false }
+              : { ...activeConversation, correspondantHasNewMessage: false };
           dispatch(
             conversationUpdateNewMessageStatusAction(updatedConversation)
           );
         }
+
+        const newConvo = {
+          id: "temp-id",
+          idConnection: connection.id,
+          dateCreated: new Date().toISOString(),
+          dateLastMessage: null,
+          idCreator: user.id,
+          idCorrespondant: connection.id,
+          idLastSender: user.id,
+          creatorHasNewMessage: false,
+          correspondantHasNewMessage: false,
+        };
+
+        console.log("New convo:", newConvo);
+
         dispatch({
           type: "CREATE_POTENTIAL_CONVERSATION",
-          payload: {
-            id: generateRandomId(20),
-            id_connection: connection.id,
-            date_created: new Date().toISOString(),
-            date_last_message: null,
-            id_creator: user.id,
-            id_correspondant: connection.id,
-            id_last_sender: user.id,
-            creator_has_new_message: false,
-            correspondant_has_new_message: false,
-          },
+          payload: newConvo,
         });
       }
     } catch (error) {
@@ -75,7 +68,7 @@ export default function UserSearchBar({ handleConvoSideOpen, enterConvo }) {
     query === ""
       ? connections
       : connections.filter((connection) =>
-          connection.name
+          connection.username
             .toLowerCase()
             .replace(/\s+/g, "")
             .includes(query.toLowerCase().replace(/\s+/g, ""))
@@ -115,7 +108,7 @@ export default function UserSearchBar({ handleConvoSideOpen, enterConvo }) {
                       active ? "bg-teal-600 text-white" : "text-gray-900"
                     }`
                   }
-                  value={connection.name}
+                  value={connection.username}
                   onClick={() => {
                     handleConvoSearchOpen(connection);
                   }}
@@ -127,7 +120,7 @@ export default function UserSearchBar({ handleConvoSideOpen, enterConvo }) {
                           selected ? "font-medium" : "font-normal"
                         }`}
                       >
-                        {connection.name}
+                        {connection.username}
                       </span>
                       {selected ? (
                         <span

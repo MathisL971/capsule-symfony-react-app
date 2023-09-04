@@ -1,4 +1,4 @@
-{% extends "admin/navbar.html.twig" %}
+{% extends "base-js.html.twig" %}
 
 {% block body %}
 	<h1>Liste des ressources</h1>
@@ -6,11 +6,13 @@
 	<a data-bs-toggle="offcanvas" href="#ressources_add" role="button" aria-controls="offcanvasExample">
 		<h1>Ajouter une ressources : form & upload</h1>
 	</a>
+	{#
 	<p>
 		{{ post.url}}
 		<br>
-		{{post.file}}</p>
-
+		{{post.file}}
+	</p>
+	#}
 	{# barre latérale amovible #}
 	<div class="offcanvas offcanvas-end" tabindex="-1" id="ressources_add" aria-labelledby="offcanvasExampleLabel" style="text-align: center">
 		<div class="offcanvas-header">

@@ -1,6 +1,6 @@
 import axios from "axios";
-// const baseUrl = "https://127.0.0.1:8001/api/messages";
-const baseUrl = "http://localhost:3002/api/messages";
+const baseUrl = "https://127.0.0.1:8001/api/messages";
+// const baseUrl = "http://localhost:3002/api/messages";
 
 const getAll = async () => {
   const response = await axios.get(baseUrl);

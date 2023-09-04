@@ -32,7 +32,7 @@
             </p>
 
 
-            {% if role == "SuperAdmin" or role == "Admin" or role == "Pro" %}
+            {% if role == "superadmin" or role == "admin" or role == "pro" %}
 
                 <p>
                     <a class="btn btn-success" href="/ado/home" style="background-color: rgb(48,180,167); border: none">
@@ -54,7 +54,7 @@
 
 
                 {# Affichage du lien vers l'espace admin si profil admin ou super admin #}
-                {% if role == "SuperAdmin" or role == "Admin" %}
+                {% if role == "superadmin" or role == "admin" %}
                     <p>
                         <a class="btn btn-dark" href="/admin/home">
                             Accéder à l'espace administrateur

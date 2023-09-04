@@ -36,7 +36,7 @@ const MessageThread = () => {
 
   if (activeConversationMessages) {
     activeConversationMessages.sort((m1, m2) => {
-      return compareMessageDates(m1.date_sent - m2.date_sent);
+      return compareMessageDates(m1.dateSent - m2.dateSent);
     });
   }
 
@@ -62,7 +62,7 @@ const MessageThread = () => {
               <div
                 key={m.id}
                 className={
-                  m.id_sender === user.id
+                  m.idSender === user.id
                     ? "flex flex-row justify-end"
                     : "flex flex-row justify-start"
                 }

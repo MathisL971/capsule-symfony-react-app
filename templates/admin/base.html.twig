@@ -39,7 +39,7 @@
 				<p style="margin-top: 15px">{{user.firstName}}
 					<br>{{user.role}}</p>
 				<p>
-					<a class="btn btn-warning" href="/{{ (role == 'SuperAdmin') ? 'admin' : role|lower }}/profil">
+					<a class="btn btn-warning" href="/{{ (role == 'superadmin') ? 'admin' : role|lower }}/profil">
 						Profil
 					</a>
 				</p>
@@ -61,7 +61,7 @@
 					</p>
 
 					{# Affichage du lien vers l'espace ado si profil pro, admin ou super admin #}
-					{% if role == "SuperAdmin" or role == "Admin" or role == "Pro" %}
+					{% if role == "superadmin" or role == "admin" or role == "pro" %}
 						<p>
 							<a class="btn btn-success" href="/ado/home" style="background-color: rgb(48,180,167); border: none">
 								Accéder à l'espace ado
@@ -70,7 +70,7 @@
 					{% endif %}
 
 					{# Affichage du lien vers l'espace parent si profil pro, admin ou super admin #}
-					{% if role == "SuperAdmin" or role == "Admin" or role == "Pro" %}
+					{% if role == "superadmin" or role == "admin" or role == "pro" %}
 						<p>
 							<a class="btn btn-info" href="/parent/home" style="background-color: rgba(190,19,232,0.5); border: none">
 								Accéder à l'espace parent
@@ -79,7 +79,7 @@
 					{% endif %}
 
 					{# Affichage du lien vers l'espace pro si profil pro, admin ou super admin #}
-					{% if role == "SuperAdmin" or role == "Admin" or role == "Pro" %}
+					{% if role == "admin" or role == "admin" or role == "pro" %}
 						<p>
 							<a class="btn btn-warning" href="/pro/home" style="background-color: rgb(255,222,16); border: none">
 								Accéder à l'espace pro
@@ -88,7 +88,7 @@
 					{% endif %}
 
 					{# Affichage du lien vers l'espace admin si profil admin ou super admin #}
-					{% if role == "SuperAdmin" or role == "Admin" %}
+					{% if role == "superadmin" or role == "admin" %}
 						<p>
 							<a class="btn btn-dark" href="/admin/home">
 								Accéder à l'espace administrateur

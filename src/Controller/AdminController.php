@@ -46,12 +46,13 @@ class AdminController extends BaseController
 
         // return new RedirectResponse('/');
 
-        $data = ['controller_name' => 'ParentController', 'message' => 'Returning from parent...'];
+        $vars = [];
 
-        // $page = $this->twig->render('admin/home.html.twig', $data);
-        // return new Response($page);
+        $vars['user'] = $session->get('user');
+        $vars['role'] = $session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-        return $this->render('admin/home.html.twig', $data);
+        return $this->render('admin/home.html.twig', $vars);
     }
 
     /**
@@ -201,25 +202,24 @@ class AdminController extends BaseController
     }
 
     /**
-     * @Route("/admin/users/", name="admin_users")
+     * @Route("/admin/users", name="admin_users")
      */
     public function users()
     {
-        VarDumper::dump($this->session->get('role'));
-
         if (AdminController::authentify($this->session)) {
 
-            // $vars = [];
+            $vars = [];
 
-            // $vars['user'] = $this->session->get('user');
-            // $vars['role'] = $this->session->get('role');
+            $vars['user'] = $this->session->get('user');
+            $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-            // $repo = $this->em->getRepository(User::class);
-            // $users = $repo->findAll();
+            $repo = $this->em->getRepository(User::class);
+            $users = $repo->findAll();
 
-            // $vars['users'] = $users;
+            $vars['users'] = $users;
 
-            return new Response($this->twig->render('admin/users.html.twig', $vars));
+            return new Response($this->render('admin/users.html.twig', $vars));
         }
 
         return new RedirectResponse('/admin/home');
@@ -322,7 +322,7 @@ class AdminController extends BaseController
     {
         if (AdminController::authentify($session)) {
             $user = $em->getRepository(User::class)->findOneBy(['id' => $id]);
-            $user->setRole('Admin');
+            $user->setRole('admin');
 
             $em->persist($user);
             $em->flush();
@@ -340,7 +340,7 @@ class AdminController extends BaseController
     {
         if (AdminController::authentify($session)) {
             $user = $em->getRepository(User::class)->findOneBy(['id' => $id]);
-            $user->setRole('SuperAdmin');
+            $user->setRole('superadmin');
 
             $em->persist($user);
             $em->flush();
@@ -418,6 +418,7 @@ class AdminController extends BaseController
 
             $vars['user'] = $session->get('user');
             $vars['role'] = $session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
             if ($rq->request->count() != 0) {
                 $url = $rq->request->get('url');
@@ -445,7 +446,7 @@ class AdminController extends BaseController
             $repoRessource = $em->getRepository(Ressource::class);
             $vars['videos'] = $repoRessource->findBy(['type' => 'video'], ['id' => 'DESC'], 10);
 
-            $page = $this->twig->render('admin/ressources.html.twig', $vars);
+            $page = $this->render('admin/ressources.html.twig', $vars);
 
             return new Response($page);
         }
@@ -760,7 +761,9 @@ class AdminController extends BaseController
 
             $vars['user'] = $session->get('user');
             $vars['role'] = $session->get('role');
-            return new Response($this->twig->render('admin/textes.html.twig', $vars));
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+
+            return new Response($this->render('admin/textes.html.twig', $vars));
         }
 
         return new RedirectResponse('/');
@@ -837,9 +840,9 @@ class AdminController extends BaseController
     static function authentify(SessionInterface $session)
     {
         $role = $session->get('role');
-        if ($role == 'Admin' || $role == 'SuperAdmin') {
+        if ($role == 'admin' || $role == 'superadmin') {
             return true;
-        } elseif ($role == 'Ado' || $role == 'Jeune' || $role == 'Parent' || $role == 'Pro') {
+        } elseif ($role == 'ado' || $role == 'jeune' || $role == 'parent' || $role == 'pro') {
             $session->set('flash', 'Tu n\'as pas les droits pour accéder à cette page');
             return false;
         } else {

@@ -24,7 +24,7 @@ class ProController extends BaseController
      */
     public function home(Request $rq)
     {
-        //$vars = [];
+        // $vars = [];
 
         // if (ProController::authentify($this->session)) {
 
@@ -33,16 +33,22 @@ class ProController extends BaseController
 
         //     $vars['date'] = ProController::datecomplete(new \DateTime());
 
-        //     return new Response($this->twig->render('pro/home.html.twig', $vars));
+        //     return new Response($this->render('pro/home.html.twig', $vars));
         // }
-
+        
         // $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
         // return new RedirectResponse('/');
 
         // return new Response($this->twig->render('pro/home.html.twig', $vars));
 
-        $data = [];
-        return $this->render('pro/home.html.twig', $data);
+        $vars = [];
+
+        $vars['user'] = $this->session->get('user');
+        $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+
+        return $this->render('pro/home.html.twig', $vars);
+        
     }
 
     /**
@@ -85,16 +91,25 @@ class ProController extends BaseController
      */
     public function messages(Request $rq)
     {
-        if (ProController::authentify($this->session)) {
+        // if (ProController::authentify($this->session)) {
+        //     $vars['user'] = $this->session->get('user');
+        //     $vars['role'] = $this->session->get('role');
+        //     $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-            $vars['user'] = $this->session->get('user');
-            $vars['role'] = $this->session->get('role');
+        //     return new Response($this->twig->render('pro/messages.html.twig', $vars));
+        // }
 
-            return new Response($this->twig->render('pro/messages.html.twig', $vars));
-        }
+        // $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
+        // return new RedirectResponse('/');
 
-        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
-        return new RedirectResponse('/');
+        $vars = [];
+
+        $vars['user'] = $this->session->get('user');
+        $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+
+        // return new Response($this->twig->render('ado/messages.html.twig', $vars));
+        return $this->render('pro/messages.html.twig', $vars);
     }
 
     /**
@@ -285,7 +300,7 @@ class ProController extends BaseController
      */
     static function authentify(SessionInterface $session)
     {
-        if ($session->get('role') == 'Pro' || $session->get('role') == 'Admin' || $session->get('role') == 'SuperAdmin') {
+        if ($session->get('role') == 'pro' || $session->get('role') == 'admin' || $session->get('role') == 'superadmin') {
             return true;
         } else {
             return false;

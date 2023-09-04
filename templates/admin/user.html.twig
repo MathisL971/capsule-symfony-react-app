@@ -13,11 +13,11 @@
 				<a href="/admin/user/reactivate/{{profile.id}}/" class="btn btn-primary">Réactiver</a>
 			{% endif %}
 			<a href="/admin/user/resetpass/{{ profile.id }}" class="btn btn-info">Nouveau mot de passe</a>
-			{% if user.role == 'SuperAdmin' %}
+			{% if user.role == 'superadmin' %}
 				<a href="/admin/user/upgrade/{{ profile.id }}" class="btn btn-warning">Nommer Admin</a>
 				<a href="/admin/user/upgrade2/{{ profile.id }}" class="btn btn-warning">Nommer SuperAdmin</a>
 			{% endif %}
-			{% if profile.user != 'SuperAdmin' %}
+			{% if profile.user != 'superadmin' %}
 				<a href="/admin/user/suspend/{{profile.id}}" class="btn btn-danger">Bloquer le compte</a>
 			{% endif %}
 		</div>
@@ -72,7 +72,7 @@
 	<div
 		class="supera">
 		{# {{ dump(user) }} #}
-		<p>{{ (user.role == 'SuperAdmin') ? dump(user) }}</p>
+		<p>{{ (user.role == 'superadmin') ? dump(user) }}</p>
 
 	</div>
 {% endblock %}

@@ -1,6 +1,6 @@
 import axios from "axios";
-// const baseUrl = "https://127.0.0.1:8001/api/conversations";
-const baseUrl = "http://localhost:3002/api/conversations";
+const baseUrl = "https://127.0.0.1:8001/api/conversations";
+// const baseUrl = "http://localhost:3002/api/conversations";
 
 const getAll = async () => {
   const response = await axios.get(baseUrl);
@@ -23,7 +23,10 @@ const getConvo = async (id) => {
 };
 
 const modifyConvo = async (modifiedConvo) => {
-  const response = await axios.put(baseUrl, modifiedConvo);
+  const response = await axios.put(
+    `${baseUrl}/${modifiedConvo.id}`,
+    modifiedConvo
+  );
   return response.data;
 };
 

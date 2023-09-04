@@ -20,11 +20,12 @@ class AdoController extends BaseController
     {
         $vars = [];
 
-        $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['user'] = $this->session->get('user');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-        // return new Response($this->twig->render('ado/home.html.twig', $vars));
-        return $this->render('ado/home.html.twig', $vars);
+        return new Response($this->render('ado/home.html.twig', $vars));
+        // return $this->render('ado/home.html.twig', $vars);
     }
 
     /**
@@ -36,6 +37,8 @@ class AdoController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+
 
         return $this->render('ado/journal.html.twig', $vars);
     }
@@ -49,6 +52,7 @@ class AdoController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
         $page = $this->twig->render('ado/videos.html.twig', $vars);
 
@@ -64,6 +68,8 @@ class AdoController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+
 
         $page = $this->twig->render('ado/podcasts.html.twig', $vars);
 
@@ -79,6 +85,8 @@ class AdoController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+
 
         $page = $this->twig->render('ado/audiobooks.html.twig', $vars);
 
@@ -94,6 +102,8 @@ class AdoController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+
 
         // return new Response($this->twig->render('ado/messages.html.twig', $vars));
         return $this->render('ado/messages.html.twig', $vars);
@@ -108,6 +118,7 @@ class AdoController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
         $page = $this->twig->render('ado/family.html.twig', $vars);
 
@@ -123,6 +134,7 @@ class AdoController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
         $page = $this->twig->render('ado/news.html.twig', $vars);
 
@@ -138,6 +150,8 @@ class AdoController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+
 
         $page = $this->twig->render('ado/notes.html.twig', $vars);
 
@@ -153,6 +167,8 @@ class AdoController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+
 
         $page = $this->twig->render('ado/community.html.twig', $vars);
 
@@ -168,6 +184,8 @@ class AdoController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+
 
         $page = $this->twig->render('ado/timing.html.twig', $vars);
 
@@ -183,6 +201,7 @@ class AdoController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
         return new Response($this->twig->render('ado/visio.html.twig', $vars));
     }
@@ -197,6 +216,7 @@ class AdoController extends BaseController
 
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
             if (count($rq->request) != 0) {
                 $data = $rq->request;
@@ -231,7 +251,7 @@ class AdoController extends BaseController
      */
     static function authentify(SessionInterface $session)
     {
-        if ($session->get('role') == 'Ado' || $session->get('role') == 'Admin' || $session->get('role') == 'SuperAdmin') {
+        if ($session->get('role') == 'ado' || $session->get('role') == 'admin' || $session->get('role') == 'superadmin') {
             return true;
         } else {
             return false;

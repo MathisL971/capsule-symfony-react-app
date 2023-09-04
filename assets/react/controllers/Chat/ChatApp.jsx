@@ -15,38 +15,40 @@ import { connectionFetchAction } from "../../reducers/connections";
 
 const GENERAL_SOCKET_CONNECTION_ID = "123456789";
 
-const ChatApp = () => {
+const ChatApp = ({ user, role }) => {
   const dispatch = useDispatch();
 
   const { conversations, activeConversation, potentialConversation } =
     useSelector((state) => state.conversations);
 
-  const { user } = useSelector((state) => state.user);
-
   const [broadcast, setBroadcast] = useState(null);
-  // const [inConversation, setInConversation] = useState(false);
 
   // Initial data fetching
   useEffect(() => {
-    const user = sessionStorage.getItem("sessionUser");
-
     if (!user) {
       window.location.href = "/login";
     } else {
-      const loggedInUser = JSON.parse(user);
-      dispatch({ type: "LOGIN", payload: loggedInUser });
-      dispatch(conversationFetchAction(loggedInUser.id));
-      dispatch(connectionFetchAction(loggedInUser.id));
+      dispatch({ type: "LOGIN", payload: user });
+      dispatch(conversationFetchAction(user.id));
+      dispatch(connectionFetchAction(user.id));
       openWebSocketConnection();
     }
   }, []);
+
+  useEffect(() => {
+    console.log("Effect hook for active convos running...");
+    if (activeConversation && !potentialConversation) {
+      console.log("Fetching convo messages...");
+      dispatch(conversationOpenMessagesAction(activeConversation, user));
+    }
+  }, [activeConversation]);
 
   useEffect(() => {
     if (broadcast) {
       const { addedMessage, updatedConversation } = broadcast;
 
       // If listener is the correspondant
-      if (addedMessage.id_receiver === user.id) {
+      if (addedMessage.idReceiver === user.id) {
         // Find out if the conversation already exists
         const existingConvo = conversations.find(
           (c) => c.id === updatedConversation.id
@@ -67,11 +69,11 @@ const ChatApp = () => {
           ) {
             dispatch(
               conversationUpdateNewMessageStatusAction(
-                updatedConversation.id_creator === user.id
-                  ? { ...updatedConversation, creator_has_new_message: false }
+                updatedConversation.idCreator === user.id
+                  ? { ...updatedConversation, creatorHasNewMessage: false }
                   : {
                       ...updatedConversation,
-                      correspondant_has_new_message: false,
+                      correspondantHasNewMessage: false,
                     }
               )
             );
@@ -94,7 +96,7 @@ const ChatApp = () => {
           // If receiver was about to send his first message to the sender
           if (
             potentialConversation &&
-            potentialConversation.id_correspondant === addedMessage.id_sender
+            potentialConversation.idCorrespondant === addedMessage.idSender
           ) {
             // Scrap potential convo
             dispatch({
@@ -136,13 +138,13 @@ const ChatApp = () => {
         type: "ABORT_POTENTIAL_CONVERSATION",
       });
     }
-
     // Turn inactive conversation card into active conversation card
     dispatch({ type: "MAKE_CONVERSATION_ACTIVE", payload: conversationToOpen });
-
-    // Load conversation messages
-    dispatch(conversationOpenMessagesAction(conversationToOpen, userOpening));
   };
+
+  console.log("Conversations:", conversations);
+  console.log("Potential conversation:", potentialConversation);
+  console.log("Active conversation:", activeConversation);
 
   return (
     <div className="flex flex-col gap-3 py-4 h-screen">
@@ -156,7 +158,6 @@ const ChatApp = () => {
       <div className="flex flex-row grow sm:gap-1">
         <ConversationsBar handleConvoSideOpen={handleConvoSideOpen} />
         <MessageThread />
-        {/* <MessageThread /> */}
       </div>
     </div>
   );
