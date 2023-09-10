@@ -32,6 +32,8 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.15",
+    "@stripe/react-stripe-js": "^2.2.0",
+    "@stripe/stripe-js": "^2.1.2",
     "axios": "^1.4.0",
     "country-list": "^2.3.0",
     "formik": "^2.4.2",

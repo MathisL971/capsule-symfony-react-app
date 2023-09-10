@@ -12,32 +12,19 @@
 // -- This is a parent command --
 // Cypress.Commands.add('login', (email, password) => { ... })
 
-Cypress.Commands.add("login", ({ username, password }) => {
+Cypress.Commands.add("login", ({ email, password }) => {
   cy.request("POST", `${Cypress.env("DEV_BACKEND")}/login`, {
-    username,
+    email,
     password,
   }).then(({ body }) => {
     sessionStorage.setItem("sessionUser", JSON.stringify(body));
-
-    const { role } = body;
-
-    switch (role) {
-      case "ado":
-        window.location.href = "/ado/home";
-        break;
-      case "parent":
-        window.location.href = "/parent/home";
-        break;
-      case "pro":
-        window.location.href = "/pro/home";
-        break;
-      case "admin":
-        window.location.href = "/admin/home";
-        break;
-      default:
-        console.log("Invalid role");
-    }
+    cy.visit(body);
   });
+});
+
+Cypress.Commands.add("logout", () => {
+  cy.request("POST", `${Cypress.env("DEV_BACKEND")}/logout`);
+  cy.visit("");
 });
 
 Cypress.Commands.add("checkNavBar", () => {

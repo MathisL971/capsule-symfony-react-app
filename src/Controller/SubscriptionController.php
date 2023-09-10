@@ -18,6 +18,7 @@ class SubscriptionController extends BaseController
 
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
         $vars['extend'] = "ado" . "/navbar.html.twig";
 
         if (!empty($_POST)) {
@@ -112,7 +113,21 @@ class SubscriptionController extends BaseController
             $this->CallAPI("PUT", "If1Xo2WXDYp5Qr5vy98GVjNz75ee1D3v",  $url . "documents/builddoc", $pdf_a_generer);
         }
 
-        return new Response($this->twig->render('subscription/subscription.html.twig', $vars));
+        return new Response($this->render('subscription/subscription.html.twig', $vars));
+    }
+
+     /**
+     * @Route("/completion", name="subscription_completion")
+     */
+    public function completion()
+    {
+        $vars = [];
+
+        $vars['user'] = $this->session->get('user');
+        $vars['role'] = $this->session->get('role');
+        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+
+        return $this->render('subscription/subscription.html.twig', $vars);
     }
 
     public function CallAPI($method, $apikey, $url, $data = false)

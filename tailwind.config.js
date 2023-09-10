@@ -7,8 +7,8 @@ module.exports = {
     "./assets/react/controllers/Chat/*.jsx",
     "./assets/react/controllers/Forms/*.jsx",
     "./assets/react/controllers/Utility/*.jsx",
-    "./assets/react/controllers/Forms/LoginForm/*.jsx",
-    "./assets/react/controllers/Forms/SignupForm/*.jsx",
+    "./assets/react/controllers/Forms/Login/*.jsx",
+    "./assets/react/controllers/Forms/SignUp/*.jsx",
   ],
   theme: {
     extend: {},

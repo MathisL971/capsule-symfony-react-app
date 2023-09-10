@@ -3,9 +3,6 @@ import HamburgerButton from "./HamburgerButton";
 import Button from "../Utility/Button";
 import NavLinks from "./NavLinks";
 import UserButton from "./UserButton";
-import { PrimaryButton } from "../Utility/Button.styled";
-
-const style = {};
 
 const FixedSection = ({
   user,
@@ -32,13 +29,6 @@ const FixedSection = ({
         <NavLinks user={user} />
 
         {!user && (
-          // <PrimaryButton
-          //   variant="dark"
-          //   type="button"
-          //   onClick={() => (window.location.href = "/login")}
-          // >
-          //   Se Connecter
-          // </PrimaryButton>
           <Button
             text={"Se Connecter"}
             type={"button"}
@@ -54,13 +44,6 @@ const FixedSection = ({
             style={"primary_2"}
             onClick={() => (window.location.href = "/signup")}
           />
-          // <PrimaryButton
-          //   variant="ligth"
-          //   type="button"
-          //   onClick={() => (window.location.href = "/signup")}
-          // >
-          //   S'inscrire
-          // </PrimaryButton>
         )}
 
         {user && (

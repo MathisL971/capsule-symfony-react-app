@@ -18,14 +18,80 @@ class AdoController extends BaseController
      */
     public function home(Request $rq)
     {
-        $vars = [];
+        if (AdoController::authentify($this->session)) {
+            $vars = [];
 
-        $vars['role'] = $this->session->get('role');
-        $vars['user'] = $this->session->get('user');
-        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+            $vars['user'] = $this->session->get('user');
+            $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-        return new Response($this->render('ado/home.html.twig', $vars));
-        // return $this->render('ado/home.html.twig', $vars);
+            return $this->render('ado/home.html.twig', $vars);
+            // return new Response($this->twig->render('ado/profil.html.twig', $vars));
+        }
+
+        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
+        return new RedirectResponse('/');
+    }
+    /**
+     * @Route("/ado/profil"), name="ado_profil")
+     */
+    public function profil(Request $rq)
+    {
+        if (AdoController::authentify($this->session)) {
+            $vars = [];
+
+            $vars['user'] = $this->session->get('user');
+            $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+
+            if (count($rq->request) != 0) {
+                $data = $rq->request;
+                $repo = $this->em->getRepository(User::class);
+                $profile = $repo->findOneBy(['id' => $vars['user']->getId()]);
+                $profile->setFirstName($data->get('firstName'))
+                    ->setName($data->get('name'))
+                    ->setEmail($data->get('email'))
+                    ->setPhoneMobile($data->get('mobile'))
+                    ->setStreet1($data->get('street1'))
+                    ->setStreet2($data->get('street2'))
+                    ->setPostcode($data->get('postcode'))
+                    ->setCity($data->get('city'))
+                    ->setCountry($data->get('country'))
+                    ->setBirthDate(new \DateTime($data->get('birthDate')));
+
+                $this->em->persist($profile);
+                $this->em->flush();
+
+                $this->session->set('user', $profile);
+                $vars['user'] = $profile;
+            }
+
+            return $this->render('ado/profil.html.twig', $vars);
+            // return new Response($this->twig->render('ado/profil.html.twig', $vars));
+        }
+
+        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
+        return new RedirectResponse('/');
+    }
+
+    /**
+     * @Route("/ado/messages", name="ado_messages")
+     */
+    public function messages(Request $rq)
+    {
+        if (AdoController::authentify($this->session)) {
+            $vars = [];
+
+            $vars['user'] = $this->session->get('user');
+            $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+
+            return $this->render('ado/messages.html.twig', $vars);
+            // return new Response($this->twig->render('ado/messages.html.twig', $vars));
+        }
+
+        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
+        return new RedirectResponse('/');
     }
 
     /**
@@ -93,22 +159,7 @@ class AdoController extends BaseController
         return new Response($page);
     }
 
-    /**
-     * @Route("/ado/messages", name="ado_messages")
-     */
-    public function messages(Request $rq)
-    {
-        $vars = [];
-
-        $vars['user'] = $this->session->get('user');
-        $vars['role'] = $this->session->get('role');
-        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
-
-
-        // return new Response($this->twig->render('ado/messages.html.twig', $vars));
-        return $this->render('ado/messages.html.twig', $vars);
-    }
-
+    
     /**
      * @Route("/ado/family"), name="ado_family")
      */
@@ -206,45 +257,7 @@ class AdoController extends BaseController
         return new Response($this->twig->render('ado/visio.html.twig', $vars));
     }
 
-    /**
-     * @Route("/ado/profil"), name="ado_profil")
-     */
-    public function profil(Request $rq)
-    {
-        if (AdoController::authentify($this->session)) {
-            $vars = [];
-
-            $vars['user'] = $this->session->get('user');
-            $vars['role'] = $this->session->get('role');
-            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
-
-            if (count($rq->request) != 0) {
-                $data = $rq->request;
-                $repo = $this->em->getRepository(User::class);
-                $profile = $repo->findOneBy(['id' => $vars['user']->getId()]);
-                $profile->setFirstName($data->get('firstName'))
-                    ->setName($data->get('name'))
-                    ->setEmail($data->get('email'))
-                    ->setPhoneMobile($data->get('mobile'))
-                    ->setStreet1($data->get('street1'))
-                    ->setStreet2($data->get('street2'))
-                    ->setPostcode($data->get('postcode'))
-                    ->setCity($data->get('city'))
-                    ->setCountry($data->get('country'))
-                    ->setBirthDate(new \DateTime($data->get('birthDate')));
-
-                $this->em->persist($profile);
-                $this->em->flush();
-
-                $this->session->set('user', $profile);
-                $vars['user'] = $profile;
-            }
-
-            return $this->render('ado/profil.html.twig', $vars);
-            // return new Response($this->twig->render('ado/profil.html.twig', $vars));
-        }
-        return new RedirectResponse('/ado/home');
-    }
+   
 
     /**
      * Authentification des ados

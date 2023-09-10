@@ -1,10 +1,11 @@
-{% extends extend %}
+{% extends "base-js.html.twig" %}
 
 {% block title %}
 	Capsule - Abonnement
 {% endblock %}
 
 {% block body %}
+	{#
 	<h1>Abonnement Capsule</h1>
 	<div style="min-height: 75vh">
 		<form method="post">
@@ -12,5 +13,8 @@
 			<input type="submit" class="btn btn-warning" value="Je souhaite souscrire à un abonnement d'un an au prix de 6€ TTC">
 		</form>
 	</div>
-
+	#}
+	<div class="mx-auto py-16 md:py-20 lg:py-24 px-10">
+		<div {{ react_component('App', { userObj: userJson, userRole: role }) }}></div>
+	</div>
 {% endblock %}

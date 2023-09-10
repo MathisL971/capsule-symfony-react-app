@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseUrl = "https://127.0.0.1:8001/api/conversations";
+const baseUrl = "https://127.0.0.1:8000/api/conversations";
 // const baseUrl = "http://localhost:3002/api/conversations";
 
 const getAll = async () => {

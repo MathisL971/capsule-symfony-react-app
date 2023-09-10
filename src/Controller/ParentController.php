@@ -18,11 +18,61 @@ class ParentController extends BaseController
     {
         $vars = [];
 
-        $vars['user'] = $this->session->get('user');
-        $vars['role'] = $this->session->get('role');
-        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+        if (ParentController::authentify($this->session)) {
 
-        return $this->render('parent/home.html.twig', $vars);
+            $vars['user'] = $this->session->get('user');
+            $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+
+            $post = $rq->request;
+
+            return $this->render('parent/home.html.twig', $vars);
+            // return new Response($this->render('parent/profil.html.twig', $vars));
+        }
+
+        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
+        return new RedirectResponse('/');
+    }
+    /**
+     * @Route("/parent/profil", name="parent_profil")
+     */
+    public function profil(Request $rq)
+    {
+        $vars = [];
+
+        if (ParentController::authentify($this->session)) {
+
+            $vars['user'] = $this->session->get('user');
+            $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+
+            return $this->render('parent/profil.html.twig', $vars);
+            // return new Response($this->render('parent/profil.html.twig', $vars));
+        }
+
+        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
+        return new RedirectResponse('/');
+    }
+
+     /**
+     * @Route("/parent/messages", name="parent_messages")
+     */
+    public function messages(Request $rq)
+    {
+        $vars = [];
+
+        if (ParentController::authentify($this->session)) {
+            $vars['user'] = $this->session->get('user');
+            $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+            $vars['menu2'] = true;
+
+            return $this->render('parent/messages.html.twig', $vars);
+            // return new Response($this->twig->render('parent/messages.html.twig', $vars));
+        }
+
+        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
+        return new RedirectResponse('/');
     }
 
     /**
@@ -105,33 +155,7 @@ class ParentController extends BaseController
         return new RedirectResponse('/');
     }
 
-    /**
-     * @Route("/parent/messages", name="parent_messages")
-     */
-    public function messages(Request $rq)
-    {
-        // $vars = [];
-
-        // if (ParentController::authentify($this->session)) {
-        //     $vars['user'] = $this->session->get('user');
-        //     $vars['role'] = $this->session->get('role');
-        //     $vars['menu2'] = true;
-
-        //     return new Response($this->twig->render('parent/messages.html.twig', $vars));
-        // }
-
-        // $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
-        // return new RedirectResponse('/');
-
-        $vars = [];
-
-        $vars['user'] = $this->session->get('user');
-        $vars['role'] = $this->session->get('role');
-        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
-
-        // return new Response($this->twig->render('ado/messages.html.twig', $vars));
-        return $this->render('parent/messages.html.twig', $vars);
-    }
+   
 
     /**
      * @Route("/parent/news", name="parent_news")
@@ -143,6 +167,7 @@ class ParentController extends BaseController
         if (ParentController::authentify($this->session)) {
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
             $vars['menu2'] = true;
 
             return new Response($this->twig->render('parent/news.html.twig', $vars));
@@ -162,6 +187,7 @@ class ParentController extends BaseController
         if (ParentController::authentify($this->session)) {
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
             $vars['menu2'] = true;
 
             return new Response($this->twig->render('parent/notes.html.twig', $vars));
@@ -181,6 +207,7 @@ class ParentController extends BaseController
         if (ParentController::authentify($this->session)) {
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
             $vars['menu2'] = true;
 
             return new Response($this->twig->render('parent/timing.html.twig', $vars));
@@ -200,6 +227,7 @@ class ParentController extends BaseController
         if (ParentController::authentify($this->session)) {
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
             $vars['menu2'] = true;
 
             return new Response($this->twig->render('parent/visio.html.twig', $vars));
@@ -209,26 +237,7 @@ class ParentController extends BaseController
         return new RedirectResponse('/');
     }
 
-    /**
-     * @Route("/parent/profil", name="parent_profil")
-     */
-    public function profil(Request $rq)
-    {
-        if (ParentController::authentify($this->session)) {
-
-            $vars['user'] = $this->session->get('user');
-            $vars['role'] = $this->session->get('role');
-
-            $post = $rq->request;
-
-
-
-            return new Response($this->twig->render('parent/profil.html.twig', $vars));
-        }
-
-        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
-        return new RedirectResponse('/');
-    }
+   
 
     /**
      * Authentification des parents

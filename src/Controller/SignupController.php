@@ -36,7 +36,7 @@ class SignupController extends BaseController
                 $client = HttpClient::create(['verify_peer' => false, 'verify_host' => false]);
 
                 // Make the POST request to "api/users" with the decoded request data
-                $response = $client->request('POST', 'https://127.0.0.1:8001/api/users', [
+                $response = $client->request('POST', 'https://127.0.0.1:8000/api/users', [
                     'json' => $requestData,
                 ]);
 
@@ -49,6 +49,9 @@ class SignupController extends BaseController
                     // Handle error response and return it
                     return new Response($apiResponse, $response->getStatusCode(), ['Content-Type' => 'application/json']);
                 } else {
+                    $this->session->set('user', $responseData);
+                    $this->session->set('role', $responseData['role']);
+
                     // Extract desired fields (username and role)
                     $userFields = [
                         'username' => $responseData['username'] ?? null,

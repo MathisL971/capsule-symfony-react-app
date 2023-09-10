@@ -24,31 +24,81 @@ class ProController extends BaseController
      */
     public function home(Request $rq)
     {
-        // $vars = [];
+        if (ProController::authentify($this->session)) {
+            $vars = [];
 
-        // if (ProController::authentify($this->session)) {
+            $vars['user'] = $this->session->get('user');
+            $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+            $vars['date'] = ProController::datecomplete(new \DateTime());
 
-        //     $vars['user'] = $this->session->get('user');
-        //     $vars['role'] = $this->session->get('role');
-
-        //     $vars['date'] = ProController::datecomplete(new \DateTime());
-
-        //     return new Response($this->render('pro/home.html.twig', $vars));
-        // }
+            return $this->render('pro/home.html.twig', $vars);
+        }
         
-        // $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
-        // return new RedirectResponse('/');
+        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
+        return new RedirectResponse('/');
+    }
+    
+    /**
+     * @Route("/pro/profil", name="pro_profil")
+     */
+    public function profil(Request $rq)
+    {
+        if (ProController::authentify($this->session)) {
+            $vars = [];
 
-        // return new Response($this->twig->render('pro/home.html.twig', $vars));
+            $vars['user'] = $this->session->get('user');
+            $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-        $vars = [];
+            $post = $rq->request;
 
-        $vars['user'] = $this->session->get('user');
-        $vars['role'] = $this->session->get('role');
-        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+            if (count($post) > 0) {
+                dump($post);
+                $start_date = new DateTime($post->get('start_date') . $post->get('am_start_time'));
+                $end_date = new DateTime($post->get('end_date') . $post->get('pm_end_time'));
+                $date = $start_date;
+                $duration_interval = new DateInterval('PT' . substr($post->get('duration'), 0, 2) . 'H' . substr($post->get('duration'), -2) . 'M');
+                echo date_format($end_date, 'd.m.Y H:i') . '<p>';
 
-        return $this->render('pro/home.html.twig', $vars);
-        
+                while ($date <= $end_date) {
+                    $day_end = new DateTime(date_format($date, 'Y-m-d') . $post->get('pm_end_time'));
+                    while ($date < $day_end) {
+                        echo date_format($date, 'd.m.Y H:i') . '<br>';
+                        $date->add($duration_interval);
+                    }
+                    $date->add(new DateInterval(('P1D')));
+                    $date = new DateTime(date_format($date, 'Y-m-d') . $post->get('am_start_time'));
+                    echo 'retour : ' . date_format($date, 'd.m.Y H:i') . '<br>';
+                }
+                dd('Et maintenant ?');
+            }
+            
+            return $this->render('pro/profil.html.twig', $vars);
+            // return new Response($this->twig->render('pro/profil.html.twig', $vars));
+        }
+
+        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
+        return new RedirectResponse('/');
+    }
+
+    /**
+     * @Route("/pro/messages", name="pro_messages")
+     */
+    public function messages(Request $rq)
+    {
+        if (ProController::authentify($this->session)) {
+            $vars = [];
+
+            $vars['user'] = $this->session->get('user');
+            $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+
+            return $this->render('pro/messages.html.twig', $vars);
+        }
+
+        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
+        return new RedirectResponse('/');
     }
 
     /**
@@ -86,31 +136,7 @@ class ProController extends BaseController
         return new RedirectResponse('/');
     }
 
-    /**
-     * @Route("/pro/messages", name="pro_messages")
-     */
-    public function messages(Request $rq)
-    {
-        // if (ProController::authentify($this->session)) {
-        //     $vars['user'] = $this->session->get('user');
-        //     $vars['role'] = $this->session->get('role');
-        //     $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
-
-        //     return new Response($this->twig->render('pro/messages.html.twig', $vars));
-        // }
-
-        // $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
-        // return new RedirectResponse('/');
-
-        $vars = [];
-
-        $vars['user'] = $this->session->get('user');
-        $vars['role'] = $this->session->get('role');
-        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
-
-        // return new Response($this->twig->render('ado/messages.html.twig', $vars));
-        return $this->render('pro/messages.html.twig', $vars);
-    }
+    
 
     /**
      * @Route("/pro/visios", name="pro_visios")
@@ -163,137 +189,99 @@ class ProController extends BaseController
         return new RedirectResponse('/');
     }
 
-    /**
-     * @Route("/pro/profil", name="pro_profil")
-     */
-    public function profil(Request $rq)
-    {
-        if (ProController::authentify($this->session)) {
-
-            $vars['user'] = $this->session->get('user');
-            $vars['role'] = $this->session->get('role');
-
-            $post = $rq->request;
-
-            // if (count($post) > 0) {
-            //     dump($post);
-            //     $start_date = new DateTime($post->get('start_date') . $post->get('am_start_time'));
-            //     $end_date = new DateTime($post->get('end_date') . $post->get('pm_end_time'));
-            //     $date = $start_date;
-            //     $duration_interval = new DateInterval('PT' . substr($post->get('duration'), 0, 2) . 'H' . substr($post->get('duration'), -2) . 'M');
-            //     echo date_format($end_date, 'd.m.Y H:i') . '<p>';
-
-            //     while ($date <= $end_date) {
-            //         $day_end = new DateTime(date_format($date, 'Y-m-d') . $post->get('pm_end_time'));
-            //         while ($date < $day_end) {
-            //             echo date_format($date, 'd.m.Y H:i') . '<br>';
-            //             $date->add($duration_interval);
-            //         }
-            //         $date->add(new DateInterval(('P1D')));
-            //         $date = new DateTime(date_format($date, 'Y-m-d') . $post->get('am_start_time'));
-            //         echo 'retour : ' . date_format($date, 'd.m.Y H:i') . '<br>';
-            //     }
-            //     dd('Et maintenant ?');
-            // }
-
-            return new Response($this->twig->render('pro/profil.html.twig', $vars));
-        }
-
-        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
-        return new RedirectResponse('/');
-    }
+    
 
     /**
      * @Route("pro/new", name="pro_new")
      */
-    public function new(Request $rq)
-    {
-        $vars['user'] = $this->session->get('user');
-        $vars['role'] = $this->session->get('role');
+    // public function new(Request $rq)
+    // {
+    //     $vars['user'] = $this->session->get('user');
+    //     $vars['role'] = $this->session->get('role');
 
-        if ($rq->request->has('name')) {
-            $repo = $this->em->getRepository(User::class);
-            $user = $repo->findOneBy(['email' => $rq->request->get('email')]);
+    //     if ($rq->request->has('name')) {
+    //         $repo = $this->em->getRepository(User::class);
+    //         $user = $repo->findOneBy(['email' => $rq->request->get('email')]);
 
-            if (!$user) {
-                $user = new User();
-                $pass = $user->generate(12);
-                $user->setEmail($rq->request->get('email'))
-                    ->setPassword(password_hash($pass, PASSWORD_DEFAULT))
-                    ->setRole($rq->request->get('role'))
-                    ->setName($rq->request->get('name'))
-                    ->setFirstName($rq->request->get('first_name'))
-                    ->setPhoneOffice($rq->request->get('phone_office'))
-                    ->setPhoneMobile($rq->request->get('phone_mobile'))
-                    ->setStreet1($rq->request->get('street1'))
-                    ->setStreet2($rq->request->get('street2'))
-                    ->setPostcode($rq->request->get('postcode'))
-                    ->setCity($rq->request->get('city'))
-                    ->setStatus('pending')
-                    ->setTitle($rq->request->get('title'))
-                    ->setProfession($rq->request->get('profession'))
-                    ->setBio($rq->request->get('bio'));
+    //         if (!$user) {
+    //             $user = new User();
+    //             $pass = $user->generate(12);
+    //             $user->setEmail($rq->request->get('email'))
+    //                 ->setPassword(password_hash($pass, PASSWORD_DEFAULT))
+    //                 ->setRole($rq->request->get('role'))
+    //                 ->setName($rq->request->get('name'))
+    //                 ->setFirstName($rq->request->get('first_name'))
+    //                 ->setPhoneOffice($rq->request->get('phone_office'))
+    //                 ->setPhoneMobile($rq->request->get('phone_mobile'))
+    //                 ->setStreet1($rq->request->get('street1'))
+    //                 ->setStreet2($rq->request->get('street2'))
+    //                 ->setPostcode($rq->request->get('postcode'))
+    //                 ->setCity($rq->request->get('city'))
+    //                 ->setStatus('pending')
+    //                 ->setTitle($rq->request->get('title'))
+    //                 ->setProfession($rq->request->get('profession'))
+    //                 ->setBio($rq->request->get('bio'));
 
 
-                for ($i = 1; $i < $rq->request->get('educations') + 1; $i++) {
-                    if ($rq->request->get('date' . $i) != null && $rq->request->get('degree' . $i) != null && $rq->request->get('school' . $i) != null) {
-                        $education = new Education();
-                        $education->setDate(new DateTime($rq->request->get('date' . $i)))
-                            ->setDegree($rq->request->get('degree' . $i))
-                            ->setSchool($rq->request->get('school' . $i));
-                        $this->em->persist($education);
-                    }
-                }
+    //             for ($i = 1; $i < $rq->request->get('educations') + 1; $i++) {
+    //                 if ($rq->request->get('date' . $i) != null && $rq->request->get('degree' . $i) != null && $rq->request->get('school' . $i) != null) {
+    //                     $education = new Education();
+    //                     $education->setDate(new DateTime($rq->request->get('date' . $i)))
+    //                         ->setDegree($rq->request->get('degree' . $i))
+    //                         ->setSchool($rq->request->get('school' . $i));
+    //                     $this->em->persist($education);
+    //                 }
+    //             }
 
-                for ($i = 1; $i < $rq->request->get('experiences') + 1; $i++) {
-                    if ($rq->request->get('dateStart' . $i) != null && $rq->request->get('position' . $i) != null && $rq->request->get('employer' . $i) != null) {
-                        $experience = new Experience();
-                        $experience->setDateStart(new DateTime($rq->request->get('dateStart' . $i)))
-                            ->setPosition($rq->request->get('position' . $i))
-                            ->setEmployer($rq->request->get('employer' . $i));
+    //             for ($i = 1; $i < $rq->request->get('experiences') + 1; $i++) {
+    //                 if ($rq->request->get('dateStart' . $i) != null && $rq->request->get('position' . $i) != null && $rq->request->get('employer' . $i) != null) {
+    //                     $experience = new Experience();
+    //                     $experience->setDateStart(new DateTime($rq->request->get('dateStart' . $i)))
+    //                         ->setPosition($rq->request->get('position' . $i))
+    //                         ->setEmployer($rq->request->get('employer' . $i));
 
-                        if ($rq->request->get('dateEnd' . $i == '')) {
-                            $experience->setDateEnd(new DateTime($rq->request->get('dateEnd' . $i)));
-                        } else {
-                            $experience->setDateEnd(null);
-                        }
-                        $this->em->persist($experience);
-                    }
-                }
+    //                     if ($rq->request->get('dateEnd' . $i == '')) {
+    //                         $experience->setDateEnd(new DateTime($rq->request->get('dateEnd' . $i)));
+    //                     } else {
+    //                         $experience->setDateEnd(null);
+    //                     }
+    //                     $this->em->persist($experience);
+    //                 }
+    //             }
 
-                $user->setStatus('pending');
-                $this->em->persist($user);
+    //             $user->setStatus('pending');
+    //             $this->em->persist($user);
 
-                dump($rq->request);
-                dd($user);
+    //             dump($rq->request);
+    //             dd($user);
 
-                $this->em->flush();
+    //             $this->em->flush();
 
-                if (isset($_FILES['pic'])) {
-                    $file = $_FILES['pic'];
-                    $name = $file['tmp_name'];
-                    $fileExt = "." . strtolower(substr(strrchr($file['name'], '.'), 1));
-                    $dest = '/profilepics/' . $user->getId() . $fileExt;
+    //             if (isset($_FILES['pic'])) {
+    //                 $file = $_FILES['pic'];
+    //                 $name = $file['tmp_name'];
+    //                 $fileExt = "." . strtolower(substr(strrchr($file['name'], '.'), 1));
+    //                 $dest = '/profilepics/' . $user->getId() . $fileExt;
 
-                    $resultat = move_uploaded_file($name, $dest);
+    //                 $resultat = move_uploaded_file($name, $dest);
 
-                    if ($resultat) {
-                        $user->setProfilePic($dest);
-                        $this->em->persist($user);
-                        $this->em->flush();
-                        $vars['user'] = $user;
-                    }
-                }
+    //                 if ($resultat) {
+    //                     $user->setProfilePic($dest);
+    //                     $this->em->persist($user);
+    //                     $this->em->flush();
+    //                     $vars['user'] = $user;
+    //                 }
+    //             }
 
-                $this->session->set('flash', 'Votre demande a été soumise, elle sera examinée dans les plus brefs délais. Merci de votre intérêt.');
-                return new RedirectResponse(('/'));
-            } else {
-                $vars['flash'] = "un utilisateur utilise déjà cet email";
-            }
-        }
+    //             $this->session->set('flash', 'Votre demande a été soumise, elle sera examinée dans les plus brefs délais. Merci de votre intérêt.');
+    //             return new RedirectResponse(('/'));
+    //         } else {
+    //             $vars['flash'] = "un utilisateur utilise déjà cet email";
+    //         }
+    //     }
 
-        return new Response($this->twig->render('pro/new.html.twig', $vars));
-    }
+    //     return new Response($this->twig->render('pro/new.html.twig', $vars));
+    // }
 
     /**
      * Authentification des pro

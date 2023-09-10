@@ -61,8 +61,8 @@ const getLoggedInPages = (role) => {
     case "admin":
       pages = [
         { name: "dashboard", url: "home", developed: true },
-        { name: "agenda", url: "agenda", developed: true },
-        { name: "conférence", url: "visio2", developed: true },
+        { name: "agenda", url: "agenda", developed: false },
+        { name: "conférence", url: "visio2", developed: false },
         { name: "utilisateurs", url: "users", developed: true },
         { name: "ressources", url: "ressources", developed: true },
         { name: "textes", url: "textes", developed: false },

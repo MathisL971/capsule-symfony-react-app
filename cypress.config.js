@@ -5,9 +5,10 @@ module.exports = defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
-    baseUrl: "https://127.0.0.1:8001",
+    baseUrl: "https://127.0.0.1:8000",
   },
   env: {
-    DEV_BACKEND: "http://localhost:3002/api",
+    // DEV_BACKEND: "http://localhost:3002/api",
+    DEV_BACKEND: "https://127.0.0.1:8000",
   },
 });

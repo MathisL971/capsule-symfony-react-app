@@ -1,4 +1,4 @@
-{% extends "pro/navbar.html.twig" %}
+{% extends "base-js.html.twig" %}
 
 {% block body %}
 	<div class="container" style="margin-bottom: 30px">
@@ -14,7 +14,7 @@
 			<button class="btn btn-dark" style="width: 200px; margin: auto; background: white; color: black; border: 1px solid rgb(255,237,121)" onclick="reveal('payments')">Moyens de paiement</button>
 		</div>
 		<div class="row" id="infos" style"display: block; margin: 15px 0">
-			{{ dump(user.profilPic)}}<br>
+			{{ dump(user.profilePic)}}<br>
 			<p>{{ user.email }}<br>
 				{{ user.phoneMobile}}</p>
 		</div>

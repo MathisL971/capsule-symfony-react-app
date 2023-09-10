@@ -21,7 +21,7 @@ const conversationsReducer = (state = initialState, action) => {
       return {
         ...state,
         potentialConversation: action.payload,
-        activeConversation: null,
+        activeConversation: action.payload,
         activeConversationMessages: [],
         error: null,
       };
