@@ -70,6 +70,7 @@ class SignupController extends BaseController
         // Else if GET request (rendering login form)
         elseif ($rq->isMethod('GET')) {
             $vars = [];
+            $vars['flash'] = '';
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
             $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
@@ -79,7 +80,6 @@ class SignupController extends BaseController
     
         // If the request method is neither GET nor POST
         return new Response('Invalid request method');
-
     }
 
     // /**
@@ -141,7 +141,7 @@ class SignupController extends BaseController
     //     $vars['user'] = $this->session->get('user');
     //     $vars['role'] = $this->session->get('role');
 
-    //     // return new Response($this->twig->render('signup/new.html.twig', $vars));
+    //     // return new Response($this->render('signup/new.html.twig', $vars));
     //     return $this->render('signup/new.html.twig', $vars);
     // }
 }

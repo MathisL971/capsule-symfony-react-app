@@ -21,7 +21,7 @@ const conversationsReducer = (state = initialState, action) => {
       return {
         ...state,
         potentialConversation: action.payload,
-        activeConversation: action.payload,
+        activeConversation: null,
         activeConversationMessages: [],
         error: null,
       };
@@ -140,6 +140,7 @@ export const conversationAddAction = (newConversation) => async (dispatch) => {
       type: "CREATE_CONVERSATION_SUCCESS",
       payload: createdConversation,
     });
+
     return createdConversation;
   } catch (e) {
     dispatch({ type: "FAILURE", payload: e.message });
@@ -149,14 +150,16 @@ export const conversationAddAction = (newConversation) => async (dispatch) => {
 export const conversationAddMessageAction =
   (newMessage) => async (dispatch) => {
     try {
+      console.log("Posting message to database");
       const addedMessage = await messageService.create(newMessage);
-
-      console.log("New message:", addedMessage);
+      console.log("Message object returned:", addedMessage);
 
       dispatch({
         type: "CREATE_NEW_MESSAGE_SUCCESS",
         payload: addedMessage,
       });
+
+      return addedMessage;
     } catch (e) {
       dispatch({ type: "FAILURE", payload: e.message });
     }
@@ -173,6 +176,8 @@ export const conversationUpdateAction =
         type: "UPDATE_CONVERSATION_SUCCESS",
         payload: returnedConversation,
       });
+
+      return returnedConversation;
     } catch (e) {
       dispatch({ type: "FAILURE", payload: e.message });
     }

@@ -21,12 +21,13 @@ class AdoController extends BaseController
         if (AdoController::authentify($this->session)) {
             $vars = [];
 
+            $vars['flash'] = '';;
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
             $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
             return $this->render('ado/home.html.twig', $vars);
-            // return new Response($this->twig->render('ado/profil.html.twig', $vars));
+            // return new Response($this->render('ado/profil.html.twig', $vars));
         }
 
         $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
@@ -40,6 +41,7 @@ class AdoController extends BaseController
         if (AdoController::authentify($this->session)) {
             $vars = [];
 
+            $vars['flash'] = '';
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
             $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
@@ -67,7 +69,7 @@ class AdoController extends BaseController
             }
 
             return $this->render('ado/profil.html.twig', $vars);
-            // return new Response($this->twig->render('ado/profil.html.twig', $vars));
+            // return new Response($this->render('ado/profil.html.twig', $vars));
         }
 
         $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
@@ -81,13 +83,13 @@ class AdoController extends BaseController
     {
         if (AdoController::authentify($this->session)) {
             $vars = [];
-
+            $vars['flash'] = '';
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
             $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
             return $this->render('ado/messages.html.twig', $vars);
-            // return new Response($this->twig->render('ado/messages.html.twig', $vars));
+            // return new Response($this->render('ado/messages.html.twig', $vars));
         }
 
         $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
@@ -99,14 +101,18 @@ class AdoController extends BaseController
      */
     public function journal(Request $rq)
     {
-        $vars = [];
+        if (AdoController::authentify($this->session)) {
+            $vars = [];
+            $vars['flash'] = '';
+            $vars['user'] = $this->session->get('user');
+            $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-        $vars['user'] = $this->session->get('user');
-        $vars['role'] = $this->session->get('role');
-        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+            return $this->render('ado/journal.html.twig', $vars);
+        }
 
-
-        return $this->render('ado/journal.html.twig', $vars);
+        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
+        return new RedirectResponse('/');
     }
 
     /**
@@ -114,15 +120,18 @@ class AdoController extends BaseController
      */
     public function videos(Request $rq)
     {
-        $vars = [];
+        if (AdoController::authentify($this->session)) {
+            $vars = [];
+            $vars['flash'] = '';
+            $vars['user'] = $this->session->get('user');
+            $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-        $vars['user'] = $this->session->get('user');
-        $vars['role'] = $this->session->get('role');
-        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+            return $this->render('ado/videos.html.twig', $vars);
+        }
 
-        $page = $this->twig->render('ado/videos.html.twig', $vars);
-
-        return new Response($page);
+        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
+        return new RedirectResponse('/');
     }
 
     /**
@@ -130,16 +139,18 @@ class AdoController extends BaseController
      */
     public function podcasts(Request $rq)
     {
-        $vars = [];
+        if (AdoController::authentify($this->session)) {
+            $vars = [];
+            $vars['flash'] = '';
+            $vars['user'] = $this->session->get('user');
+            $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-        $vars['user'] = $this->session->get('user');
-        $vars['role'] = $this->session->get('role');
-        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+            return $this->render('ado/podcasts.html.twig', $vars);
+        }
 
-
-        $page = $this->twig->render('ado/podcasts.html.twig', $vars);
-
-        return new Response($page);
+        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
+        return new RedirectResponse('/');
     }
 
     /**
@@ -147,16 +158,18 @@ class AdoController extends BaseController
      */
     public function audiobooks(Request $rq)
     {
-        $vars = [];
+        if (AdoController::authentify($this->session)) {
+            $vars = [];
+            $vars['flash'] = '';
+            $vars['user'] = $this->session->get('user');
+            $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-        $vars['user'] = $this->session->get('user');
-        $vars['role'] = $this->session->get('role');
-        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+            return $this->render('ado/audiobooks.html.twig', $vars);
+        }
 
-
-        $page = $this->twig->render('ado/audiobooks.html.twig', $vars);
-
-        return new Response($page);
+        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
+        return new RedirectResponse('/');
     }
 
     
@@ -165,15 +178,18 @@ class AdoController extends BaseController
      */
     public function family(Request $rq)
     {
-        $vars = [];
+        if (AdoController::authentify($this->session)) {
+            $vars = [];
+            $vars['flash'] = '';
+            $vars['user'] = $this->session->get('user');
+            $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-        $vars['user'] = $this->session->get('user');
-        $vars['role'] = $this->session->get('role');
-        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+            return $this->render('ado/family.html.twig', $vars);
+        }
 
-        $page = $this->twig->render('ado/family.html.twig', $vars);
-
-        return new Response($page);
+        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
+        return new RedirectResponse('/');
     }
 
     /**
@@ -181,15 +197,18 @@ class AdoController extends BaseController
      */
     public function news(Request $rq)
     {
-        $vars = [];
+        if (AdoController::authentify($this->session)) {
+            $vars = [];
+            $vars['flash'] = '';
+            $vars['user'] = $this->session->get('user');
+            $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-        $vars['user'] = $this->session->get('user');
-        $vars['role'] = $this->session->get('role');
-        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+            return $this->render('ado/news.html.twig', $vars);
+        }
 
-        $page = $this->twig->render('ado/news.html.twig', $vars);
-
-        return new Response($page);
+        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
+        return new RedirectResponse('/');
     }
 
     /**
@@ -197,16 +216,19 @@ class AdoController extends BaseController
      */
     public function notes(Request $rq)
     {
-        $vars = [];
+        if (AdoController::authentify($this->session)) {
+            $vars = [];
 
-        $vars['user'] = $this->session->get('user');
-        $vars['role'] = $this->session->get('role');
-        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+            $vars['flash'] = '';
+            $vars['user'] = $this->session->get('user');
+            $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
+            return $this->render('ado/notes.html.twig', $vars);
+        }
 
-        $page = $this->twig->render('ado/notes.html.twig', $vars);
-
-        return new Response($page);
+        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
+        return new RedirectResponse('/');
     }
 
     /**
@@ -214,16 +236,18 @@ class AdoController extends BaseController
      */
     public function community(Request $rq)
     {
-        $vars = [];
+        if (AdoController::authentify($this->session)) {
+            $vars = [];
+            $vars['flash'] = '';
+            $vars['user'] = $this->session->get('user');
+            $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-        $vars['user'] = $this->session->get('user');
-        $vars['role'] = $this->session->get('role');
-        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+            return $this->render('ado/community.html.twig', $vars);
+        }
 
-
-        $page = $this->twig->render('ado/community.html.twig', $vars);
-
-        return new Response($page);
+        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
+        return new RedirectResponse('/');
     }
 
     /**
@@ -231,16 +255,18 @@ class AdoController extends BaseController
      */
     public function timing(Request $rq)
     {
-        $vars = [];
+        if (AdoController::authentify($this->session)) {
+            $vars = [];
+            $vars['flash'] = '';
+            $vars['user'] = $this->session->get('user');
+            $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-        $vars['user'] = $this->session->get('user');
-        $vars['role'] = $this->session->get('role');
-        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+            return $this->render('ado/timing.html.twig', $vars);
+        }
 
-
-        $page = $this->twig->render('ado/timing.html.twig', $vars);
-
-        return new Response($page);
+        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
+        return new RedirectResponse('/');
     }
 
     /**
@@ -248,13 +274,18 @@ class AdoController extends BaseController
      */
     public function visio(Request $rq)
     {
-        $vars = [];
+        if (AdoController::authentify($this->session)) {
+            $vars = [];
+            $vars['flash'] = '';
+            $vars['user'] = $this->session->get('user');
+            $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-        $vars['user'] = $this->session->get('user');
-        $vars['role'] = $this->session->get('role');
-        $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+            return $this->render('ado/visio.html.twig', $vars);
+        }
 
-        return new Response($this->twig->render('ado/visio.html.twig', $vars));
+        $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
+        return new RedirectResponse('/');
     }
 
    

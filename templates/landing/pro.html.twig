@@ -5,44 +5,47 @@
 {% block body %}
 	{# Image accueil #}
 	<div class="container-fluid text-center" style="padding: 0; background-image: url('/images/landing_pro_first.jpg'); background-size: 100% auto">
-		<div class="row align-items-center justify-content-center" style="margin-top: -70px; padding-right: 30vw; height: 45vw; min-height: 250px ;margin-left: 0px; margin-right: 0px;">
-			<h1 class="landing" style="margin-top: 20vh">Réalisez vos consultations<br>en ligne avec Capsule</h1>
-			<p>
+		<div class="flex row" style="height: 55vw; min-height: 250px; padding: 75px 0; align-items: center">
+			<h1 class="landing" style="height: fit-content">Réalisez vos consultations<br>en ligne avec Capsule</h1>
+			<div style="margin: 0 auto; height: fit-content">
 				<h2 style="font-size: 2vw;">Capsule centralise tous les outils dont vous avez besoin<br>et vous garantit un accès à votre agenda en un seul clic</h2>
-			</p>
-		</div>
-		<div style="padding-right: 30vw">
-			<a type="button" href="signup" class="btn" style="margin-bottom: 3vh; padding: 1vh 2vw; background-color: rgba(48, 180, 167, 1); color: white; font-size: x-large">Je m'inscris</a>
+			</div>
+			<div style="margin: 0 auto; height: fit-content">
+				<a type="button" href="signup" class="btn" style="padding: 2vh 4vw; background-color: rgba(48, 180, 167, 1); color: white; font-size: x-large">Je m'inscris</a>
+			</div>
 		</div>
 	</div>
 
 	{# Solutions #}
-	<div class="row" style="padding: 75px">
+	<div class="container row" style="padding: 75px; margin: 0 auto">
 		<h1>
 			Capsule répond présent</h1>
 		<p>Texte sur les atouts de capsule et ses fonctionnalités</p>
 	</div>
 
 	{# Fonctionnalités #}
-	<div class="row" style="padding: 75px">
-		<h1 style="margin-bottom: 2vw">Capsule c'est</h1>
-		<div class="col col-4">
-			<img src="images/landing_pro_acces.jpg" alt="Illustration" style="margin-bottom: 1vw; width: auto; height: 15vw; border-top-right-radius: 3vw">
-			<p style="font-weight: bold">UN ACCES AUX CONSULTATIONS</p>
-			<p>Toutes vos consultations réunies sur une seule et même plateforme
-			</p>
+	<div class="container row gap-4" style="padding: 75px; margin: 0 auto">
+		<h1 class="text-2xl" style="margin-bottom: 2vw">Capsule c'est</h1>
+
+		<div class="flex col">
+			<div class="col col-4">
+				<img src="images/landing_pro_acces.jpg" alt="Illustration" style="margin-bottom: 1vw; width: auto; height: 15vw; border-top-right-radius: 3vw">
+				<p style="font-weight: bold">UN ACCES AUX CONSULTATIONS</p>
+				<p>Toutes vos consultations réunies sur une seule et même plateforme
+				</p>
+			</div>
+			<div class="col col-4"><img src="images/landing_pro_profil.jpg" alt="Illustration" style="margin-bottom: 1vw; width: auto; height: 15vw; border-top-right-radius: 3vw">
+				<p style="font-weight: bold">UN PROFIL UTILISATEUR COMPLET ET INTERACTIF</p>
+				<p>Retrouvez tous les outils dont vous avez besoin en un clic : dossiers, suivi patient, boîte de réception,etc.</p>
+			</div>
+			<div class="col col-4"><img src="images/landing_pro_contenu.jpg" alt="Illustration" style="margin-bottom: 1vw; width: auto; height: 15vw; border-top-right-radius: 3vw">
+				<p style="font-weight: bold">DU CONTENU SUR MESURE</p>
+				<p>Podcasts, revues, articles,…, accès aux conférences, zone d’échanges entre professionnels
+				</p>
+			</div>
 		</div>
-		<div class="col col-4"><img src="images/landing_pro_profil.jpg" alt="Illustration" style="margin-bottom: 1vw; width: auto; height: 15vw; border-top-right-radius: 3vw">
-			<p style="font-weight: bold">UN PROFIL UTILISATEUR COMPLET ET INTERACTIF</p>
-			<p>Retrouvez tous les outils dont vous avez besoin en un clic : dossiers, suivi patient, boîte de réception,etc.</p>
-		</div>
-		<div class="col col-4"><img src="images/landing_pro_contenu.jpg" alt="Illustration" style="margin-bottom: 1vw; width: auto; height: 15vw; border-top-right-radius: 3vw">
-			<p style="font-weight: bold">DU CONTENU SUR MESURE</p>
-			<p>Podcasts, revues, articles,…, accès aux conférences, zone d’échanges entre professionnels
-			</p>
-		</div>
-		<div>
-			<a type="button" href="signup" class="btn btn-lg" style="margin-top: 3vh; padding: 1vh 2vw; background-color: rgba(48, 180, 167, 1); color: white; font-size: x-large">Je m'inscris</a>
+		<div class="flex row justify-center" style="">
+			<a type="button" href="signup" class="btn btn-lg w-fit" style="margin: 0 auto; padding: 1vh 2vw; background-color: rgba(48, 180, 167, 1); color: white; font-size: x-large">Je m'inscris</a>
 		</div>
 	</div>
 

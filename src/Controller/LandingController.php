@@ -41,7 +41,8 @@ class LandingController extends BaseController
                 $vars['pros'][] = $pros[$row];
             }
         }
-
+        
+        $vars['flash'] = '';
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
         $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
@@ -81,6 +82,8 @@ class LandingController extends BaseController
             }
         }
 
+        $vars['flash'] = '';
+
         return $this->render('landing/jeune.html.twig', $vars);
     }
 
@@ -94,6 +97,7 @@ class LandingController extends BaseController
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
         $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+        $vars['flash'] = '';
 
         return $this->render('landing/parent.html.twig', $vars);
     }
@@ -108,6 +112,7 @@ class LandingController extends BaseController
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
         $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+        $vars['flash'] = '';
 
         return $this->render('landing/pro.html.twig', $vars);
     }
@@ -122,8 +127,9 @@ class LandingController extends BaseController
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
         $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+        $vars['flash'] = '';
 
-        // return new Response($this->twig->render('landing/liste_pros.html.twig', $vars));
+        // return new Response($this->render('landing/liste_pros.html.twig', $vars));
         return $this->render('landing/liste_pros.html.twig', $vars);
     }
 
@@ -156,7 +162,9 @@ class LandingController extends BaseController
             $vars['dates'][$i] = $date;
         }
 
-        // return new Response($this->twig->render('landing/fiche_pro.html.twig', $vars));
+        $vars['flash'] = '';
+
+        // return new Response($this->render('landing/fiche_pro.html.twig', $vars));
         return $this->render('landing/fiche_pro.html.twig', $vars);
     }
 
@@ -170,8 +178,9 @@ class LandingController extends BaseController
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
         $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+        $vars['flash'] = '';
 
-        // return new Response($this->twig->render('landing/ressources.html.twig', $vars));
+        // return new Response($this->render('landing/ressources.html.twig', $vars));
         return $this->render('landing/ressources.html.twig', $vars);
     }
 
@@ -185,8 +194,9 @@ class LandingController extends BaseController
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
         $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+        $vars['flash'] = '';
 
-        // return new Response($this->twig->render('landing/revue_presse.html.twig', $vars));
+        // return new Response($this->render('landing/revue_presse.html.twig', $vars));
         return $this->render('landing/revue_presse.html.twig', $vars);
     }
 
@@ -200,8 +210,9 @@ class LandingController extends BaseController
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
         $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+        $vars['flash'] = '';
 
-        // return new Response($this->twig->render('landing/mentions.html.twig', $vars));
+        // return new Response($this->render('landing/mentions.html.twig', $vars));
         return $this->render('landing/mentions.html.twig', $vars);
     }
 
@@ -215,8 +226,9 @@ class LandingController extends BaseController
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
         $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+        $vars['flash'] = '';
 
-        // return new Response($this->twig->render('landing/rgpd.html.twig', $vars));
+        // return new Response($this->render('landing/rgpd.html.twig', $vars));
         return $this->render('landing/rgpd.html.twig', $vars);
     }
 
@@ -230,8 +242,9 @@ class LandingController extends BaseController
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
         $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+        $vars['flash'] = '';
 
-        // return new Response($this->twig->render('landing/cgs.html.twig', $vars));
+        // return new Response($this->render('landing/cgs.html.twig', $vars));
         return $this->render('landing/cgs.html.twig', $vars);
     }
 
@@ -245,8 +258,9 @@ class LandingController extends BaseController
         $vars['user'] = $this->session->get('user');
         $vars['role'] = $this->session->get('role');
         $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
+        $vars['flash'] = '';
 
-        // return new Response($this->twig->render('landing/faq.html.twig', $vars));
+        // return new Response($this->render('landing/faq.html.twig', $vars));
         return $this->render('landing/faq.html.twig', $vars);
     }
 
@@ -259,7 +273,7 @@ class LandingController extends BaseController
     //         $path = '/' . strtolower($this->session->get('role')) . '/messages';
     //         return new RedirectResponse($path);
     //     } else {
-    //         return new Response($this->twig->render('hello.html.twig', [
+    //         return new Response($this->render('hello.html.twig', [
     //             'flash' => "L'accès à la messagerie nécessite d'être connecté"
     //         ]));
     //     }
@@ -274,7 +288,7 @@ class LandingController extends BaseController
     //         $path = '/' . strtolower($this->session->get('role')) . '/visio';
     //         return new RedirectResponse($path);
     //     } else {
-    //         return new Response($this->twig->render('hello.html.twig', [
+    //         return new Response($this->render('hello.html.twig', [
     //             'flash' => "L'accès au la page de téléconsultation nécessite d'être connecté"
     //         ]));
     //     }

@@ -39,7 +39,11 @@ const NavBar = ({ userObj, userRole }) => {
         />
       </div>
       {/* Toggled section */}
-      <div className="flex p-2">
+      <div
+        className={`${navCollapsed && accCollapsed ? "hidden" : "flex"} ${
+          !navCollapsed ? "bg-teal-600" : ""
+        } p-2 z-50`}
+      >
         <HamburgerMenu user={user} isCollapsed={navCollapsed} />
         {user && (
           <UserMenu

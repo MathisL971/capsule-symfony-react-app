@@ -97,7 +97,7 @@ class AgendaController extends BaseController
                 $vars['contacts'] = json_encode($contactsArray);
 
                 // Affichage
-                return new Response($this->twig->render('pro/agenda.html.twig', $vars));
+                return new Response($this->render('pro/agenda.html.twig', $vars));
             }
 
             // Affichage de l'agenda ado / parents / admin
@@ -163,7 +163,7 @@ class AgendaController extends BaseController
             }
             $vars['contacts'] = json_encode($contactsArray);
 
-            return new Response($this->twig->render($qui . '/agenda.html.twig', $vars));
+            return new Response($this->render($qui . '/agenda.html.twig', $vars));
         }
 
         return new RedirectResponse('/');

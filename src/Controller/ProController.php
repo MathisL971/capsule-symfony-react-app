@@ -26,7 +26,7 @@ class ProController extends BaseController
     {
         if (ProController::authentify($this->session)) {
             $vars = [];
-
+            $vars['flash'] = '';
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
             $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
@@ -46,7 +46,7 @@ class ProController extends BaseController
     {
         if (ProController::authentify($this->session)) {
             $vars = [];
-
+            $vars['flash'] = '';
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
             $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
@@ -75,7 +75,6 @@ class ProController extends BaseController
             }
             
             return $this->render('pro/profil.html.twig', $vars);
-            // return new Response($this->twig->render('pro/profil.html.twig', $vars));
         }
 
         $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
@@ -89,7 +88,7 @@ class ProController extends BaseController
     {
         if (ProController::authentify($this->session)) {
             $vars = [];
-
+            $vars['flash'] = '';
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
             $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
@@ -107,11 +106,13 @@ class ProController extends BaseController
     public function patients(Request $rq)
     {
         if (ProController::authentify($this->session)) {
-
+            $vars = [];
+            $vars['flash'] = '';
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-            return new Response($this->twig->render('pro/patients.html.twig', $vars));
+            return $this->render('pro/patients.html.twig', $vars);
         }
 
         $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
@@ -124,12 +125,14 @@ class ProController extends BaseController
     public function patient(Request $rq)
     {
         if (ProController::authentify($this->session)) {
-
+            $vars = [];
+            $vars['flash'] = '';
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
             $vars['id'] = $rq->query->get('id', 0);
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-            return new Response($this->twig->render('pro/patient.html.twig', $vars));
+            return $this->render('pro/patients.html.twig', $vars);
         }
 
         $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
@@ -144,11 +147,13 @@ class ProController extends BaseController
     public function visios(Request $rq)
     {
         if (ProController::authentify($this->session)) {
-
+            $vars = [];
+            $vars['flash'] = '';
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-            return new Response($this->twig->render('pro/visios.html.twig', $vars));
+            return $this->render('pro/visios.html.twig', $vars);        
         }
 
         $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
@@ -161,12 +166,13 @@ class ProController extends BaseController
     public function visio(Request $rq)
     {
         if (ProController::authentify($this->session)) {
-
+            $vars = [];
+            $vars['flash'] = '';
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-            return new Response($this->twig->render('pro/visio.html.twig', $vars));
-        }
+            return $this->render('pro/visio.html.twig', $vars);        }
 
         $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
         return new RedirectResponse('/');
@@ -178,12 +184,13 @@ class ProController extends BaseController
     public function repays(Request $rq)
     {
         if (ProController::authentify($this->session)) {
-
+            $vars = [];
+            $vars['flash'] = '';
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-            return new Response($this->twig->render('pro/repays.html.twig', $vars));
-        }
+            return $this->render('pro/repays.html.twig', $vars);        }
 
         $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
         return new RedirectResponse('/');
@@ -280,7 +287,7 @@ class ProController extends BaseController
     //         }
     //     }
 
-    //     return new Response($this->twig->render('pro/new.html.twig', $vars));
+    //     return new Response($this->render('pro/new.html.twig', $vars));
     // }
 
     /**

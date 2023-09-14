@@ -19,7 +19,7 @@ const HamburgerMenu = ({ user, isCollapsed }) => {
             href={user ? `/${user.role}/${url}` : `/${url}`}
             className={`${
               developed ? "block" : "hidden"
-            } rounded-lg px-4 py-2 my-auto text-center text-sm font-medium text-black`}
+            } rounded-lg px-4 py-2 my-auto text-center text-sm font-normal border-2`}
           >
             {name.charAt(0).toUpperCase() + name.slice(1)}
           </a>

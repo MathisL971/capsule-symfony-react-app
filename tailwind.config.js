@@ -12,6 +12,7 @@ module.exports = {
   ],
   theme: {
     extend: {},
+    darkMode: false, // Disable dark and light modes
   },
   plugins: [],
 };

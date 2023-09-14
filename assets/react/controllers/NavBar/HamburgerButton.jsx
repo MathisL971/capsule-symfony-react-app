@@ -8,7 +8,7 @@ const HamburgerButton = ({
 }) => {
   return (
     <button
-      className="flex sm:hidden bg-teal-900 font-bold text-white text-sm rounded-lg my-auto px-4 py-2.5"
+      className="flex lg:hidden my-auto"
       id="hamburger-button"
       type="button"
       onClick={() => {
@@ -18,7 +18,11 @@ const HamburgerButton = ({
         handleToggle(!toggledState);
       }}
     >
-      Menu
+      <img
+        alt="hamburger-button"
+        src="/images/hamburger-icon-white.svg"
+        style={{ width: "40px" }}
+      ></img>
     </button>
   );
 };

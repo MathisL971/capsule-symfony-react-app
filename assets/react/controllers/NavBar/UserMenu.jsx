@@ -13,7 +13,7 @@ const UserMenu = ({ user, handleLogout, isCollapsed }) => {
       id="user-menu"
     >
       <div
-        className={`relative flex-col p-3 gap-1 inset-0 text-base w-fit bg-white rounded-lg shadow`}
+        className={`flex flex-col p-3 gap-1 inset-0 text-base w-fit bg-white rounded-lg shadow`}
       >
         <div className="pt-2 px-1">
           <span className="block text-sm font-medium text-gray-900">

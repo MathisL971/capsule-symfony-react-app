@@ -28,7 +28,7 @@ export default function UserSearchBar({ handleConvoSideOpen, enterConvo }) {
       if (existingConvo) {
         handleConvoSideOpen(existingConvo, user);
       } else {
-        console.log("active convo:", activeConversation);
+        // If currently in another convo, perform logic for new message card style (TO REVIEW)
         if (activeConversation) {
           const updatedConversation =
             user.id === activeConversation.idCreator
@@ -40,7 +40,6 @@ export default function UserSearchBar({ handleConvoSideOpen, enterConvo }) {
         }
 
         const newConvo = {
-          id: "temp-id",
           idConnection: connection.id,
           dateCreated: new Date().toISOString(),
           dateLastMessage: null,
@@ -50,8 +49,6 @@ export default function UserSearchBar({ handleConvoSideOpen, enterConvo }) {
           creatorHasNewMessage: false,
           correspondantHasNewMessage: false,
         };
-
-        console.log("New convo:", newConvo);
 
         dispatch({
           type: "CREATE_POTENTIAL_CONVERSATION",
@@ -76,7 +73,7 @@ export default function UserSearchBar({ handleConvoSideOpen, enterConvo }) {
 
   return (
     <Combobox value={query} onChange={setQuery}>
-      <div className="relative">
+      <div className=" static">
         <div>
           <Combobox.Input
             className="border-2 border-teal-950 rounded-lg w-full p-3 text-base leading-5 text-gray-900 focus:ring-0"

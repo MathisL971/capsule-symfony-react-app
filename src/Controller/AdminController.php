@@ -35,7 +35,7 @@ class AdminController extends BaseController
         if (AdminController::authentify($session)) {
 
             $vars = [];
-
+            $vars['flash'] = '';;
             $vars['user'] = $session->get('user');
             $vars['role'] = $session->get('role');
             $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
@@ -185,7 +185,7 @@ class AdminController extends BaseController
             if (in_array($user->getId(), $guestsId)) {
                 $vars['meeting'] = $meeting;
 
-                return new Response($this->twig->render('admin/meeting.html.twig', $vars));
+                return new Response($this->render('admin/meeting.html.twig', $vars));
             } else {
                 return new RedirectResponse('/admin/home');
             }
@@ -200,7 +200,7 @@ class AdminController extends BaseController
         if (AdminController::authentify($this->session)) {
 
             $vars = [];
-
+            $vars['flash'] = '';
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
             $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
@@ -225,7 +225,7 @@ class AdminController extends BaseController
         if (AdminController::authentify($session)) {
 
             $vars = [];
-
+            $vars['flash'] = '';
             $vars['user'] = $session->get('user');
             $vars['role'] = $session->get('role');
 
@@ -233,7 +233,7 @@ class AdminController extends BaseController
             $vars['educations'] = $em->getRepository(Education::class)->findBy(['userId' => $id]);
             $vars['experiences'] = $em->getRepository(Experience::class)->findBy(['userId' => $id]);
 
-            $page = $this->twig->render('admin/user.html.twig', $vars);
+            $page = $this->render('admin/user.html.twig', $vars);
 
             return new Response($page);
         }
@@ -255,7 +255,7 @@ class AdminController extends BaseController
 
             $vars['profile'] = $em->getRepository(User::class)->findOneBy(['id' => $id]);
 
-            $page = $this->twig->render('admin/user.html.twig', $vars);
+            $page = $this->render('admin/user.html.twig', $vars);
 
             return new Response($page);
         }
@@ -301,7 +301,7 @@ class AdminController extends BaseController
 
             $vars['profile'] = $profile;
 
-            return new Response($this->twig->render('admin/user.html.twig', $vars));
+            return new Response($this->render('admin/user.html.twig', $vars));
         }
 
         return new RedirectResponse('/');
@@ -407,7 +407,7 @@ class AdminController extends BaseController
         if (AdminController::authentify($session)) {
 
             $vars = [];
-
+            $vars['flash'] = '';
             $vars['user'] = $session->get('user');
             $vars['role'] = $session->get('role');
             $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
@@ -452,13 +452,12 @@ class AdminController extends BaseController
         if (AdminController::authentify($session)) {
 
             $vars = [];
-
+            $vars['flash'] = '';
             $vars['user'] = $session->get('user');
             $vars['role'] = $session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-            $page = $this->twig->render('admin/revue_presse.html.twig', $vars);
-
-            return new Response($page);
+            return $this->render('admin/revue_presse.html.twig', $vars);
         }
 
         return new RedirectResponse('/');
@@ -472,13 +471,12 @@ class AdminController extends BaseController
         if (AdminController::authentify($session)) {
 
             $vars = [];
-
+            $vars['flash'] = '';
             $vars['user'] = $session->get('user');
             $vars['role'] = $session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-            $page = $this->twig->render('admin/support.html.twig', $vars);
-
-            return new Response($page);
+            return $this->render('admin/support.html.twig', $vars);
         }
 
         return new RedirectResponse('/');
@@ -492,13 +490,12 @@ class AdminController extends BaseController
         if (AdminController::authentify($session)) {
 
             $vars = [];
-
+            $vars['flash'] = '';
             $vars['user'] = $session->get('user');
             $vars['role'] = $session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-            $page = $this->twig->render('admin/billing.html.twig', $vars);
-
-            return new Response($page);
+            return $this->render('admin/billing.html.twig', $vars);
         }
 
         return new RedirectResponse('/');
@@ -512,13 +509,12 @@ class AdminController extends BaseController
         if (AdminController::authentify($session)) {
 
             $vars = [];
-
+            $vars['flash'] = '';
             $vars['user'] = $session->get('user');
             $vars['role'] = $session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-            $page = $this->twig->render('admin/repay.html.twig', $vars);
-
-            return new Response($page);
+            return $this->render('admin/repay.html.twig', $vars);
         }
 
         return new RedirectResponse('/');
@@ -531,13 +527,12 @@ class AdminController extends BaseController
     {
         if (AdminController::authentify($session)) {
             $vars = [];
-
+            $vars['flash'] = '';
             $vars['user'] = $session->get('user');
             $vars['role'] = $session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-            $page = $this->twig->render('admin/visios.html.twig', $vars);
-
-            return new Response($page);
+            return $this->render('admin/visios.html.twig', $vars);
         }
 
         return new RedirectResponse('/');
@@ -550,7 +545,7 @@ class AdminController extends BaseController
     {
         if (AdminController::authentify($session)) {
             $vars = [];
-
+            $vars['flash'] = '';
             $vars['user'] = $session->get('user');
             $vars['role'] = $session->get('role');
 
@@ -612,9 +607,9 @@ class AdminController extends BaseController
                 $vars['jwt'] = $jwt;
                 $vars['subject'] = $meeting->getTitle();
 
-                $page = $this->twig->render('admin/visio2.html.twig', $vars);
+                $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-                return new Response($page);
+                return $this->render('admin/visio2.html.twig', $vars);
             }
         }
 
@@ -629,7 +624,7 @@ class AdminController extends BaseController
         if (AdminController::authentify($session)) {
 
             $vars = [];
-
+            $vars['flash'] = '';
             $vars['user'] = $session->get('user');
             $vars['role'] = $session->get('role');
 
@@ -672,9 +667,9 @@ class AdminController extends BaseController
             $vars['jwt'] = $jwt;
             $vars['subject'] = "Salon des admins";
 
-            $page = $this->twig->render('admin/visio2.html.twig', $vars);
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-            return new Response($page);
+            return $this->render('admin/visio2.html.twig', $vars);
         }
 
         return new RedirectResponse('/');
@@ -689,12 +684,13 @@ class AdminController extends BaseController
         if (AdminController::authentify($session)) {
 
             $vars = [];
-
-            $user = $session->get('user');
-            $vars['user'] = $user;
+            $vars['flash'] = '';
+            $vars['user'] = $session->get('user');
             $vars['role'] = $session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
             $post = $rq->request;
+
             if (count($post) > 0) {
                 $repo = $this->em->getRepository(User::class);
                 $user = $repo->find($vars['user']->getId());
@@ -734,7 +730,7 @@ class AdminController extends BaseController
                 $vars['user'] = $user;
             }
 
-            return new Response($this->twig->render('admin/profil.html.twig', $vars));
+            return $this->render('admin/profil.html.twig', $vars);        
         }
 
         return new RedirectResponse('/');
@@ -746,14 +742,13 @@ class AdminController extends BaseController
     public function textes(Request $rq, SessionInterface $session)
     {
         if (AdminController::authentify($session)) {
-
             $vars = [];
-
+            $vars['flash'] = '';
             $vars['user'] = $session->get('user');
             $vars['role'] = $session->get('role');
             $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-            return new Response($this->render('admin/textes.html.twig', $vars));
+            return $this->render('admin/textes.html.twig', $vars);
         }
 
         return new RedirectResponse('/');
@@ -778,14 +773,15 @@ class AdminController extends BaseController
             }
 
             $vars = [];
-
+            $vars['flash'] = '';
             $vars['user'] = $session->get('user');
             $vars['role'] = $session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
             $repo = $this->em->getRepository(Param::class);
             $vars['params'] = $repo->findAll();
 
-            return new Response($this->twig->render('admin/params.html.twig', $vars));
+            return $this->render('admin/params.html.twig', $vars);
         }
 
         return new RedirectResponse('/');
@@ -797,6 +793,9 @@ class AdminController extends BaseController
     public function updatePassword(Request $rq, SessionInterface $session)
     {
         if (AdminController::authentify($session)) {
+            $vars = [];
+            $vars['flash'] = '';
+
             if (!empty($_POST)) {
                 if ($rq->request->get('new') != $rq->request->get('repeat')) {
                     $vars['flash'] = "Le nouveau mot de passe n'est pas identique à la resaisie du nouveau mot de passe.";
@@ -817,8 +816,9 @@ class AdminController extends BaseController
 
             $vars['user'] = $session->get('user');
             $vars['role'] = $session->get('role');
+            $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
-            return new Response($this->twig->render('admin/updatePassword.html.twig', $vars));
+            return $this->render('admin/updatePassword.html.twig', $vars);
         }
 
         return new RedirectResponse('/');

@@ -18,8 +18,14 @@ const GENERAL_SOCKET_CONNECTION_ID = "123456789";
 const ChatApp = ({ user, role }) => {
   const dispatch = useDispatch();
 
-  const { conversations, activeConversation, potentialConversation } =
-    useSelector((state) => state.conversations);
+  const {
+    conversations,
+    activeConversation,
+    potentialConversation,
+    activeConversationMessages,
+  } = useSelector((state) => state.conversations);
+
+  console.log("Active convo messages:", activeConversationMessages);
 
   const [broadcast, setBroadcast] = useState(null);
 
@@ -36,9 +42,7 @@ const ChatApp = ({ user, role }) => {
   }, []);
 
   useEffect(() => {
-    console.log("Effect hook for active convos running...");
     if (activeConversation && !potentialConversation) {
-      console.log("Fetching convo messages...");
       dispatch(conversationOpenMessagesAction(activeConversation, user));
     }
   }, [activeConversation]);
@@ -141,10 +145,6 @@ const ChatApp = ({ user, role }) => {
     // Turn inactive conversation card into active conversation card
     dispatch({ type: "MAKE_CONVERSATION_ACTIVE", payload: conversationToOpen });
   };
-
-  console.log("Conversations:", conversations);
-  console.log("Potential conversation:", potentialConversation);
-  console.log("Active conversation:", activeConversation);
 
   return (
     <div className="flex flex-col gap-3 py-4 h-screen">

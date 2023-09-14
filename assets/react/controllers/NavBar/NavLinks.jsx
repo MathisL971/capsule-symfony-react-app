@@ -13,7 +13,7 @@ const NavLinks = ({ user }) => {
             href={user ? `/${user.role}/${url}` : `/${url}`}
             className={`${
               developed ? "block" : "hidden"
-            } rounded-lg px-4 py-2 my-auto text-sm font-normal text-white hover:bg-teal-400`}
+            } rounded-lg px-4 py-2 my-auto text-sm font-medium text-white hover:bg-teal-400`}
           >
             {name.charAt(0).toUpperCase() + name.slice(1)}
           </a>

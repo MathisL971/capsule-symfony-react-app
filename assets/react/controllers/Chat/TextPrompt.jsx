@@ -12,9 +12,11 @@ const TextPrompt = () => {
 
   const [newMessage, setNewMessage] = useState("");
 
-  const { activeConversation, potentialConversation } = useSelector(
-    (state) => state.conversations
-  );
+  const {
+    activeConversation,
+    potentialConversation,
+    activeConversationMessages,
+  } = useSelector((state) => state.conversations);
 
   const { user } = useSelector((state) => state.user);
 
@@ -36,29 +38,27 @@ const TextPrompt = () => {
             dateLastMessage: new Date().toISOString(),
             correspondantHasNewMessage: true,
           };
-          delete newConvo.id;
 
           dispatch(conversationAddAction(newConvo)).then((returnedConvo) => {
             addedMessage = {
               text: newMessage,
               dateSent: new Date().toISOString(),
               idSender: user.id,
-              idReceiver: potentialConversation.idCorrespondant,
+              idReceiver: returnedConvo.idCorrespondant,
               idConversation: returnedConvo.id,
             };
-            console.log(addedMessage);
-            dispatch(conversationAddMessageAction(addedMessage));
-
-            connection.send(
-              JSON.stringify({
-                addedMessage,
-                updatedConversation: returnedConvo,
-              })
+            dispatch(conversationAddMessageAction(addedMessage)).then(
+              (returnedMessage) => {
+                connection.send(
+                  JSON.stringify({
+                    addedMessage: returnedMessage,
+                    updatedConversation: returnedConvo,
+                  })
+                );
+              }
             );
           });
         } else {
-          console.log("new message for existing convo");
-
           addedMessage = {
             text: newMessage,
             dateSent: new Date().toISOString(),
@@ -69,27 +69,31 @@ const TextPrompt = () => {
                 : activeConversation.idCorrespondant,
             idConversation: activeConversation.id,
           };
-          dispatch(conversationAddMessageAction(addedMessage));
-
-          let updatedConversation = {
-            ...activeConversation,
-            dateLastMessage: addedMessage.dateSent,
-            idLastSender: addedMessage.idSender,
-          };
-          updatedConversation =
-            user.id === updatedConversation.idCreator
-              ? { ...updatedConversation, correspondantHasNewMessage: true }
-              : {
-                  ...updatedConversation,
-                  creatorHasNewMessage: true,
-                };
-          dispatch(conversationUpdateAction(updatedConversation));
-
-          connection.send(
-            JSON.stringify({
-              addedMessage,
-              updatedConversation,
-            })
+          dispatch(conversationAddMessageAction(addedMessage)).then(
+            (returnedMessage) => {
+              let updatedConversation = {
+                ...activeConversation,
+                dateLastMessage: returnedMessage.dateSent,
+                idLastSender: returnedMessage.idSender,
+              };
+              updatedConversation =
+                user.id === updatedConversation.idCreator
+                  ? { ...updatedConversation, correspondantHasNewMessage: true }
+                  : {
+                      ...updatedConversation,
+                      creatorHasNewMessage: true,
+                    };
+              dispatch(conversationUpdateAction(updatedConversation)).then(
+                (returnedConvo) => {
+                  connection.send(
+                    JSON.stringify({
+                      addedMessage: returnedMessage,
+                      updatedConversation: returnedConvo,
+                    })
+                  );
+                }
+              );
+            }
           );
         }
 

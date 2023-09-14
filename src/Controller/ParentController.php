@@ -19,7 +19,7 @@ class ParentController extends BaseController
         $vars = [];
 
         if (ParentController::authentify($this->session)) {
-
+            $vars['flash'] = '';
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
             $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
@@ -27,7 +27,6 @@ class ParentController extends BaseController
             $post = $rq->request;
 
             return $this->render('parent/home.html.twig', $vars);
-            // return new Response($this->render('parent/profil.html.twig', $vars));
         }
 
         $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
@@ -41,13 +40,12 @@ class ParentController extends BaseController
         $vars = [];
 
         if (ParentController::authentify($this->session)) {
-
+            $vars['flash'] = '';
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
             $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
 
             return $this->render('parent/profil.html.twig', $vars);
-            // return new Response($this->render('parent/profil.html.twig', $vars));
         }
 
         $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
@@ -62,13 +60,13 @@ class ParentController extends BaseController
         $vars = [];
 
         if (ParentController::authentify($this->session)) {
+            $vars['flash'] = '';
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
             $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
             $vars['menu2'] = true;
 
             return $this->render('parent/messages.html.twig', $vars);
-            // return new Response($this->twig->render('parent/messages.html.twig', $vars));
         }
 
         $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
@@ -83,12 +81,13 @@ class ParentController extends BaseController
         $vars = [];
 
         if (ParentController::authentify($this->session)) {
+            $vars['flash'] = '';
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
             $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
             $vars['menu2'] = true;
 
-            return new Response($this->twig->render('parent/journal.html.twig', $vars));
+            return $this->render('parent/journal.html.twig', $vars);
         }
 
         $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
@@ -103,12 +102,13 @@ class ParentController extends BaseController
         $vars = [];
 
         if (ParentController::authentify($this->session)) {
+            $vars['flash'] = '';
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
             $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
             $vars['menu2'] = true;
 
-            return new Response($this->twig->render('parent/videos.html.twig', $vars));
+            return $this->render('parent/videos.html.twig', $vars);
         }
 
         $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
@@ -123,12 +123,13 @@ class ParentController extends BaseController
         $vars = [];
 
         if (ParentController::authentify($this->session)) {
+            $vars['flash'] = '';
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
             $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
             $vars['menu2'] = true;
 
-            return new Response($this->twig->render('parent/podcasts.html.twig', $vars));
+            return $this->render('parent/podcasts.html.twig', $vars);
         }
 
         $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
@@ -143,12 +144,13 @@ class ParentController extends BaseController
         $vars = [];
 
         if (ParentController::authentify($this->session)) {
+            $vars['flash'] = '';
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
             $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
             $vars['menu2'] = true;
 
-            return new Response($this->twig->render('parent/audiobooks.html.twig', $vars));
+            return $this->render('parent/audiobooks.html.twig', $vars);
         }
 
         $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
@@ -165,12 +167,13 @@ class ParentController extends BaseController
         $vars = [];
 
         if (ParentController::authentify($this->session)) {
+            $vars['flash'] = '';
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
             $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
             $vars['menu2'] = true;
 
-            return new Response($this->twig->render('parent/news.html.twig', $vars));
+            return $this->render('parent/news.html.twig', $vars);
         }
 
         $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
@@ -185,12 +188,13 @@ class ParentController extends BaseController
         $vars = [];
 
         if (ParentController::authentify($this->session)) {
+            $vars['flash'] = '';
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
             $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
             $vars['menu2'] = true;
 
-            return new Response($this->twig->render('parent/notes.html.twig', $vars));
+            return $this->render('parent/notes.html.twig', $vars);
         }
 
         $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
@@ -205,12 +209,13 @@ class ParentController extends BaseController
         $vars = [];
 
         if (ParentController::authentify($this->session)) {
+            $vars['flash'] = '';
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
             $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
             $vars['menu2'] = true;
 
-            return new Response($this->twig->render('parent/timing.html.twig', $vars));
+            return $this->render('parent/timing.html.twig', $vars);
         }
 
         $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');
@@ -225,12 +230,13 @@ class ParentController extends BaseController
         $vars = [];
 
         if (ParentController::authentify($this->session)) {
+            $vars['flash'] = '';
             $vars['user'] = $this->session->get('user');
             $vars['role'] = $this->session->get('role');
             $vars['userJson'] = json_encode($this->serializer->normalize($this->session->get('user'), 'json'));
             $vars['menu2'] = true;
 
-            return new Response($this->twig->render('parent/visio.html.twig', $vars));
+            return $this->render('parent/visio.html.twig', $vars);
         }
 
         $this->session->set('flash', 'La page demandée n\'est pas accessible hors connexion');

@@ -25,7 +25,7 @@ const FixedSection = ({
         </a>
       )}
 
-      <div className="flex w-fit justify-between gap-3 my-auto">
+      <div className="flex w-fit justify-between gap-2 my-auto">
         <NavLinks user={user} />
 
         {!user && (

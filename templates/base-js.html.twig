@@ -18,15 +18,14 @@
     </head>
     <body style="width: 100%;"> {# background-color: rgb(204 251 241)">#}
 
-        {# {% if flash %}<div class="alert alert-warning text-center">{{flash|raw}}</div>{% endif %} #}
-
 		<div {{ react_component('NavBar', { userObj: userJson, userRole: role }) }} id="navbar-div" style="container-type: inline-size"></div>
 		
 		<div class="">
+			{% if flash %}<div class="alert alert-warning text-center">{{flash|raw}}</div>{% endif %}
 			{% block body %}{% endblock %}
 		</div>
 
-		<footer class="d-flex flex-column gap-3 py-4">
+		<footer class="d-flex flex-column gap-3 py-8">
 			<div class="d-flex flex-row justify-content-center gap-2">
 				<a href="https://www.facebook.com/Capsule.ado" target="_blank"><img src="/images/logo_fb.png" alt="Facebook"></a>
 
