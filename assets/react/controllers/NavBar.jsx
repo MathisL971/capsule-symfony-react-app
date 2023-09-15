@@ -6,11 +6,8 @@ import HamburgerMenu from "./NavBar/HamburgerMenu";
 import FixedSection from "./NavBar/FixedSection";
 import UserMenu from "./NavBar/UserMenu";
 
-const NavBar = ({ userObj, userRole }) => {
+const NavBar = ({ userObj }) => {
   const user = JSON.parse(userObj);
-
-  console.log("Logged in user:", user);
-  console.log("User role:", userRole);
 
   const [navCollapsed, setNavCollapsed] = useState(true);
   const [accCollapsed, setAccCollapsed] = useState(true);
@@ -42,17 +39,20 @@ const NavBar = ({ userObj, userRole }) => {
       <div
         className={`${navCollapsed && accCollapsed ? "hidden" : "flex"} ${
           !navCollapsed ? "bg-teal-600" : ""
-        } p-2 z-50`}
+        } p-2 hide-on-large`}
       >
         <HamburgerMenu user={user} isCollapsed={navCollapsed} />
-        {user && (
+      </div>
+
+      {user && !accCollapsed && (
+        <div className={"flex p-2"}>
           <UserMenu
             user={user}
             handleLogout={handleLogout}
             isCollapsed={accCollapsed}
           />
-        )}
-      </div>
+        </div>
+      )}
     </nav>
   );
 };

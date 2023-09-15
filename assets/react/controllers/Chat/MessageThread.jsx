@@ -16,9 +16,11 @@ function compareMessageDates(date1, date2) {
 }
 
 const MessageThread = () => {
-  const { activeConversationMessages, activeConversation } = useSelector(
-    (state) => state.conversations
-  );
+  const {
+    activeConversationMessages,
+    activeConversation,
+    potentialConversation,
+  } = useSelector((state) => state.conversations);
   const { user } = useSelector((state) => state.user);
   const scrollableContainerRef = useRef(null);
 
@@ -41,7 +43,7 @@ const MessageThread = () => {
   }
 
   let style;
-  if (activeConversation) {
+  if (activeConversation || potentialConversation) {
     style =
       "flex flex-col w-full sm:w-2/3 gap-2 border-2 border-teal-950 bg-teal-800 rounded-lg p-2";
   } else {

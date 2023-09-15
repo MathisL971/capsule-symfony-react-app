@@ -15,17 +15,11 @@ import { connectionFetchAction } from "../../reducers/connections";
 
 const GENERAL_SOCKET_CONNECTION_ID = "123456789";
 
-const ChatApp = ({ user, role }) => {
+const ChatApp = ({ user }) => {
   const dispatch = useDispatch();
 
-  const {
-    conversations,
-    activeConversation,
-    potentialConversation,
-    activeConversationMessages,
-  } = useSelector((state) => state.conversations);
-
-  console.log("Active convo messages:", activeConversationMessages);
+  const { conversations, activeConversation, potentialConversation } =
+    useSelector((state) => state.conversations);
 
   const [broadcast, setBroadcast] = useState(null);
 
@@ -40,12 +34,6 @@ const ChatApp = ({ user, role }) => {
       openWebSocketConnection();
     }
   }, []);
-
-  useEffect(() => {
-    if (activeConversation && !potentialConversation) {
-      dispatch(conversationOpenMessagesAction(activeConversation, user));
-    }
-  }, [activeConversation]);
 
   useEffect(() => {
     if (broadcast) {
@@ -144,6 +132,9 @@ const ChatApp = ({ user, role }) => {
     }
     // Turn inactive conversation card into active conversation card
     dispatch({ type: "MAKE_CONVERSATION_ACTIVE", payload: conversationToOpen });
+
+    // Fetch messages
+    dispatch(conversationOpenMessagesAction(conversationToOpen, user));
   };
 
   return (

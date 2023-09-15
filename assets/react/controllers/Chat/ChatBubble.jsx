@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 
 const ChatBubble = ({ message }) => {
   const { text, idSender } = message;
-
   const { user } = useSelector((state) => state.user);
 
   return (

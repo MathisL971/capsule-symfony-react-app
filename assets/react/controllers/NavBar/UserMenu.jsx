@@ -9,7 +9,7 @@ const UserMenu = ({ user, handleLogout, isCollapsed }) => {
 
   return (
     <div
-      className={`${isCollapsed ? "hidden" : "flex"} flex w-full justify-end`}
+      className={`${isCollapsed ? "hidden" : "flex"} w-full justify-end`}
       id="user-menu"
     >
       <div

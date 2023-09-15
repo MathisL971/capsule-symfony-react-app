@@ -73,8 +73,8 @@ export default function UserSearchBar({ handleConvoSideOpen, enterConvo }) {
 
   return (
     <Combobox value={query} onChange={setQuery}>
-      <div className=" static">
-        <div>
+      <div className="flex flex-col">
+        <div className="w-full">
           <Combobox.Input
             className="border-2 border-teal-950 rounded-lg w-full p-3 text-base leading-5 text-gray-900 focus:ring-0"
             onChange={(event) => setQuery(event.target.value)}
@@ -88,7 +88,7 @@ export default function UserSearchBar({ handleConvoSideOpen, enterConvo }) {
           leaveTo="opacity-0"
           afterLeave={() => setQuery("")}
         >
-          <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+          <Combobox.Options className="relative mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
             {filteredConnections &&
             filteredConnections.length === 0 &&
             query !== "" ? (

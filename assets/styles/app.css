@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Assuming you want to hide the button when the screen width is 992px or larger (adjust this breakpoint as needed) */
+@media (min-width: 1024px) {
+  .hide-on-large {
+    display: none;
+  }
+}

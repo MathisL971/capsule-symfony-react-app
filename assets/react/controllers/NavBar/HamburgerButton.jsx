@@ -8,7 +8,7 @@ const HamburgerButton = ({
 }) => {
   return (
     <button
-      className="flex lg:hidden my-auto"
+      className="flex my-auto hide-on-large"
       id="hamburger-button"
       type="button"
       onClick={() => {

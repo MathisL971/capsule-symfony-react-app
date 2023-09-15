@@ -150,9 +150,7 @@ export const conversationAddAction = (newConversation) => async (dispatch) => {
 export const conversationAddMessageAction =
   (newMessage) => async (dispatch) => {
     try {
-      console.log("Posting message to database");
       const addedMessage = await messageService.create(newMessage);
-      console.log("Message object returned:", addedMessage);
 
       dispatch({
         type: "CREATE_NEW_MESSAGE_SUCCESS",
